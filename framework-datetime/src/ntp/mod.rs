@@ -1,5 +1,3 @@
-mod waiter;
-
 #[cfg(not(feature = "tokio"))]
 mod sync_std;
 #[cfg(feature = "tokio")]
@@ -12,9 +10,6 @@ use std::{
     thread,
     time::Duration,
 };
-
-pub use waiter::wait_ntp;
-pub(crate) use waiter::wake_waiters;
 
 /// 内置 NTP 服务列表。
 pub const NTP_SERVERS: &[&str] = &[
@@ -129,7 +124,7 @@ pub(super) fn ntp_unix_millis(duration: SntpDuration) -> Result<i128> {
         millis
     };
 
-    crate::system_unix_millis()?
+    crate::native::system_unix_millis()?
         .checked_add(offset_millis)
         .context("校准后的 NTP 时间戳溢出")
 }

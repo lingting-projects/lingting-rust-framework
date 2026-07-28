@@ -6,7 +6,7 @@ use std::{sync::mpsc, thread, time::Duration};
 pub(super) fn sync_loop(config: NtpConfig) {
     loop {
         let delay = match query_ntp_offset_millis(&config) {
-            Ok(unix_millis) => match crate::apply_ntp_time(unix_millis) {
+            Ok(unix_millis) => match crate::native::apply_ntp_time(unix_millis) {
                 Ok(()) => config.sync_interval,
                 Err(_) => config.retry_interval,
             },

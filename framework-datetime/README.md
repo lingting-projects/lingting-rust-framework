@@ -1,9 +1,8 @@
 # framework-datetime
 
-提供 Unix 毫秒时间戳，并可选地通过 NTP 持续校时。
+提供 Unix 毫秒时间戳，并可选地进行持续校时。
 
-内部时钟以 `i128` Unix 毫秒时间戳和 `Instant` 单调时钟组成不可变锚点。程序启动后，常规时间读取不受操作系统时钟回拨影响；NTP
-校时成功后会以校准后的真实时间替换锚点，校时结果允许向前或向后调整，以时间准确性为优先。
+内部时钟使用 Unix 毫秒时间戳和 `Instant` 组成锚点。首次读取建立锚点，后续读取由单调时钟推进，因此常规读取不会受到系统时钟回拨或前跳影响。校时成功后会替换锚点，以校准时间为准。
 
 ## 安装
 
@@ -14,47 +13,49 @@
 framework-datetime = { path = "../framework-datetime" }
 ```
 
-启用 NTP 校时：
+启用校时能力：
 
 ```toml
 [dependencies]
 framework-datetime = { path = "../framework-datetime", features = ["ntp"] }
 ```
 
-启用 Tokio 管理 NTP 并发查询：
+非 JS/wasm 平台可选启用 Tokio 管理 NTP 并发查询：
 
 ```toml
 [dependencies]
 framework-datetime = { path = "../framework-datetime", features = ["tokio"] }
 ```
 
-`tokio` feature 自动包含 `ntp`。不启用 `tokio` 时，NTP 查询使用标准库线程并发执行。
+`tokio` feature 自动包含 `ntp`。
 
 ## 平台支持
 
-基础时间读取 API 支持浏览器 wasm，并使用 JavaScript `Date.now()` 初始化内部时间锚点。NTP 与 `tokio` 功能当前仅面向具备标准网络与线程能力的平台；
-`wasm32-unknown-unknown` 不在其支持范围内。
+`wasm32-unknown-unknown` 视为浏览器 JS/wasm 平台，使用独立实现：`Date.now()` 只用于建立初始时间锚点，后续读取由
+`web_time::Instant` 推进。WASI 与其他非 JS/wasm 平台使用原生实现。
 
-## 时间读取
+`tokio` feature 仅影响非 JS/wasm 平台；在浏览器 wasm 中不会引入 Tokio 网络或运行时实现。
+
+以下 API 在两个平台具有相同的时间读取能力：
+
+- `current_millis() -> Result<u64>`：修正后的 Unix 毫秒时间戳；Epoch 前时间或超出 `u64` 范围时返回错误。
+- `current_millis_u128() -> Result<u128>`：修正后的非负 Unix 毫秒时间戳；Epoch 前时间时返回错误。
+- `current_millis_i128() -> Result<i128>`：修正后的有符号 Unix 毫秒时间戳，可表示 Epoch 前时间。
+- `is_ntp() -> bool`：至少成功校时一次后返回 `true`。
 
 ```rust
 use framework_datetime::{current_millis, current_millis_i128, current_millis_u128, is_ntp};
 
-let millis: u64 = current_millis() ?;
-let signed_millis: i128 = current_millis_i128() ?;
-let unsigned_millis: u128 = current_millis_u128() ?;
+let millis: u64 = current_millis()?;
+let signed_millis: i128 = current_millis_i128()?;
+let unsigned_millis: u128 = current_millis_u128()?;
 let calibrated: bool = is_ntp();
-# Ok::<(), Box<dyn std::error::Error> > (())
+# Ok::<(), Box<dyn std::error::Error>>(())
 ```
 
-`current_millis()` 是默认接口，返回 `Result<u64>`。当时间早于 Unix Epoch 或无法转换为 `u64` 时返回错误；需要保留 Epoch
-前时间时使用 `current_millis_i128()`。
+## 非 JS/wasm NTP
 
-`is_ntp()` 在至少一次 NTP 校时成功后返回 `true`。未启用 `ntp`、未启动校时任务或尚未成功校时时返回 `false`。
-
-## NTP 校时
-
-`NtpConfig::default()` 使用公开的 `NTP_SERVERS` 服务列表，并设置以下默认参数：
+非 JS/wasm 平台的 NTP 行为保持不变。`NtpConfig` 使用 NTP 服务器列表、请求超时、同步间隔和重试间隔：
 
 | 配置项            | 默认值  |
 |-------------------|---------|
@@ -62,58 +63,52 @@ let calibrated: bool = is_ntp();
 | `sync_interval`   | 10 分钟 |
 | `retry_interval`  | 5 秒    |
 
-启动默认校时任务：
-
 ```rust
 use framework_datetime::{NtpConfig, init_ntp};
 
-init_ntp(NtpConfig::default ()) ?;
-# Ok::<(), Box<dyn std::error::Error> > (())
+init_ntp(NtpConfig::default())?;
+# Ok::<(), Box<dyn std::error::Error>>(())
 ```
 
-指定外部 NTP 服务与刷新策略：
+未启用 `tokio` 时，NTP 查询使用标准库线程并发执行；启用 `tokio` 时，查询由专用后台线程中的 Tokio runtime
+管理。初始化只启动一个常驻任务，NTP 失败会按重试间隔继续尝试。
+
+## 浏览器 wasm NTP
+
+浏览器 wasm 不直接访问 NTP 服务器。启用 `ntp` 后，`NtpConfig` 仅包含 `sync_interval`，`init_ntp` 必须同时接收配置和同步时间提供函数：
 
 ```rust
+use anyhow::Result;
 use framework_datetime::{NtpConfig, init_ntp};
 use std::time::Duration;
 
 let config = NtpConfig {
-servers: vec![
-    "ntp.example.com".to_owned(),
-    "time.example.com".to_owned(),
-],
-request_timeout: Duration::from_secs(3),
-sync_interval: Duration::from_secs(15 * 60),
-retry_interval: Duration::from_secs(10),
+    sync_interval: Duration::from_secs(10 * 60),
 };
 
-init_ntp(config) ?;
-# Ok::<(), Box<dyn std::error::Error> > (())
+init_ntp(config, || -> Result<u128> {
+    // 返回已由外部服务校准的 Unix 毫秒绝对时间戳。
+    Ok(1_735_689_600_000)
+})?;
+# Ok::<(), Box<dyn std::error::Error>>(())
 ```
 
-`init_ntp` 立即返回并只启动一个后台校时任务。每轮并发请求全部配置服务，首个成功结果即用于重置时钟锚点。启用 `tokio` feature
-时，查询任务由专用后台线程中的 Tokio runtime 管理，首个成功结果会取消同轮剩余任务。
+回调类型为 `Fn() -> anyhow::Result<u128> + 'static`。其返回值必须是 Unix Epoch 起算的 **毫秒绝对时间戳**，不是 NTP
+偏移量、秒或纳秒；值超过 `i128::MAX` 时视为该次校时失败。
+
+初始化会建立浏览器 `setInterval` 定时器并立即调用一次回调。回调失败不会停止定时器，后续周期会自动重试；首次成功前
+`is_ntp()` 返回 `false`，`wait_ntp()` 会持续等待。重复初始化不会替换首个定时器或回调，页面生命周期内不提供停止接口。
+
+`sync_interval` 必须至少为 1 毫秒，且不能超过 `2_147_483_647` 毫秒。浏览器中的网络请求通常是异步的，调用方应在回调执行前完成请求并缓存最近一次可用的校准时间。
 
 ## 等待首次校时
 
-`wait_ntp()` 可被任意数量的异步任务同时等待：
+启用 `ntp` 后，两个平台均可等待首次成功校时：
 
 ```rust
-use framework_datetime::{NtpConfig, init_ntp, wait_ntp};
+use framework_datetime::wait_ntp;
 
-init_ntp(NtpConfig::default ()) ?;
 wait_ntp().await;
-
-assert!(framework_datetime::is_ntp());
-# Ok::<(), Box<dyn std::error::Error> > (())
 ```
 
-该 Future 不绑定 Tokio，可由任意 Rust async runtime 驱动。首次校时成功时会唤醒全部等待者；已经成功校时后，后续调用会立即完成。若未调用
-`init_ntp` 或所有服务持续失败，等待不会自行超时，调用方应在自己的 runtime 中按需增加超时控制。
-
-## 时间语义
-
-- 首次读取时，以系统 Unix 时间初始化内部锚点。
-- 后续读取使用 `Instant` 推进锚点时间，不会因操作系统时钟回拨或前跳改变。
-- NTP 成功后，立即以校准后的 NTP Unix 时间替换锚点；为保证真实时间准确性，此次替换允许时间回退或前跳。
-- 后续 NTP 同步会继续刷新锚点，以降低本地时钟长期漂移的影响。
+该 Future 不绑定 Tokio，可由任意 Rust async runtime 驱动。未初始化或尚未成功校时时，它不会自行超时，调用方应按需增加超时控制。

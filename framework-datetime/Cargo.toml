@@ -15,8 +15,12 @@ tokio = ["ntp", "dep:tokio", "rsntp/async"]
 [dependencies]
 anyhow.workspace = true
 arc-swap.workspace = true
+
+[target.'cfg(not(all(target_arch = "wasm32", target_os = "unknown")))'.dependencies]
 rsntp = { workspace = true, optional = true }
 tokio = { workspace = true, optional = true }
 
-[target.'cfg(target_arch = "wasm32")'.dependencies]
+[target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dependencies]
 js-sys = "0.3"
+wasm-bindgen = "0.2"
+web-time = "1.1"
