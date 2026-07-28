@@ -95,6 +95,7 @@ version = "26.7.25"
 dependencies = [
     "anyhow",
     "arc-swap",
+    "js-sys",
     "rsntp",
     "tokio",
 ]

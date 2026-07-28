@@ -30,6 +30,11 @@ framework-datetime = { path = "../framework-datetime", features = ["tokio"] }
 
 `tokio` feature 自动包含 `ntp`。不启用 `tokio` 时，NTP 查询使用标准库线程并发执行。
 
+## 平台支持
+
+基础时间读取 API 支持浏览器 wasm，并使用 JavaScript `Date.now()` 初始化内部时间锚点。NTP 与 `tokio` 功能当前仅面向具备标准网络与线程能力的平台；
+`wasm32-unknown-unknown` 不在其支持范围内。
+
 ## 时间读取
 
 ```rust

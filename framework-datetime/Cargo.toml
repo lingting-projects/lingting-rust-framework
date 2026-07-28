@@ -17,3 +17,6 @@ anyhow.workspace = true
 arc-swap.workspace = true
 rsntp = { workspace = true, optional = true }
 tokio = { workspace = true, optional = true }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+js-sys = "0.3"

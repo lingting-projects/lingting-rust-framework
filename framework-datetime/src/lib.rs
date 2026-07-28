@@ -5,12 +5,14 @@ use anyhow::{Context, Result};
 use arc_swap::ArcSwap;
 #[cfg(feature = "ntp")]
 use std::sync::Arc;
+#[cfg(not(target_arch = "wasm32"))]
+use std::time::{SystemTime, UNIX_EPOCH};
 use std::{
     sync::{
         OnceLock,
         atomic::{AtomicBool, Ordering},
     },
-    time::{Instant, SystemTime, UNIX_EPOCH},
+    time::Instant,
 };
 
 /// 内部时钟锚点。Unix 时间戳使用 i128，避免 Epoch 前时间无法表示。
@@ -85,6 +87,17 @@ fn clock_anchor() -> Result<&'static ArcSwap<ClockAnchor>> {
     CLOCK_ANCHOR.get().context("初始化内部时钟锚点失败")
 }
 
+#[cfg(target_arch = "wasm32")]
+pub(crate) fn system_unix_millis() -> Result<i128> {
+    let millis = js_sys::Date::now();
+    if !millis.is_finite() {
+        anyhow::bail!("浏览器时间戳不是有限数值");
+    }
+
+    Ok(millis as i128)
+}
+
+#[cfg(not(target_arch = "wasm32"))]
 pub(crate) fn system_unix_millis() -> Result<i128> {
     match SystemTime::now().duration_since(UNIX_EPOCH) {
         Ok(duration) => i128::try_from(duration.as_millis()).context("系统时间戳超过 i128 范围"),
