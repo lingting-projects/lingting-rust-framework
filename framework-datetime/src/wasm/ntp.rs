@@ -38,7 +38,7 @@ static INITIALIZED: AtomicBool = AtomicBool::new(false);
 extern "C" {
     #[wasm_bindgen(catch, js_name = setInterval)]
     fn set_interval(callback: &js_sys::Function, timeout: i32)
-                    -> std::result::Result<i32, JsValue>;
+        -> std::result::Result<i32, JsValue>;
 }
 
 /// 启动浏览器定时校时任务。

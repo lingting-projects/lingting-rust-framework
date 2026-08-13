@@ -38,17 +38,15 @@ framework-datetime = { path = "../framework-datetime", features = ["tokio"] }
 
 以下 API 在两个平台具有相同的时间读取能力：
 
-- `current_millis() -> Result<u64>`：修正后的 Unix 毫秒时间戳；Epoch 前时间或超出 `u64` 范围时返回错误。
-- `current_millis_u128() -> Result<u128>`：修正后的非负 Unix 毫秒时间戳；Epoch 前时间时返回错误。
+- `current_millis() -> Result<i64>`：修正后的 Unix 毫秒时间戳；超出 `i64` 范围时返回错误。
 - `current_millis_i128() -> Result<i128>`：修正后的有符号 Unix 毫秒时间戳，可表示 Epoch 前时间。
 - `is_ntp() -> bool`：至少成功校时一次后返回 `true`。
 
 ```rust
-use framework_datetime::{current_millis, current_millis_i128, current_millis_u128, is_ntp};
+use framework_datetime::{current_millis, current_millis_i128, is_ntp};
 
-let millis: u64 = current_millis()?;
+let millis: i64 = current_millis()?;
 let signed_millis: i128 = current_millis_i128()?;
-let unsigned_millis: u128 = current_millis_u128()?;
 let calibrated: bool = is_ntp();
 # Ok::<(), Box<dyn std::error::Error>>(())
 ```

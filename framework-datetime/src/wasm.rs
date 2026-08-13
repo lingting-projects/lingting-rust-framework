@@ -28,17 +28,8 @@ pub use crate::waiter::wait_ntp;
 pub use ntp::{NtpConfig, init_ntp};
 
 /// 获取经过校时修正后的 Unix 毫秒时间戳。
-pub fn current_millis() -> Result<u64> {
-    let millis = current_millis_i128()?;
-
-    u64::try_from(millis).context("修正后的时间早于 Unix Epoch 或超过 u64 范围")
-}
-
-/// 获取经过校时修正后的 Unix 毫秒时间戳。
-pub fn current_millis_u128() -> Result<u128> {
-    let millis = current_millis_i128()?;
-
-    u128::try_from(millis).context("修正后的时间早于 Unix Epoch")
+pub fn current_millis() -> Result<i64> {
+    i64::try_from(current_millis_i128()?).context("修正后的时间超出 i64 范围")
 }
 
 /// 获取经过校时修正后的有符号 Unix 毫秒时间戳。

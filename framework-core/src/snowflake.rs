@@ -2,11 +2,11 @@ use anyhow::{Result, anyhow};
 use framework_datetime::current_millis;
 use std::sync::{LazyLock, Mutex};
 
-const EPOCH: u64 = 1_704_067_200_000;
+const EPOCH: i64 = 1_704_067_200_000;
 const SEQUENCE_MASK: u16 = 0x0fff;
 
 struct SnowflakeState {
-    last_millis: u64,
+    last_millis: i64,
     sequence: u16,
 }
 
@@ -28,7 +28,7 @@ impl Snowflake {
         }
     }
 
-    pub fn next_id(&self) -> Result<u64> {
+    pub fn next_id(&self) -> Result<i64> {
         let mut state = self
             .state
             .lock()
@@ -46,12 +46,19 @@ impl Snowflake {
         }
 
         state.last_millis = logical_millis;
-        Ok((logical_millis.saturating_sub(EPOCH) << 22)
-            | (u64::from(self.node) << 12)
-            | u64::from(state.sequence))
+        let elapsed_millis = logical_millis
+            .checked_sub(EPOCH)
+            .ok_or_else(|| anyhow!("雪花时间差超出 i64 范围"))?;
+        let timestamp_part = elapsed_millis
+            .checked_mul(1 << 22)
+            .ok_or_else(|| anyhow!("雪花 ID 超出 i64 范围"))?;
+        let node_and_sequence = (i64::from(self.node) << 12) | i64::from(state.sequence);
+        timestamp_part
+            .checked_add(node_and_sequence)
+            .ok_or_else(|| anyhow!("雪花 ID 超出 i64 范围"))
     }
 }
 
-pub fn next_id() -> Result<u64> {
+pub fn next_id() -> Result<i64> {
     GLOBAL_SNOWFLAKE.next_id()
 }
