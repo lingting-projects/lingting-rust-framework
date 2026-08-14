@@ -3,7 +3,7 @@ resolver = "2"
 members = ["framework-core", "framework-datetime"]
 
 [workspace.package]
-version = "26.7.25"
+version = "26.8.14"
 edition = "2024"
 rust-version = "1.93.0"
 authors = ["lingting"]
