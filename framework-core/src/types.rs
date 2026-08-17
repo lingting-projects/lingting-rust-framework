@@ -1,4 +1,4 @@
-use crate::{auto_enum, auto_type};
+use framework_proc_auto::{auto_enum, auto_type};
 use std::sync::Arc;
 
 pub const R_CODE_SUCCCESS: u32 = 200;

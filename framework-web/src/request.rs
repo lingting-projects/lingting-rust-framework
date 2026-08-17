@@ -1,5 +1,5 @@
 use bytes::Bytes;
-use framework_core::value::MultiStringValue;
+use framework_core::MultiStringValue;
 use std::fmt::{Display, Formatter};
 
 #[derive(Debug, PartialEq, Eq)]

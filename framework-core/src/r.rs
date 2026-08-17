@@ -1,5 +1,5 @@
 use crate::types::{R, RCodeKind, R_CODE_SUCCCESS, R_MESSAGE_SUCCCESS};
-use crate::auto_enum_impl;
+use framework_proc_auto::auto_enum_impl;
 
 #[auto_enum_impl]
 impl RCodeKind {
