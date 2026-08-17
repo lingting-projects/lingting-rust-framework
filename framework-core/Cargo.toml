@@ -11,5 +11,4 @@ license.workspace = true
 framework-datetime = { path = "../framework-datetime" }
 
 anyhow.workspace = true
-chrono.workspace = true
 log.workspace = true
