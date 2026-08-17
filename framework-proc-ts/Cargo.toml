@@ -1,0 +1,21 @@
+[package]
+name = "framework-proc-ts"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+description.workspace = true
+license.workspace = true
+
+[lib]
+proc-macro = true
+
+[features]
+default = []
+collect = ["framework-proc-core/collect"]
+
+[dependencies]
+framework-proc-core = { path = "../framework-proc-core" }
+proc-macro2.workspace = true
+quote.workspace = true
+syn.workspace = true
