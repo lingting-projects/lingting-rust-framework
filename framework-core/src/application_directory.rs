@@ -84,7 +84,11 @@ fn debug_runtime_directory(install: &Path) -> PathBuf {
             .skip(1)
             .any(|ancestor| ancestor.file_name().is_some_and(|name| name == "target"))
     });
-    let base = is_example.then_some(profile.unwrap()).unwrap_or(install);
+    let base = if is_example {
+        profile.unwrap()
+    } else {
+        install
+    };
     base.join("runtime")
 }
 

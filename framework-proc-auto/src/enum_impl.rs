@@ -4,7 +4,7 @@ use quote::format_ident;
 use quote::quote;
 use syn::{Attribute, Error, ImplItem, ItemImpl, punctuated::Punctuated};
 #[cfg(feature = "collect")]
-use syn::{FnArg, ImplItemFn, LitStr, ReturnType};
+use syn::{FnArg, ImplItemFn, LitStr, ReturnType, Type};
 
 #[cfg(feature = "collect")]
 use crate::type_transform::{TypeTransform, TypeWrapper};

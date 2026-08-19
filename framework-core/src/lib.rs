@@ -9,5 +9,5 @@ mod value;
 pub use application_directory::*;
 pub use framework_datetime::*;
 pub use money::Money;
-pub use snowflake::{next_id, Snowflake};
+pub use snowflake::{Snowflake, next_id};
 pub use value::*;
