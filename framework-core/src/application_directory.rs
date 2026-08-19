@@ -80,10 +80,10 @@ fn debug_runtime_directory(install: &Path) -> PathBuf {
     let profile = install.parent();
     let is_example = install.file_name().is_some_and(|name| name == "examples")
         && profile.is_some_and(|path| {
-        path.ancestors()
-            .skip(1)
-            .any(|ancestor| ancestor.file_name().is_some_and(|name| name == "target"))
-    });
+            path.ancestors()
+                .skip(1)
+                .any(|ancestor| ancestor.file_name().is_some_and(|name| name == "target"))
+        });
     let base = if is_example {
         profile.unwrap()
     } else {

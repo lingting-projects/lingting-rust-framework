@@ -66,9 +66,9 @@ fn parse_api_arguments(args: TokenStream2) -> syn::Result<ApiArguments> {
 
 fn string_literal(value: &Expr) -> syn::Result<syn::LitStr> {
     let Expr::Lit(ExprLit {
-                      lit: Lit::Str(value),
-                      ..
-                  }) = value
+        lit: Lit::Str(value),
+        ..
+    }) = value
     else {
         return Err(Error::new_spanned(value, "ts_api 参数值必须是字符串"));
     };

@@ -77,7 +77,7 @@ impl FromWeb for PaginationParams {
                 format!("分页大小不能超过 {MAX_PAGE_SIZE}"),
                 anyhow!("分页大小超出上限：{size}"),
             )
-                .into());
+            .into());
         }
         if let Some(sort) = pagination
             .sorts
@@ -88,7 +88,7 @@ impl FromWeb for PaginationParams {
                 "分页排序字段包含非法字符",
                 anyhow!("可疑分页排序字段：{}", sort.field),
             )
-                .into());
+            .into());
         }
         Ok(Self {
             current: pagination

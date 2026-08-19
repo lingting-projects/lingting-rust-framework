@@ -6,7 +6,7 @@ use std::panic::AssertUnwindSafe;
 
 pub async fn catch_panic<F, T>(future: F) -> Result<T>
 where
-    F: Future<Output=T>,
+    F: Future<Output = T>,
 {
     AssertUnwindSafe(future)
         .catch_unwind()

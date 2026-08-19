@@ -102,9 +102,9 @@ impl WebApiOptions {
 
 fn parse_path(value: &Expr) -> syn::Result<syn::LitStr> {
     let Expr::Lit(ExprLit {
-                      lit: Lit::Str(path),
-                      ..
-                  }) = value
+        lit: Lit::Str(path),
+        ..
+    }) = value
     else {
         return Err(Error::new_spanned(value, "path 必须是字符串"));
     };

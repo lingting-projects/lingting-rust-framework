@@ -1,4 +1,4 @@
-use crate::types::{R, RCodeKind, R_CODE_SUCCCESS, R_MESSAGE_SUCCCESS};
+use crate::types::{R, R_CODE_SUCCCESS, R_MESSAGE_SUCCCESS, RCodeKind};
 use framework_proc_auto::auto_enum_impl;
 
 #[auto_enum_impl]
