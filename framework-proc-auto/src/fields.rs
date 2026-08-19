@@ -1,9 +1,7 @@
-use proc_macro2::TokenStream;
-use quote::quote;
 use syn::{Field, Token, punctuated::Punctuated};
 
 use crate::attributes::{ensure_serde_adapter, ensure_serde_default, ensure_specta_type};
-use crate::type_transform::{TypeTransform, TypeWrapper};
+use crate::type_transform::TypeTransform;
 
 pub struct FieldSummary {
     pub requires_serde_as: bool,
@@ -23,35 +21,14 @@ pub fn transform_fields(
         if serde_enabled && transform.is_option {
             ensure_serde_default(&mut field.attrs);
         }
-        if !transform.requires_string {
-            continue;
-        }
-        if serde_enabled {
-            ensure_serde_adapter(&mut field.attrs, serde_adapter(transform.wrapper));
+        if serde_enabled && let Some(adapter) = transform.serde_adapter {
+            ensure_serde_adapter(&mut field.attrs, adapter);
             summary.requires_serde_as = true;
         }
-        if specta_enabled {
-            ensure_specta_type(&mut field.attrs, specta_type(transform.wrapper));
+        if specta_enabled && let Some(ty) = transform.specta_type {
+            ensure_specta_type(&mut field.attrs, ty);
         }
     }
 
     summary
-}
-
-fn serde_adapter(wrapper: TypeWrapper) -> &'static str {
-    match wrapper {
-        TypeWrapper::Plain => "serde_with::DisplayFromStr",
-        TypeWrapper::Option => "Option<serde_with::DisplayFromStr>",
-        TypeWrapper::Vec => "Vec<serde_with::DisplayFromStr>",
-        TypeWrapper::OptionVec => "Option<Vec<serde_with::DisplayFromStr>>",
-    }
-}
-
-fn specta_type(wrapper: TypeWrapper) -> TokenStream {
-    match wrapper {
-        TypeWrapper::Plain => quote!(String),
-        TypeWrapper::Option => quote!(Option<String>),
-        TypeWrapper::Vec => quote!(Vec<String>),
-        TypeWrapper::OptionVec => quote!(Option<Vec<String>>),
-    }
 }

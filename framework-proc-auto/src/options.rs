@@ -131,9 +131,9 @@ fn parse_options(
             return Err(Error::new_spanned(name_value.path, "参数名称必须是标识符"));
         };
         let Expr::Lit(ExprLit {
-                          lit: Lit::Bool(value),
-                          ..
-                      }) = name_value.value
+            lit: Lit::Bool(value),
+            ..
+        }) = name_value.value
         else {
             return Err(Error::new_spanned(name_value, "参数值必须是布尔值"));
         };

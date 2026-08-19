@@ -40,8 +40,8 @@ pub fn auto_enum_field(_: TokenStream, _: TokenStream) -> TokenStream {
         proc_macro2::Span::call_site(),
         "auto_enum_field 仅能用于 #[auto_enum_impl] 标记的固有 impl 方法",
     )
-        .to_compile_error()
-        .into()
+    .to_compile_error()
+    .into()
 }
 
 fn expand_auto_type(args: TokenStream2, input: TokenStream2) -> TokenStream2 {

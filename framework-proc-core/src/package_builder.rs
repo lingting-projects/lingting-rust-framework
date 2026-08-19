@@ -31,7 +31,7 @@ impl TypeScriptPackageBuilder {
 
     pub fn types<I, M>(mut self, metadata: I) -> Self
     where
-        I: IntoIterator<Item=M>,
+        I: IntoIterator<Item = M>,
         M: Borrow<TypeMetadata>,
     {
         self.code_builder.push_types(metadata);
@@ -40,7 +40,7 @@ impl TypeScriptPackageBuilder {
 
     pub fn apis<I, M>(mut self, metadata: I) -> Self
     where
-        I: IntoIterator<Item=M>,
+        I: IntoIterator<Item = M>,
         M: Borrow<ApiMetadata>,
     {
         self.code_builder.push_apis(metadata);
@@ -49,7 +49,7 @@ impl TypeScriptPackageBuilder {
 
     pub fn enums<I, M>(mut self, metadata: I) -> Self
     where
-        I: IntoIterator<Item=M>,
+        I: IntoIterator<Item = M>,
         M: Borrow<EnumMetadata>,
     {
         self.code_builder.push_enums(metadata);

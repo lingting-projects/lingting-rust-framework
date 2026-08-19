@@ -38,7 +38,7 @@ impl TypeScriptCodeBuilder {
 
     pub fn types<I, M>(mut self, metadata: I) -> Self
     where
-        I: IntoIterator<Item=M>,
+        I: IntoIterator<Item = M>,
         M: Borrow<TypeMetadata>,
     {
         self.push_types(metadata);
@@ -47,7 +47,7 @@ impl TypeScriptCodeBuilder {
 
     pub fn apis<I, M>(mut self, metadata: I) -> Self
     where
-        I: IntoIterator<Item=M>,
+        I: IntoIterator<Item = M>,
         M: Borrow<ApiMetadata>,
     {
         self.push_apis(metadata);
@@ -56,7 +56,7 @@ impl TypeScriptCodeBuilder {
 
     pub fn enums<I, M>(mut self, metadata: I) -> Self
     where
-        I: IntoIterator<Item=M>,
+        I: IntoIterator<Item = M>,
         M: Borrow<EnumMetadata>,
     {
         self.push_enums(metadata);
@@ -75,7 +75,7 @@ impl TypeScriptCodeBuilder {
 
     pub fn push_types<I, M>(&mut self, metadata: I)
     where
-        I: IntoIterator<Item=M>,
+        I: IntoIterator<Item = M>,
         M: Borrow<TypeMetadata>,
     {
         self.type_metadata
@@ -84,7 +84,7 @@ impl TypeScriptCodeBuilder {
 
     pub fn push_apis<I, M>(&mut self, metadata: I)
     where
-        I: IntoIterator<Item=M>,
+        I: IntoIterator<Item = M>,
         M: Borrow<ApiMetadata>,
     {
         self.api_metadata
@@ -93,7 +93,7 @@ impl TypeScriptCodeBuilder {
 
     pub fn push_enums<I, M>(&mut self, metadata: I)
     where
-        I: IntoIterator<Item=M>,
+        I: IntoIterator<Item = M>,
         M: Borrow<EnumMetadata>,
     {
         self.enum_metadata
@@ -214,9 +214,9 @@ fn validate_enum_metadata(types: &[TypeMetadata], enums: &[EnumMetadata]) -> Typ
             if actual_fields.len() != value.fields.len()
                 || actual_fields.len() != metadata.fields.len()
                 || !metadata
-                .fields
-                .iter()
-                .all(|field| actual_fields.contains(field))
+                    .fields
+                    .iter()
+                    .all(|field| actual_fields.contains(field))
             {
                 return Err(build_error(format!("枚举 {name} 的导出字段与元数据不一致")));
             }

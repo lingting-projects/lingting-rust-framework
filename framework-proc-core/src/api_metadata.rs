@@ -36,6 +36,6 @@ pub struct ApiMetadata {
 inventory::collect!(ApiMetadata);
 
 #[cfg(feature = "collect")]
-pub fn api_metadata_iter() -> Box<dyn Iterator<Item=&'static ApiMetadata>> {
+pub fn api_metadata_iter() -> Box<dyn Iterator<Item = &'static ApiMetadata>> {
     Box::new(inventory::iter::<ApiMetadata>.into_iter())
 }

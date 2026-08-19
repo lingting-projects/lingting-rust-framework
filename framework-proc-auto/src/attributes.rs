@@ -46,12 +46,15 @@ pub fn ensure_serde_default(attrs: &mut Vec<Attribute>) {
     attrs.push(parse_quote!(#[serde(default)]));
 }
 
-pub fn ensure_serde_adapter(attrs: &mut Vec<Attribute>, adapter: &str) {
+pub fn ensure_serde_adapter(attrs: &mut Vec<Attribute>, adapter: proc_macro2::TokenStream) {
     if has_attribute_key(attrs, "serde_as", "as") {
         return;
     }
-    let value = syn::LitStr::new(adapter, proc_macro2::Span::call_site());
-    attrs.push(parse_quote!(#[serde_as(as = #value)]));
+    let adapter = syn::LitStr::new(
+        &adapter.to_token_stream().to_string().replace(' ', ""),
+        proc_macro2::Span::call_site(),
+    );
+    attrs.push(parse_quote!(#[serde_as(as = #adapter)]));
 }
 
 pub fn ensure_specta_type(attrs: &mut Vec<Attribute>, ty: proc_macro2::TokenStream) {
@@ -95,11 +98,11 @@ fn has_attribute_key(attrs: &[Attribute], name: &str, key: &str) -> bool {
             .last()
             .is_some_and(|segment| segment.ident == name)
             && attr
-            .meta
-            .to_token_stream()
-            .to_string()
-            .split(|character: char| !character.is_alphanumeric() && character != '_')
-            .any(|part| part == key)
+                .meta
+                .to_token_stream()
+                .to_string()
+                .split(|character: char| !character.is_alphanumeric() && character != '_')
+                .any(|part| part == key)
     })
 }
 

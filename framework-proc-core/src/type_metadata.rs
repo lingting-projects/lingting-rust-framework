@@ -67,12 +67,12 @@ inventory::collect!(EnumMetadata);
 
 /// 返回当前二进制中已注册的结构体与枚举元数据。
 #[cfg(feature = "collect")]
-pub fn type_metadata_iter() -> Box<dyn Iterator<Item=&'static TypeMetadata>> {
+pub fn type_metadata_iter() -> Box<dyn Iterator<Item = &'static TypeMetadata>> {
     Box::new(inventory::iter::<TypeMetadata>.into_iter())
 }
 
 /// 返回当前二进制中已注册的枚举运行时导出元数据。
 #[cfg(feature = "collect")]
-pub fn enum_metadata_iter() -> Box<dyn Iterator<Item=&'static EnumMetadata>> {
+pub fn enum_metadata_iter() -> Box<dyn Iterator<Item = &'static EnumMetadata>> {
     Box::new(inventory::iter::<EnumMetadata>.into_iter())
 }

@@ -7,7 +7,7 @@ use syn::{Attribute, Error, ImplItem, ItemImpl, punctuated::Punctuated};
 use syn::{FnArg, ImplItemFn, LitStr, ReturnType, Type};
 
 #[cfg(feature = "collect")]
-use crate::type_transform::{TypeTransform, TypeWrapper};
+use crate::type_transform::TypeTransform;
 
 pub fn expand(mut item: ItemImpl) -> syn::Result<TokenStream> {
     if item.trait_.is_some() {
@@ -218,33 +218,9 @@ fn enum_field_value(method: &ImplItemFn) -> syn::Result<TokenStream> {
     };
     let method = &method.sig.ident;
     let transform = TypeTransform::from_type(ty);
-    if !transform.requires_string {
-        return Ok(quote!(::framework_proc_core::enum_field_value(value.#method())?));
-    }
-    Ok(match transform.wrapper {
-        TypeWrapper::Plain => quote!(::framework_proc_core::serde_json::Value::String(
-            value.#method().to_string(),
-        )),
-        TypeWrapper::Option => quote!(match value.#method() {
-            Some(value) => ::framework_proc_core::serde_json::Value::String(value.to_string()),
-            None => ::framework_proc_core::serde_json::Value::Null,
-        }),
-        TypeWrapper::Vec => quote!(::framework_proc_core::serde_json::Value::Array(
-            value.#method()
-                .into_iter()
-                .map(|value| ::framework_proc_core::serde_json::Value::String(value.to_string()))
-                .collect(),
-        )),
-        TypeWrapper::OptionVec => quote!(match value.#method() {
-            Some(values) => ::framework_proc_core::serde_json::Value::Array(
-                values
-                    .into_iter()
-                    .map(|value| ::framework_proc_core::serde_json::Value::String(value.to_string()))
-                    .collect(),
-            ),
-            None => ::framework_proc_core::serde_json::Value::Null,
-        }),
-    })
+    Ok(transform
+        .enum_value(method)
+        .unwrap_or_else(|| quote!(::framework_proc_core::enum_field_value(value.#method())?)))
 }
 
 #[cfg(feature = "collect")]
