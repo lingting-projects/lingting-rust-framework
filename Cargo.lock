@@ -285,6 +285,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "framework-region"
+version = "26.8.14"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "framework-web"
 version = "26.8.14"
 dependencies = [

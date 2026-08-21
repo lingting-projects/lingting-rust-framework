@@ -1,0 +1,5000 @@
+[
+  {
+    "iso": "AD",
+    "iso3": "AND",
+    "flag": "ad",
+    "callingCodes": [
+      "376"
+    ],
+    "phonePrefixes": [
+      "376"
+    ],
+    "names": {
+      "en": "Andorra",
+      "zh": "安道尔"
+    },
+    "numeric": "020",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "AE",
+    "iso3": "ARE",
+    "flag": "ae",
+    "callingCodes": [
+      "971"
+    ],
+    "phonePrefixes": [
+      "971"
+    ],
+    "names": {
+      "en": "United Arab Emirates",
+      "zh": "阿拉伯联合酋长国"
+    },
+    "numeric": "784",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "AF",
+    "iso3": "AFG",
+    "flag": "af",
+    "callingCodes": [
+      "93"
+    ],
+    "phonePrefixes": [
+      "93"
+    ],
+    "names": {
+      "en": "Afghanistan",
+      "zh": "阿富汗"
+    },
+    "numeric": "004",
+    "m49": {
+      "region": "142",
+      "subregion": "034"
+    }
+  },
+  {
+    "iso": "AG",
+    "iso3": "ATG",
+    "flag": "ag",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1268"
+    ],
+    "names": {
+      "en": "Antigua \u0026 Barbuda",
+      "zh": "安提瓜和巴布达"
+    },
+    "numeric": "028",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "AI",
+    "iso3": "AIA",
+    "flag": "ai",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1264"
+    ],
+    "names": {
+      "en": "Anguilla",
+      "zh": "安圭拉"
+    },
+    "numeric": "660",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "AL",
+    "iso3": "ALB",
+    "flag": "al",
+    "callingCodes": [
+      "355"
+    ],
+    "phonePrefixes": [
+      "355"
+    ],
+    "names": {
+      "en": "Albania",
+      "zh": "阿尔巴尼亚"
+    },
+    "numeric": "008",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "AM",
+    "iso3": "ARM",
+    "flag": "am",
+    "callingCodes": [
+      "374"
+    ],
+    "phonePrefixes": [
+      "374"
+    ],
+    "names": {
+      "en": "Armenia",
+      "zh": "亚美尼亚"
+    },
+    "numeric": "051",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "AO",
+    "iso3": "AGO",
+    "flag": "ao",
+    "callingCodes": [
+      "244"
+    ],
+    "phonePrefixes": [
+      "244"
+    ],
+    "names": {
+      "en": "Angola",
+      "zh": "安哥拉"
+    },
+    "numeric": "024",
+    "m49": {
+      "region": "002",
+      "subregion": "017"
+    }
+  },
+  {
+    "iso": "AQ",
+    "iso3": "ATA",
+    "flag": "aq",
+    "callingCodes": [],
+    "phonePrefixes": [],
+    "names": {
+      "en": "Antarctica",
+      "zh": "南极洲"
+    },
+    "numeric": "010",
+    "m49": {}
+  },
+  {
+    "iso": "AR",
+    "iso3": "ARG",
+    "flag": "ar",
+    "callingCodes": [
+      "54"
+    ],
+    "phonePrefixes": [
+      "54"
+    ],
+    "names": {
+      "en": "Argentina",
+      "zh": "阿根廷"
+    },
+    "numeric": "032",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "AS",
+    "iso3": "ASM",
+    "flag": "as",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1684"
+    ],
+    "names": {
+      "en": "American Samoa",
+      "zh": "美属萨摩亚"
+    },
+    "numeric": "016",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "AT",
+    "iso3": "AUT",
+    "flag": "at",
+    "callingCodes": [
+      "43"
+    ],
+    "phonePrefixes": [
+      "43"
+    ],
+    "names": {
+      "en": "Austria",
+      "zh": "奥地利"
+    },
+    "numeric": "040",
+    "m49": {
+      "region": "150",
+      "subregion": "155"
+    }
+  },
+  {
+    "iso": "AU",
+    "iso3": "AUS",
+    "flag": "au",
+    "callingCodes": [
+      "61"
+    ],
+    "phonePrefixes": [
+      "61"
+    ],
+    "names": {
+      "en": "Australia",
+      "zh": "澳大利亚"
+    },
+    "numeric": "036",
+    "m49": {
+      "region": "009",
+      "subregion": "053"
+    }
+  },
+  {
+    "iso": "AW",
+    "iso3": "ABW",
+    "flag": "aw",
+    "callingCodes": [
+      "297"
+    ],
+    "phonePrefixes": [
+      "297"
+    ],
+    "names": {
+      "en": "Aruba",
+      "zh": "阿鲁巴"
+    },
+    "numeric": "533",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "AX",
+    "iso3": "ALA",
+    "flag": "ax",
+    "callingCodes": [
+      "358"
+    ],
+    "phonePrefixes": [
+      "35818"
+    ],
+    "names": {
+      "en": "Åland Islands",
+      "zh": "奥兰群岛"
+    },
+    "numeric": "248",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "AZ",
+    "iso3": "AZE",
+    "flag": "az",
+    "callingCodes": [
+      "994"
+    ],
+    "phonePrefixes": [
+      "994"
+    ],
+    "names": {
+      "en": "Azerbaijan",
+      "zh": "阿塞拜疆"
+    },
+    "numeric": "031",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "BA",
+    "iso3": "BIH",
+    "flag": "ba",
+    "callingCodes": [
+      "387"
+    ],
+    "phonePrefixes": [
+      "387"
+    ],
+    "names": {
+      "en": "Bosnia \u0026 Herzegovina",
+      "zh": "波斯尼亚和黑塞哥维那"
+    },
+    "numeric": "070",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "BB",
+    "iso3": "BRB",
+    "flag": "bb",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1246"
+    ],
+    "names": {
+      "en": "Barbados",
+      "zh": "巴巴多斯"
+    },
+    "numeric": "052",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "BD",
+    "iso3": "BGD",
+    "flag": "bd",
+    "callingCodes": [
+      "880"
+    ],
+    "phonePrefixes": [
+      "880"
+    ],
+    "names": {
+      "en": "Bangladesh",
+      "zh": "孟加拉国"
+    },
+    "numeric": "050",
+    "m49": {
+      "region": "142",
+      "subregion": "034"
+    }
+  },
+  {
+    "iso": "BE",
+    "iso3": "BEL",
+    "flag": "be",
+    "callingCodes": [
+      "32"
+    ],
+    "phonePrefixes": [
+      "32"
+    ],
+    "names": {
+      "en": "Belgium",
+      "zh": "比利时"
+    },
+    "numeric": "056",
+    "m49": {
+      "region": "150",
+      "subregion": "155"
+    }
+  },
+  {
+    "iso": "BF",
+    "iso3": "BFA",
+    "flag": "bf",
+    "callingCodes": [
+      "226"
+    ],
+    "phonePrefixes": [
+      "226"
+    ],
+    "names": {
+      "en": "Burkina Faso",
+      "zh": "布基纳法索"
+    },
+    "numeric": "854",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "BG",
+    "iso3": "BGR",
+    "flag": "bg",
+    "callingCodes": [
+      "359"
+    ],
+    "phonePrefixes": [
+      "359"
+    ],
+    "names": {
+      "en": "Bulgaria",
+      "zh": "保加利亚"
+    },
+    "numeric": "100",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "BH",
+    "iso3": "BHR",
+    "flag": "bh",
+    "callingCodes": [
+      "973"
+    ],
+    "phonePrefixes": [
+      "973"
+    ],
+    "names": {
+      "en": "Bahrain",
+      "zh": "巴林"
+    },
+    "numeric": "048",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "BI",
+    "iso3": "BDI",
+    "flag": "bi",
+    "callingCodes": [
+      "257"
+    ],
+    "phonePrefixes": [
+      "257"
+    ],
+    "names": {
+      "en": "Burundi",
+      "zh": "布隆迪"
+    },
+    "numeric": "108",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "BJ",
+    "iso3": "BEN",
+    "flag": "bj",
+    "callingCodes": [
+      "229"
+    ],
+    "phonePrefixes": [
+      "229"
+    ],
+    "names": {
+      "en": "Benin",
+      "zh": "贝宁"
+    },
+    "numeric": "204",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "BL",
+    "iso3": "BLM",
+    "flag": "bl",
+    "callingCodes": [
+      "590"
+    ],
+    "phonePrefixes": [
+      "590"
+    ],
+    "names": {
+      "en": "St. Barthélemy",
+      "zh": "圣巴泰勒米"
+    },
+    "numeric": "652",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "BM",
+    "iso3": "BMU",
+    "flag": "bm",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1441"
+    ],
+    "names": {
+      "en": "Bermuda",
+      "zh": "百慕大"
+    },
+    "numeric": "060",
+    "m49": {
+      "region": "019",
+      "subregion": "021"
+    }
+  },
+  {
+    "iso": "BN",
+    "iso3": "BRN",
+    "flag": "bn",
+    "callingCodes": [
+      "673"
+    ],
+    "phonePrefixes": [
+      "673"
+    ],
+    "names": {
+      "en": "Brunei",
+      "zh": "文莱"
+    },
+    "numeric": "096",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "BO",
+    "iso3": "BOL",
+    "flag": "bo",
+    "callingCodes": [
+      "591"
+    ],
+    "phonePrefixes": [
+      "591"
+    ],
+    "names": {
+      "en": "Bolivia",
+      "zh": "玻利维亚"
+    },
+    "numeric": "068",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "BQ",
+    "iso3": "BES",
+    "flag": "bq",
+    "callingCodes": [
+      "599"
+    ],
+    "phonePrefixes": [
+      "5993",
+      "5994",
+      "5997"
+    ],
+    "names": {
+      "en": "Caribbean Netherlands",
+      "zh": "荷属加勒比区"
+    },
+    "numeric": "535",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "BR",
+    "iso3": "BRA",
+    "flag": "br",
+    "callingCodes": [
+      "55"
+    ],
+    "phonePrefixes": [
+      "55"
+    ],
+    "names": {
+      "en": "Brazil",
+      "zh": "巴西"
+    },
+    "numeric": "076",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "BS",
+    "iso3": "BHS",
+    "flag": "bs",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1242"
+    ],
+    "names": {
+      "en": "Bahamas",
+      "zh": "巴哈马"
+    },
+    "numeric": "044",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "BT",
+    "iso3": "BTN",
+    "flag": "bt",
+    "callingCodes": [
+      "975"
+    ],
+    "phonePrefixes": [
+      "975"
+    ],
+    "names": {
+      "en": "Bhutan",
+      "zh": "不丹"
+    },
+    "numeric": "064",
+    "m49": {
+      "region": "142",
+      "subregion": "034"
+    }
+  },
+  {
+    "iso": "BV",
+    "iso3": "BVT",
+    "flag": "bv",
+    "callingCodes": [],
+    "phonePrefixes": [],
+    "names": {
+      "en": "Bouvet Island",
+      "zh": "布韦岛"
+    },
+    "numeric": "074",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "BW",
+    "iso3": "BWA",
+    "flag": "bw",
+    "callingCodes": [
+      "267"
+    ],
+    "phonePrefixes": [
+      "267"
+    ],
+    "names": {
+      "en": "Botswana",
+      "zh": "博茨瓦纳"
+    },
+    "numeric": "072",
+    "m49": {
+      "region": "002",
+      "subregion": "018"
+    }
+  },
+  {
+    "iso": "BY",
+    "iso3": "BLR",
+    "flag": "by",
+    "callingCodes": [
+      "375"
+    ],
+    "phonePrefixes": [
+      "375"
+    ],
+    "names": {
+      "en": "Belarus",
+      "zh": "白俄罗斯"
+    },
+    "numeric": "112",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "BZ",
+    "iso3": "BLZ",
+    "flag": "bz",
+    "callingCodes": [
+      "501"
+    ],
+    "phonePrefixes": [
+      "501"
+    ],
+    "names": {
+      "en": "Belize",
+      "zh": "伯利兹"
+    },
+    "numeric": "084",
+    "m49": {
+      "region": "019",
+      "subregion": "013"
+    }
+  },
+  {
+    "iso": "CA",
+    "iso3": "CAN",
+    "flag": "ca",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1"
+    ],
+    "names": {
+      "en": "Canada",
+      "zh": "加拿大"
+    },
+    "numeric": "124",
+    "m49": {
+      "region": "019",
+      "subregion": "021"
+    }
+  },
+  {
+    "iso": "CC",
+    "iso3": "CCK",
+    "flag": "cc",
+    "callingCodes": [
+      "61"
+    ],
+    "phonePrefixes": [
+      "61"
+    ],
+    "names": {
+      "en": "Cocos (Keeling) Islands",
+      "zh": "科科斯（基林）群岛"
+    },
+    "numeric": "166",
+    "m49": {
+      "region": "009",
+      "subregion": "053"
+    }
+  },
+  {
+    "iso": "CD",
+    "iso3": "COD",
+    "flag": "cd",
+    "callingCodes": [
+      "243"
+    ],
+    "phonePrefixes": [
+      "243"
+    ],
+    "names": {
+      "en": "Congo - Kinshasa",
+      "zh": "刚果（金）"
+    },
+    "numeric": "180",
+    "m49": {
+      "region": "002",
+      "subregion": "017"
+    }
+  },
+  {
+    "iso": "CF",
+    "iso3": "CAF",
+    "flag": "cf",
+    "callingCodes": [
+      "236"
+    ],
+    "phonePrefixes": [
+      "236"
+    ],
+    "names": {
+      "en": "Central African Republic",
+      "zh": "中非共和国"
+    },
+    "numeric": "140",
+    "m49": {
+      "region": "002",
+      "subregion": "017"
+    }
+  },
+  {
+    "iso": "CG",
+    "iso3": "COG",
+    "flag": "cg",
+    "callingCodes": [
+      "242"
+    ],
+    "phonePrefixes": [
+      "242"
+    ],
+    "names": {
+      "en": "Congo - Brazzaville",
+      "zh": "刚果（布）"
+    },
+    "numeric": "178",
+    "m49": {
+      "region": "002",
+      "subregion": "017"
+    }
+  },
+  {
+    "iso": "CH",
+    "iso3": "CHE",
+    "flag": "ch",
+    "callingCodes": [
+      "41"
+    ],
+    "phonePrefixes": [
+      "41"
+    ],
+    "names": {
+      "en": "Switzerland",
+      "zh": "瑞士"
+    },
+    "numeric": "756",
+    "m49": {
+      "region": "150",
+      "subregion": "155"
+    }
+  },
+  {
+    "iso": "CI",
+    "iso3": "CIV",
+    "flag": "ci",
+    "callingCodes": [
+      "225"
+    ],
+    "phonePrefixes": [
+      "225"
+    ],
+    "names": {
+      "en": "Côte d’Ivoire",
+      "zh": "科特迪瓦"
+    },
+    "numeric": "384",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "CK",
+    "iso3": "COK",
+    "flag": "ck",
+    "callingCodes": [
+      "682"
+    ],
+    "phonePrefixes": [
+      "682"
+    ],
+    "names": {
+      "en": "Cook Islands",
+      "zh": "库克群岛"
+    },
+    "numeric": "184",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "CL",
+    "iso3": "CHL",
+    "flag": "cl",
+    "callingCodes": [
+      "56"
+    ],
+    "phonePrefixes": [
+      "56"
+    ],
+    "names": {
+      "en": "Chile",
+      "zh": "智利"
+    },
+    "numeric": "152",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "CM",
+    "iso3": "CMR",
+    "flag": "cm",
+    "callingCodes": [
+      "237"
+    ],
+    "phonePrefixes": [
+      "237"
+    ],
+    "names": {
+      "en": "Cameroon",
+      "zh": "喀麦隆"
+    },
+    "numeric": "120",
+    "m49": {
+      "region": "002",
+      "subregion": "017"
+    }
+  },
+  {
+    "iso": "CN",
+    "iso3": "CHN",
+    "flag": "cn",
+    "callingCodes": [
+      "86"
+    ],
+    "phonePrefixes": [
+      "86"
+    ],
+    "names": {
+      "en": "China",
+      "zh": "中国"
+    },
+    "numeric": "156",
+    "m49": {
+      "region": "142",
+      "subregion": "030"
+    }
+  },
+  {
+    "iso": "CO",
+    "iso3": "COL",
+    "flag": "co",
+    "callingCodes": [
+      "57"
+    ],
+    "phonePrefixes": [
+      "57"
+    ],
+    "names": {
+      "en": "Colombia",
+      "zh": "哥伦比亚"
+    },
+    "numeric": "170",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "CR",
+    "iso3": "CRI",
+    "flag": "cr",
+    "callingCodes": [
+      "506"
+    ],
+    "phonePrefixes": [
+      "506"
+    ],
+    "names": {
+      "en": "Costa Rica",
+      "zh": "哥斯达黎加"
+    },
+    "numeric": "188",
+    "m49": {
+      "region": "019",
+      "subregion": "013"
+    }
+  },
+  {
+    "iso": "CU",
+    "iso3": "CUB",
+    "flag": "cu",
+    "callingCodes": [
+      "53"
+    ],
+    "phonePrefixes": [
+      "53"
+    ],
+    "names": {
+      "en": "Cuba",
+      "zh": "古巴"
+    },
+    "numeric": "192",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "CV",
+    "iso3": "CPV",
+    "flag": "cv",
+    "callingCodes": [
+      "238"
+    ],
+    "phonePrefixes": [
+      "238"
+    ],
+    "names": {
+      "en": "Cape Verde",
+      "zh": "佛得角"
+    },
+    "numeric": "132",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "CW",
+    "iso3": "CUW",
+    "flag": "cw",
+    "callingCodes": [
+      "599"
+    ],
+    "phonePrefixes": [
+      "5996",
+      "5999"
+    ],
+    "names": {
+      "en": "Curaçao",
+      "zh": "库拉索"
+    },
+    "numeric": "531",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "CX",
+    "iso3": "CXR",
+    "flag": "cx",
+    "callingCodes": [
+      "61"
+    ],
+    "phonePrefixes": [
+      "61"
+    ],
+    "names": {
+      "en": "Christmas Island",
+      "zh": "圣诞岛"
+    },
+    "numeric": "162",
+    "m49": {
+      "region": "009",
+      "subregion": "053"
+    }
+  },
+  {
+    "iso": "CY",
+    "iso3": "CYP",
+    "flag": "cy",
+    "callingCodes": [
+      "357"
+    ],
+    "phonePrefixes": [
+      "357"
+    ],
+    "names": {
+      "en": "Cyprus",
+      "zh": "塞浦路斯"
+    },
+    "numeric": "196",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "CZ",
+    "iso3": "CZE",
+    "flag": "cz",
+    "callingCodes": [
+      "420"
+    ],
+    "phonePrefixes": [
+      "420"
+    ],
+    "names": {
+      "en": "Czechia",
+      "zh": "捷克"
+    },
+    "numeric": "203",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "DE",
+    "iso3": "DEU",
+    "flag": "de",
+    "callingCodes": [
+      "49"
+    ],
+    "phonePrefixes": [
+      "49"
+    ],
+    "names": {
+      "en": "Germany",
+      "zh": "德国"
+    },
+    "numeric": "276",
+    "m49": {
+      "region": "150",
+      "subregion": "155"
+    }
+  },
+  {
+    "iso": "DJ",
+    "iso3": "DJI",
+    "flag": "dj",
+    "callingCodes": [
+      "253"
+    ],
+    "phonePrefixes": [
+      "253"
+    ],
+    "names": {
+      "en": "Djibouti",
+      "zh": "吉布提"
+    },
+    "numeric": "262",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "DK",
+    "iso3": "DNK",
+    "flag": "dk",
+    "callingCodes": [
+      "45"
+    ],
+    "phonePrefixes": [
+      "45"
+    ],
+    "names": {
+      "en": "Denmark",
+      "zh": "丹麦"
+    },
+    "numeric": "208",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "DM",
+    "iso3": "DMA",
+    "flag": "dm",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1767"
+    ],
+    "names": {
+      "en": "Dominica",
+      "zh": "多米尼克"
+    },
+    "numeric": "212",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "DO",
+    "iso3": "DOM",
+    "flag": "do",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "18001",
+      "1809",
+      "1829",
+      "1849"
+    ],
+    "names": {
+      "en": "Dominican Republic",
+      "zh": "多米尼加共和国"
+    },
+    "numeric": "214",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "DZ",
+    "iso3": "DZA",
+    "flag": "dz",
+    "callingCodes": [
+      "213"
+    ],
+    "phonePrefixes": [
+      "213"
+    ],
+    "names": {
+      "en": "Algeria",
+      "zh": "阿尔及利亚"
+    },
+    "numeric": "012",
+    "m49": {
+      "region": "002",
+      "subregion": "015"
+    }
+  },
+  {
+    "iso": "EC",
+    "iso3": "ECU",
+    "flag": "ec",
+    "callingCodes": [
+      "593"
+    ],
+    "phonePrefixes": [
+      "593"
+    ],
+    "names": {
+      "en": "Ecuador",
+      "zh": "厄瓜多尔"
+    },
+    "numeric": "218",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "EE",
+    "iso3": "EST",
+    "flag": "ee",
+    "callingCodes": [
+      "372"
+    ],
+    "phonePrefixes": [
+      "372"
+    ],
+    "names": {
+      "en": "Estonia",
+      "zh": "爱沙尼亚"
+    },
+    "numeric": "233",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "EG",
+    "iso3": "EGY",
+    "flag": "eg",
+    "callingCodes": [
+      "20"
+    ],
+    "phonePrefixes": [
+      "20"
+    ],
+    "names": {
+      "en": "Egypt",
+      "zh": "埃及"
+    },
+    "numeric": "818",
+    "m49": {
+      "region": "002",
+      "subregion": "015"
+    }
+  },
+  {
+    "iso": "EH",
+    "iso3": "ESH",
+    "flag": "eh",
+    "callingCodes": [
+      "212"
+    ],
+    "phonePrefixes": [
+      "212"
+    ],
+    "names": {
+      "en": "Western Sahara",
+      "zh": "西撒哈拉"
+    },
+    "numeric": "732",
+    "m49": {
+      "region": "002",
+      "subregion": "015"
+    }
+  },
+  {
+    "iso": "ER",
+    "iso3": "ERI",
+    "flag": "er",
+    "callingCodes": [
+      "291"
+    ],
+    "phonePrefixes": [
+      "291"
+    ],
+    "names": {
+      "en": "Eritrea",
+      "zh": "厄立特里亚"
+    },
+    "numeric": "232",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "ES",
+    "iso3": "ESP",
+    "flag": "es",
+    "callingCodes": [
+      "34"
+    ],
+    "phonePrefixes": [
+      "34"
+    ],
+    "names": {
+      "en": "Spain",
+      "zh": "西班牙"
+    },
+    "numeric": "724",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "ET",
+    "iso3": "ETH",
+    "flag": "et",
+    "callingCodes": [
+      "251"
+    ],
+    "phonePrefixes": [
+      "251"
+    ],
+    "names": {
+      "en": "Ethiopia",
+      "zh": "埃塞俄比亚"
+    },
+    "numeric": "231",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "FI",
+    "iso3": "FIN",
+    "flag": "fi",
+    "callingCodes": [
+      "358"
+    ],
+    "phonePrefixes": [
+      "35810",
+      "35813",
+      "35814",
+      "35815",
+      "35816",
+      "35817",
+      "35819",
+      "3582",
+      "3583",
+      "3584",
+      "3585",
+      "3586",
+      "3587",
+      "3588",
+      "3589"
+    ],
+    "names": {
+      "en": "Finland",
+      "zh": "芬兰"
+    },
+    "numeric": "246",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "FJ",
+    "iso3": "FJI",
+    "flag": "fj",
+    "callingCodes": [
+      "679"
+    ],
+    "phonePrefixes": [
+      "679"
+    ],
+    "names": {
+      "en": "Fiji",
+      "zh": "斐济"
+    },
+    "numeric": "242",
+    "m49": {
+      "region": "009",
+      "subregion": "054"
+    }
+  },
+  {
+    "iso": "FK",
+    "iso3": "FLK",
+    "flag": "fk",
+    "callingCodes": [
+      "500"
+    ],
+    "phonePrefixes": [
+      "500"
+    ],
+    "names": {
+      "en": "Falkland Islands",
+      "zh": "福克兰群岛"
+    },
+    "numeric": "238",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "FM",
+    "iso3": "FSM",
+    "flag": "fm",
+    "callingCodes": [
+      "691"
+    ],
+    "phonePrefixes": [
+      "691"
+    ],
+    "names": {
+      "en": "Micronesia",
+      "zh": "密克罗尼西亚"
+    },
+    "numeric": "583",
+    "m49": {
+      "region": "009",
+      "subregion": "057"
+    }
+  },
+  {
+    "iso": "FO",
+    "iso3": "FRO",
+    "flag": "fo",
+    "callingCodes": [
+      "298"
+    ],
+    "phonePrefixes": [
+      "298"
+    ],
+    "names": {
+      "en": "Faroe Islands",
+      "zh": "法罗群岛"
+    },
+    "numeric": "234",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "FR",
+    "iso3": "FRA",
+    "flag": "fr",
+    "callingCodes": [
+      "33"
+    ],
+    "phonePrefixes": [
+      "33"
+    ],
+    "names": {
+      "en": "France",
+      "zh": "法国"
+    },
+    "numeric": "250",
+    "m49": {
+      "region": "150",
+      "subregion": "155"
+    }
+  },
+  {
+    "iso": "GA",
+    "iso3": "GAB",
+    "flag": "ga",
+    "callingCodes": [
+      "241"
+    ],
+    "phonePrefixes": [
+      "241"
+    ],
+    "names": {
+      "en": "Gabon",
+      "zh": "加蓬"
+    },
+    "numeric": "266",
+    "m49": {
+      "region": "002",
+      "subregion": "017"
+    }
+  },
+  {
+    "iso": "GB",
+    "iso3": "GBR",
+    "flag": "gb",
+    "callingCodes": [
+      "44"
+    ],
+    "phonePrefixes": [
+      "44"
+    ],
+    "names": {
+      "en": "United Kingdom",
+      "zh": "英国"
+    },
+    "numeric": "826",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "GD",
+    "iso3": "GRD",
+    "flag": "gd",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1473"
+    ],
+    "names": {
+      "en": "Grenada",
+      "zh": "格林纳达"
+    },
+    "numeric": "308",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "GE",
+    "iso3": "GEO",
+    "flag": "ge",
+    "callingCodes": [
+      "995"
+    ],
+    "phonePrefixes": [
+      "995"
+    ],
+    "names": {
+      "en": "Georgia",
+      "zh": "格鲁吉亚"
+    },
+    "numeric": "268",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "GF",
+    "iso3": "GUF",
+    "flag": "gf",
+    "callingCodes": [
+      "594"
+    ],
+    "phonePrefixes": [
+      "594"
+    ],
+    "names": {
+      "en": "French Guiana",
+      "zh": "法属圭亚那"
+    },
+    "numeric": "254",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "GG",
+    "iso3": "GGY",
+    "flag": "gg",
+    "callingCodes": [
+      "44"
+    ],
+    "phonePrefixes": [
+      "44"
+    ],
+    "names": {
+      "en": "Guernsey",
+      "zh": "根西岛"
+    },
+    "numeric": "831",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "GH",
+    "iso3": "GHA",
+    "flag": "gh",
+    "callingCodes": [
+      "233"
+    ],
+    "phonePrefixes": [
+      "233"
+    ],
+    "names": {
+      "en": "Ghana",
+      "zh": "加纳"
+    },
+    "numeric": "288",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "GI",
+    "iso3": "GIB",
+    "flag": "gi",
+    "callingCodes": [
+      "350"
+    ],
+    "phonePrefixes": [
+      "350"
+    ],
+    "names": {
+      "en": "Gibraltar",
+      "zh": "直布罗陀"
+    },
+    "numeric": "292",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "GL",
+    "iso3": "GRL",
+    "flag": "gl",
+    "callingCodes": [
+      "299"
+    ],
+    "phonePrefixes": [
+      "299"
+    ],
+    "names": {
+      "en": "Greenland",
+      "zh": "格陵兰"
+    },
+    "numeric": "304",
+    "m49": {
+      "region": "019",
+      "subregion": "021"
+    }
+  },
+  {
+    "iso": "GM",
+    "iso3": "GMB",
+    "flag": "gm",
+    "callingCodes": [
+      "220"
+    ],
+    "phonePrefixes": [
+      "220"
+    ],
+    "names": {
+      "en": "Gambia",
+      "zh": "冈比亚"
+    },
+    "numeric": "270",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "GN",
+    "iso3": "GIN",
+    "flag": "gn",
+    "callingCodes": [
+      "224"
+    ],
+    "phonePrefixes": [
+      "224"
+    ],
+    "names": {
+      "en": "Guinea",
+      "zh": "几内亚"
+    },
+    "numeric": "324",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "GP",
+    "iso3": "GLP",
+    "flag": "gp",
+    "callingCodes": [
+      "590"
+    ],
+    "phonePrefixes": [
+      "590"
+    ],
+    "names": {
+      "en": "Guadeloupe",
+      "zh": "瓜德罗普"
+    },
+    "numeric": "312",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "GQ",
+    "iso3": "GNQ",
+    "flag": "gq",
+    "callingCodes": [
+      "240"
+    ],
+    "phonePrefixes": [
+      "240"
+    ],
+    "names": {
+      "en": "Equatorial Guinea",
+      "zh": "赤道几内亚"
+    },
+    "numeric": "226",
+    "m49": {
+      "region": "002",
+      "subregion": "017"
+    }
+  },
+  {
+    "iso": "GR",
+    "iso3": "GRC",
+    "flag": "gr",
+    "callingCodes": [
+      "30"
+    ],
+    "phonePrefixes": [
+      "30"
+    ],
+    "names": {
+      "en": "Greece",
+      "zh": "希腊"
+    },
+    "numeric": "300",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "GS",
+    "iso3": "SGS",
+    "flag": "gs",
+    "callingCodes": [],
+    "phonePrefixes": [],
+    "names": {
+      "en": "South Georgia \u0026 South Sandwich Islands",
+      "zh": "南乔治亚和南桑威奇群岛"
+    },
+    "numeric": "239",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "GT",
+    "iso3": "GTM",
+    "flag": "gt",
+    "callingCodes": [
+      "502"
+    ],
+    "phonePrefixes": [
+      "502"
+    ],
+    "names": {
+      "en": "Guatemala",
+      "zh": "危地马拉"
+    },
+    "numeric": "320",
+    "m49": {
+      "region": "019",
+      "subregion": "013"
+    }
+  },
+  {
+    "iso": "GU",
+    "iso3": "GUM",
+    "flag": "gu",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1671"
+    ],
+    "names": {
+      "en": "Guam",
+      "zh": "关岛"
+    },
+    "numeric": "316",
+    "m49": {
+      "region": "009",
+      "subregion": "057"
+    }
+  },
+  {
+    "iso": "GW",
+    "iso3": "GNB",
+    "flag": "gw",
+    "callingCodes": [
+      "245"
+    ],
+    "phonePrefixes": [
+      "245"
+    ],
+    "names": {
+      "en": "Guinea-Bissau",
+      "zh": "几内亚比绍"
+    },
+    "numeric": "624",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "GY",
+    "iso3": "GUY",
+    "flag": "gy",
+    "callingCodes": [
+      "592"
+    ],
+    "phonePrefixes": [
+      "592"
+    ],
+    "names": {
+      "en": "Guyana",
+      "zh": "圭亚那"
+    },
+    "numeric": "328",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "HK",
+    "iso3": "HKG",
+    "flag": "cn",
+    "callingCodes": [
+      "852"
+    ],
+    "phonePrefixes": [
+      "852"
+    ],
+    "names": {
+      "en": "Hong Kong SAR China",
+      "zh": "中国香港特别行政区"
+    },
+    "numeric": "344",
+    "m49": {
+      "region": "142",
+      "subregion": "030"
+    }
+  },
+  {
+    "iso": "HM",
+    "iso3": "HMD",
+    "flag": "hm",
+    "callingCodes": [],
+    "phonePrefixes": [],
+    "names": {
+      "en": "Heard \u0026 McDonald Islands",
+      "zh": "赫德岛和麦克唐纳群岛"
+    },
+    "numeric": "334",
+    "m49": {
+      "region": "009",
+      "subregion": "053"
+    }
+  },
+  {
+    "iso": "HN",
+    "iso3": "HND",
+    "flag": "hn",
+    "callingCodes": [
+      "504"
+    ],
+    "phonePrefixes": [
+      "504"
+    ],
+    "names": {
+      "en": "Honduras",
+      "zh": "洪都拉斯"
+    },
+    "numeric": "340",
+    "m49": {
+      "region": "019",
+      "subregion": "013"
+    }
+  },
+  {
+    "iso": "HR",
+    "iso3": "HRV",
+    "flag": "hr",
+    "callingCodes": [
+      "385"
+    ],
+    "phonePrefixes": [
+      "385"
+    ],
+    "names": {
+      "en": "Croatia",
+      "zh": "克罗地亚"
+    },
+    "numeric": "191",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "HT",
+    "iso3": "HTI",
+    "flag": "ht",
+    "callingCodes": [
+      "509"
+    ],
+    "phonePrefixes": [
+      "509"
+    ],
+    "names": {
+      "en": "Haiti",
+      "zh": "海地"
+    },
+    "numeric": "332",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "HU",
+    "iso3": "HUN",
+    "flag": "hu",
+    "callingCodes": [
+      "36"
+    ],
+    "phonePrefixes": [
+      "36"
+    ],
+    "names": {
+      "en": "Hungary",
+      "zh": "匈牙利"
+    },
+    "numeric": "348",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "ID",
+    "iso3": "IDN",
+    "flag": "id",
+    "callingCodes": [
+      "62"
+    ],
+    "phonePrefixes": [
+      "62"
+    ],
+    "names": {
+      "en": "Indonesia",
+      "zh": "印度尼西亚"
+    },
+    "numeric": "360",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "IE",
+    "iso3": "IRL",
+    "flag": "ie",
+    "callingCodes": [
+      "353"
+    ],
+    "phonePrefixes": [
+      "353"
+    ],
+    "names": {
+      "en": "Ireland",
+      "zh": "爱尔兰"
+    },
+    "numeric": "372",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "IL",
+    "iso3": "ISR",
+    "flag": "il",
+    "callingCodes": [
+      "972"
+    ],
+    "phonePrefixes": [
+      "972"
+    ],
+    "names": {
+      "en": "Israel",
+      "zh": "以色列"
+    },
+    "numeric": "376",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "IM",
+    "iso3": "IMN",
+    "flag": "im",
+    "callingCodes": [
+      "44"
+    ],
+    "phonePrefixes": [
+      "441624",
+      "4474576",
+      "447524",
+      "447624"
+    ],
+    "names": {
+      "en": "Isle of Man",
+      "zh": "马恩岛"
+    },
+    "numeric": "833",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "IN",
+    "iso3": "IND",
+    "flag": "in",
+    "callingCodes": [
+      "91"
+    ],
+    "phonePrefixes": [
+      "91"
+    ],
+    "names": {
+      "en": "India",
+      "zh": "印度"
+    },
+    "numeric": "356",
+    "m49": {
+      "region": "142",
+      "subregion": "034"
+    }
+  },
+  {
+    "iso": "IO",
+    "iso3": "IOT",
+    "flag": "io",
+    "callingCodes": [
+      "246"
+    ],
+    "phonePrefixes": [
+      "246"
+    ],
+    "names": {
+      "en": "British Indian Ocean Territory",
+      "zh": "英属印度洋领地"
+    },
+    "numeric": "086",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "IQ",
+    "iso3": "IRQ",
+    "flag": "iq",
+    "callingCodes": [
+      "964"
+    ],
+    "phonePrefixes": [
+      "964"
+    ],
+    "names": {
+      "en": "Iraq",
+      "zh": "伊拉克"
+    },
+    "numeric": "368",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "IR",
+    "iso3": "IRN",
+    "flag": "ir",
+    "callingCodes": [
+      "98"
+    ],
+    "phonePrefixes": [
+      "98"
+    ],
+    "names": {
+      "en": "Iran",
+      "zh": "伊朗"
+    },
+    "numeric": "364",
+    "m49": {
+      "region": "142",
+      "subregion": "034"
+    }
+  },
+  {
+    "iso": "IS",
+    "iso3": "ISL",
+    "flag": "is",
+    "callingCodes": [
+      "354"
+    ],
+    "phonePrefixes": [
+      "354"
+    ],
+    "names": {
+      "en": "Iceland",
+      "zh": "冰岛"
+    },
+    "numeric": "352",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "IT",
+    "iso3": "ITA",
+    "flag": "it",
+    "callingCodes": [
+      "39"
+    ],
+    "phonePrefixes": [
+      "39"
+    ],
+    "names": {
+      "en": "Italy",
+      "zh": "意大利"
+    },
+    "numeric": "380",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "JE",
+    "iso3": "JEY",
+    "flag": "je",
+    "callingCodes": [
+      "44"
+    ],
+    "phonePrefixes": [
+      "44"
+    ],
+    "names": {
+      "en": "Jersey",
+      "zh": "泽西岛"
+    },
+    "numeric": "832",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "JM",
+    "iso3": "JAM",
+    "flag": "jm",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1658",
+      "1876"
+    ],
+    "names": {
+      "en": "Jamaica",
+      "zh": "牙买加"
+    },
+    "numeric": "388",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "JO",
+    "iso3": "JOR",
+    "flag": "jo",
+    "callingCodes": [
+      "962"
+    ],
+    "phonePrefixes": [
+      "962"
+    ],
+    "names": {
+      "en": "Jordan",
+      "zh": "约旦"
+    },
+    "numeric": "400",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "JP",
+    "iso3": "JPN",
+    "flag": "jp",
+    "callingCodes": [
+      "81"
+    ],
+    "phonePrefixes": [
+      "81"
+    ],
+    "names": {
+      "en": "Japan",
+      "zh": "日本"
+    },
+    "numeric": "392",
+    "m49": {
+      "region": "142",
+      "subregion": "030"
+    }
+  },
+  {
+    "iso": "KE",
+    "iso3": "KEN",
+    "flag": "ke",
+    "callingCodes": [
+      "254"
+    ],
+    "phonePrefixes": [
+      "254"
+    ],
+    "names": {
+      "en": "Kenya",
+      "zh": "肯尼亚"
+    },
+    "numeric": "404",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "KG",
+    "iso3": "KGZ",
+    "flag": "kg",
+    "callingCodes": [
+      "996"
+    ],
+    "phonePrefixes": [
+      "996"
+    ],
+    "names": {
+      "en": "Kyrgyzstan",
+      "zh": "吉尔吉斯斯坦"
+    },
+    "numeric": "417",
+    "m49": {
+      "region": "142",
+      "subregion": "143"
+    }
+  },
+  {
+    "iso": "KH",
+    "iso3": "KHM",
+    "flag": "kh",
+    "callingCodes": [
+      "855"
+    ],
+    "phonePrefixes": [
+      "855"
+    ],
+    "names": {
+      "en": "Cambodia",
+      "zh": "柬埔寨"
+    },
+    "numeric": "116",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "KI",
+    "iso3": "KIR",
+    "flag": "ki",
+    "callingCodes": [
+      "686"
+    ],
+    "phonePrefixes": [
+      "686"
+    ],
+    "names": {
+      "en": "Kiribati",
+      "zh": "基里巴斯"
+    },
+    "numeric": "296",
+    "m49": {
+      "region": "009",
+      "subregion": "057"
+    }
+  },
+  {
+    "iso": "KM",
+    "iso3": "COM",
+    "flag": "km",
+    "callingCodes": [
+      "269"
+    ],
+    "phonePrefixes": [
+      "269"
+    ],
+    "names": {
+      "en": "Comoros",
+      "zh": "科摩罗"
+    },
+    "numeric": "174",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "KN",
+    "iso3": "KNA",
+    "flag": "kn",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1869"
+    ],
+    "names": {
+      "en": "St. Kitts \u0026 Nevis",
+      "zh": "圣基茨和尼维斯"
+    },
+    "numeric": "659",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "KP",
+    "iso3": "PRK",
+    "flag": "kp",
+    "callingCodes": [
+      "850"
+    ],
+    "phonePrefixes": [
+      "850"
+    ],
+    "names": {
+      "en": "North Korea",
+      "zh": "朝鲜"
+    },
+    "numeric": "408",
+    "m49": {
+      "region": "142",
+      "subregion": "030"
+    }
+  },
+  {
+    "iso": "KR",
+    "iso3": "KOR",
+    "flag": "kr",
+    "callingCodes": [
+      "82"
+    ],
+    "phonePrefixes": [
+      "82"
+    ],
+    "names": {
+      "en": "South Korea",
+      "zh": "韩国"
+    },
+    "numeric": "410",
+    "m49": {
+      "region": "142",
+      "subregion": "030"
+    }
+  },
+  {
+    "iso": "KW",
+    "iso3": "KWT",
+    "flag": "kw",
+    "callingCodes": [
+      "965"
+    ],
+    "phonePrefixes": [
+      "965"
+    ],
+    "names": {
+      "en": "Kuwait",
+      "zh": "科威特"
+    },
+    "numeric": "414",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "KY",
+    "iso3": "CYM",
+    "flag": "ky",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1345"
+    ],
+    "names": {
+      "en": "Cayman Islands",
+      "zh": "开曼群岛"
+    },
+    "numeric": "136",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "KZ",
+    "iso3": "KAZ",
+    "flag": "kz",
+    "callingCodes": [
+      "7"
+    ],
+    "phonePrefixes": [
+      "77"
+    ],
+    "names": {
+      "en": "Kazakhstan",
+      "zh": "哈萨克斯坦"
+    },
+    "numeric": "398",
+    "m49": {
+      "region": "142",
+      "subregion": "143"
+    }
+  },
+  {
+    "iso": "LA",
+    "iso3": "LAO",
+    "flag": "la",
+    "callingCodes": [
+      "856"
+    ],
+    "phonePrefixes": [
+      "856"
+    ],
+    "names": {
+      "en": "Laos",
+      "zh": "老挝"
+    },
+    "numeric": "418",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "LB",
+    "iso3": "LBN",
+    "flag": "lb",
+    "callingCodes": [
+      "961"
+    ],
+    "phonePrefixes": [
+      "961"
+    ],
+    "names": {
+      "en": "Lebanon",
+      "zh": "黎巴嫩"
+    },
+    "numeric": "422",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "LC",
+    "iso3": "LCA",
+    "flag": "lc",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1758"
+    ],
+    "names": {
+      "en": "St. Lucia",
+      "zh": "圣卢西亚"
+    },
+    "numeric": "662",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "LI",
+    "iso3": "LIE",
+    "flag": "li",
+    "callingCodes": [
+      "423"
+    ],
+    "phonePrefixes": [
+      "423"
+    ],
+    "names": {
+      "en": "Liechtenstein",
+      "zh": "列支敦士登"
+    },
+    "numeric": "438",
+    "m49": {
+      "region": "150",
+      "subregion": "155"
+    }
+  },
+  {
+    "iso": "LK",
+    "iso3": "LKA",
+    "flag": "lk",
+    "callingCodes": [
+      "94"
+    ],
+    "phonePrefixes": [
+      "94"
+    ],
+    "names": {
+      "en": "Sri Lanka",
+      "zh": "斯里兰卡"
+    },
+    "numeric": "144",
+    "m49": {
+      "region": "142",
+      "subregion": "034"
+    }
+  },
+  {
+    "iso": "LR",
+    "iso3": "LBR",
+    "flag": "lr",
+    "callingCodes": [
+      "231"
+    ],
+    "phonePrefixes": [
+      "231"
+    ],
+    "names": {
+      "en": "Liberia",
+      "zh": "利比里亚"
+    },
+    "numeric": "430",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "LS",
+    "iso3": "LSO",
+    "flag": "ls",
+    "callingCodes": [
+      "266"
+    ],
+    "phonePrefixes": [
+      "266"
+    ],
+    "names": {
+      "en": "Lesotho",
+      "zh": "莱索托"
+    },
+    "numeric": "426",
+    "m49": {
+      "region": "002",
+      "subregion": "018"
+    }
+  },
+  {
+    "iso": "LT",
+    "iso3": "LTU",
+    "flag": "lt",
+    "callingCodes": [
+      "370"
+    ],
+    "phonePrefixes": [
+      "370"
+    ],
+    "names": {
+      "en": "Lithuania",
+      "zh": "立陶宛"
+    },
+    "numeric": "440",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "LU",
+    "iso3": "LUX",
+    "flag": "lu",
+    "callingCodes": [
+      "352"
+    ],
+    "phonePrefixes": [
+      "352"
+    ],
+    "names": {
+      "en": "Luxembourg",
+      "zh": "卢森堡"
+    },
+    "numeric": "442",
+    "m49": {
+      "region": "150",
+      "subregion": "155"
+    }
+  },
+  {
+    "iso": "LV",
+    "iso3": "LVA",
+    "flag": "lv",
+    "callingCodes": [
+      "371"
+    ],
+    "phonePrefixes": [
+      "371"
+    ],
+    "names": {
+      "en": "Latvia",
+      "zh": "拉脱维亚"
+    },
+    "numeric": "428",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "LY",
+    "iso3": "LBY",
+    "flag": "ly",
+    "callingCodes": [
+      "218"
+    ],
+    "phonePrefixes": [
+      "218"
+    ],
+    "names": {
+      "en": "Libya",
+      "zh": "利比亚"
+    },
+    "numeric": "434",
+    "m49": {
+      "region": "002",
+      "subregion": "015"
+    }
+  },
+  {
+    "iso": "MA",
+    "iso3": "MAR",
+    "flag": "ma",
+    "callingCodes": [
+      "212"
+    ],
+    "phonePrefixes": [
+      "2125",
+      "2126",
+      "2127",
+      "2128"
+    ],
+    "names": {
+      "en": "Morocco",
+      "zh": "摩洛哥"
+    },
+    "numeric": "504",
+    "m49": {
+      "region": "002",
+      "subregion": "015"
+    }
+  },
+  {
+    "iso": "MC",
+    "iso3": "MCO",
+    "flag": "mc",
+    "callingCodes": [
+      "377"
+    ],
+    "phonePrefixes": [
+      "377"
+    ],
+    "names": {
+      "en": "Monaco",
+      "zh": "摩纳哥"
+    },
+    "numeric": "492",
+    "m49": {
+      "region": "150",
+      "subregion": "155"
+    }
+  },
+  {
+    "iso": "MD",
+    "iso3": "MDA",
+    "flag": "md",
+    "callingCodes": [
+      "373"
+    ],
+    "phonePrefixes": [
+      "373"
+    ],
+    "names": {
+      "en": "Moldova",
+      "zh": "摩尔多瓦"
+    },
+    "numeric": "498",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "ME",
+    "iso3": "MNE",
+    "flag": "me",
+    "callingCodes": [
+      "382"
+    ],
+    "phonePrefixes": [
+      "382"
+    ],
+    "names": {
+      "en": "Montenegro",
+      "zh": "黑山"
+    },
+    "numeric": "499",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "MF",
+    "iso3": "MAF",
+    "flag": "mf",
+    "callingCodes": [
+      "590"
+    ],
+    "phonePrefixes": [
+      "590"
+    ],
+    "names": {
+      "en": "St. Martin",
+      "zh": "法属圣马丁"
+    },
+    "numeric": "663",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "MG",
+    "iso3": "MDG",
+    "flag": "mg",
+    "callingCodes": [
+      "261"
+    ],
+    "phonePrefixes": [
+      "261"
+    ],
+    "names": {
+      "en": "Madagascar",
+      "zh": "马达加斯加"
+    },
+    "numeric": "450",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "MH",
+    "iso3": "MHL",
+    "flag": "mh",
+    "callingCodes": [
+      "692"
+    ],
+    "phonePrefixes": [
+      "692"
+    ],
+    "names": {
+      "en": "Marshall Islands",
+      "zh": "马绍尔群岛"
+    },
+    "numeric": "584",
+    "m49": {
+      "region": "009",
+      "subregion": "057"
+    }
+  },
+  {
+    "iso": "MK",
+    "iso3": "MKD",
+    "flag": "mk",
+    "callingCodes": [
+      "389"
+    ],
+    "phonePrefixes": [
+      "389"
+    ],
+    "names": {
+      "en": "North Macedonia",
+      "zh": "北马其顿"
+    },
+    "numeric": "807",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "ML",
+    "iso3": "MLI",
+    "flag": "ml",
+    "callingCodes": [
+      "223"
+    ],
+    "phonePrefixes": [
+      "223"
+    ],
+    "names": {
+      "en": "Mali",
+      "zh": "马里"
+    },
+    "numeric": "466",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "MM",
+    "iso3": "MMR",
+    "flag": "mm",
+    "callingCodes": [
+      "95"
+    ],
+    "phonePrefixes": [
+      "95"
+    ],
+    "names": {
+      "en": "Myanmar (Burma)",
+      "zh": "缅甸"
+    },
+    "numeric": "104",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "MN",
+    "iso3": "MNG",
+    "flag": "mn",
+    "callingCodes": [
+      "976"
+    ],
+    "phonePrefixes": [
+      "976"
+    ],
+    "names": {
+      "en": "Mongolia",
+      "zh": "蒙古"
+    },
+    "numeric": "496",
+    "m49": {
+      "region": "142",
+      "subregion": "030"
+    }
+  },
+  {
+    "iso": "MO",
+    "iso3": "MAC",
+    "flag": "cn",
+    "callingCodes": [
+      "853"
+    ],
+    "phonePrefixes": [
+      "853"
+    ],
+    "names": {
+      "en": "Macao SAR China",
+      "zh": "中国澳门特别行政区"
+    },
+    "numeric": "446",
+    "m49": {
+      "region": "142",
+      "subregion": "030"
+    }
+  },
+  {
+    "iso": "MP",
+    "iso3": "MNP",
+    "flag": "mp",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1670"
+    ],
+    "names": {
+      "en": "Northern Mariana Islands",
+      "zh": "北马里亚纳群岛"
+    },
+    "numeric": "580",
+    "m49": {
+      "region": "009",
+      "subregion": "057"
+    }
+  },
+  {
+    "iso": "MQ",
+    "iso3": "MTQ",
+    "flag": "mq",
+    "callingCodes": [
+      "596"
+    ],
+    "phonePrefixes": [
+      "596"
+    ],
+    "names": {
+      "en": "Martinique",
+      "zh": "马提尼克"
+    },
+    "numeric": "474",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "MR",
+    "iso3": "MRT",
+    "flag": "mr",
+    "callingCodes": [
+      "222"
+    ],
+    "phonePrefixes": [
+      "222"
+    ],
+    "names": {
+      "en": "Mauritania",
+      "zh": "毛里塔尼亚"
+    },
+    "numeric": "478",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "MS",
+    "iso3": "MSR",
+    "flag": "ms",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1664"
+    ],
+    "names": {
+      "en": "Montserrat",
+      "zh": "蒙特塞拉特"
+    },
+    "numeric": "500",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "MT",
+    "iso3": "MLT",
+    "flag": "mt",
+    "callingCodes": [
+      "356"
+    ],
+    "phonePrefixes": [
+      "356"
+    ],
+    "names": {
+      "en": "Malta",
+      "zh": "马耳他"
+    },
+    "numeric": "470",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "MU",
+    "iso3": "MUS",
+    "flag": "mu",
+    "callingCodes": [
+      "230"
+    ],
+    "phonePrefixes": [
+      "230"
+    ],
+    "names": {
+      "en": "Mauritius",
+      "zh": "毛里求斯"
+    },
+    "numeric": "480",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "MV",
+    "iso3": "MDV",
+    "flag": "mv",
+    "callingCodes": [
+      "960"
+    ],
+    "phonePrefixes": [
+      "960"
+    ],
+    "names": {
+      "en": "Maldives",
+      "zh": "马尔代夫"
+    },
+    "numeric": "462",
+    "m49": {
+      "region": "142",
+      "subregion": "034"
+    }
+  },
+  {
+    "iso": "MW",
+    "iso3": "MWI",
+    "flag": "mw",
+    "callingCodes": [
+      "265"
+    ],
+    "phonePrefixes": [
+      "265"
+    ],
+    "names": {
+      "en": "Malawi",
+      "zh": "马拉维"
+    },
+    "numeric": "454",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "MX",
+    "iso3": "MEX",
+    "flag": "mx",
+    "callingCodes": [
+      "52"
+    ],
+    "phonePrefixes": [
+      "52"
+    ],
+    "names": {
+      "en": "Mexico",
+      "zh": "墨西哥"
+    },
+    "numeric": "484",
+    "m49": {
+      "region": "019",
+      "subregion": "013"
+    }
+  },
+  {
+    "iso": "MY",
+    "iso3": "MYS",
+    "flag": "my",
+    "callingCodes": [
+      "60"
+    ],
+    "phonePrefixes": [
+      "60"
+    ],
+    "names": {
+      "en": "Malaysia",
+      "zh": "马来西亚"
+    },
+    "numeric": "458",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "MZ",
+    "iso3": "MOZ",
+    "flag": "mz",
+    "callingCodes": [
+      "258"
+    ],
+    "phonePrefixes": [
+      "258"
+    ],
+    "names": {
+      "en": "Mozambique",
+      "zh": "莫桑比克"
+    },
+    "numeric": "508",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "NA",
+    "iso3": "NAM",
+    "flag": "na",
+    "callingCodes": [
+      "264"
+    ],
+    "phonePrefixes": [
+      "264"
+    ],
+    "names": {
+      "en": "Namibia",
+      "zh": "纳米比亚"
+    },
+    "numeric": "516",
+    "m49": {
+      "region": "002",
+      "subregion": "018"
+    }
+  },
+  {
+    "iso": "NC",
+    "iso3": "NCL",
+    "flag": "nc",
+    "callingCodes": [
+      "687"
+    ],
+    "phonePrefixes": [
+      "687"
+    ],
+    "names": {
+      "en": "New Caledonia",
+      "zh": "新喀里多尼亚"
+    },
+    "numeric": "540",
+    "m49": {
+      "region": "009",
+      "subregion": "054"
+    }
+  },
+  {
+    "iso": "NE",
+    "iso3": "NER",
+    "flag": "ne",
+    "callingCodes": [
+      "227"
+    ],
+    "phonePrefixes": [
+      "227"
+    ],
+    "names": {
+      "en": "Niger",
+      "zh": "尼日尔"
+    },
+    "numeric": "562",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "NF",
+    "iso3": "NFK",
+    "flag": "nf",
+    "callingCodes": [
+      "672"
+    ],
+    "phonePrefixes": [
+      "672"
+    ],
+    "names": {
+      "en": "Norfolk Island",
+      "zh": "诺福克岛"
+    },
+    "numeric": "574",
+    "m49": {
+      "region": "009",
+      "subregion": "053"
+    }
+  },
+  {
+    "iso": "NG",
+    "iso3": "NGA",
+    "flag": "ng",
+    "callingCodes": [
+      "234"
+    ],
+    "phonePrefixes": [
+      "234"
+    ],
+    "names": {
+      "en": "Nigeria",
+      "zh": "尼日利亚"
+    },
+    "numeric": "566",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "NI",
+    "iso3": "NIC",
+    "flag": "ni",
+    "callingCodes": [
+      "505"
+    ],
+    "phonePrefixes": [
+      "505"
+    ],
+    "names": {
+      "en": "Nicaragua",
+      "zh": "尼加拉瓜"
+    },
+    "numeric": "558",
+    "m49": {
+      "region": "019",
+      "subregion": "013"
+    }
+  },
+  {
+    "iso": "NL",
+    "iso3": "NLD",
+    "flag": "nl",
+    "callingCodes": [
+      "31"
+    ],
+    "phonePrefixes": [
+      "31"
+    ],
+    "names": {
+      "en": "Netherlands",
+      "zh": "荷兰"
+    },
+    "numeric": "528",
+    "m49": {
+      "region": "150",
+      "subregion": "155"
+    }
+  },
+  {
+    "iso": "NO",
+    "iso3": "NOR",
+    "flag": "no",
+    "callingCodes": [
+      "47"
+    ],
+    "phonePrefixes": [
+      "470",
+      "472",
+      "473",
+      "474",
+      "475",
+      "476",
+      "4770",
+      "4771",
+      "4772",
+      "4773",
+      "4774",
+      "4775",
+      "4776",
+      "4777",
+      "4778",
+      "478",
+      "479"
+    ],
+    "names": {
+      "en": "Norway",
+      "zh": "挪威"
+    },
+    "numeric": "578",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "NP",
+    "iso3": "NPL",
+    "flag": "np",
+    "callingCodes": [
+      "977"
+    ],
+    "phonePrefixes": [
+      "977"
+    ],
+    "names": {
+      "en": "Nepal",
+      "zh": "尼泊尔"
+    },
+    "numeric": "524",
+    "m49": {
+      "region": "142",
+      "subregion": "034"
+    }
+  },
+  {
+    "iso": "NR",
+    "iso3": "NRU",
+    "flag": "nr",
+    "callingCodes": [
+      "674"
+    ],
+    "phonePrefixes": [
+      "674"
+    ],
+    "names": {
+      "en": "Nauru",
+      "zh": "瑙鲁"
+    },
+    "numeric": "520",
+    "m49": {
+      "region": "009",
+      "subregion": "057"
+    }
+  },
+  {
+    "iso": "NU",
+    "iso3": "NIU",
+    "flag": "nu",
+    "callingCodes": [
+      "683"
+    ],
+    "phonePrefixes": [
+      "683"
+    ],
+    "names": {
+      "en": "Niue",
+      "zh": "纽埃"
+    },
+    "numeric": "570",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "NZ",
+    "iso3": "NZL",
+    "flag": "nz",
+    "callingCodes": [
+      "64"
+    ],
+    "phonePrefixes": [
+      "64"
+    ],
+    "names": {
+      "en": "New Zealand",
+      "zh": "新西兰"
+    },
+    "numeric": "554",
+    "m49": {
+      "region": "009",
+      "subregion": "053"
+    }
+  },
+  {
+    "iso": "OM",
+    "iso3": "OMN",
+    "flag": "om",
+    "callingCodes": [
+      "968"
+    ],
+    "phonePrefixes": [
+      "968"
+    ],
+    "names": {
+      "en": "Oman",
+      "zh": "阿曼"
+    },
+    "numeric": "512",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "PA",
+    "iso3": "PAN",
+    "flag": "pa",
+    "callingCodes": [
+      "507"
+    ],
+    "phonePrefixes": [
+      "507"
+    ],
+    "names": {
+      "en": "Panama",
+      "zh": "巴拿马"
+    },
+    "numeric": "591",
+    "m49": {
+      "region": "019",
+      "subregion": "013"
+    }
+  },
+  {
+    "iso": "PE",
+    "iso3": "PER",
+    "flag": "pe",
+    "callingCodes": [
+      "51"
+    ],
+    "phonePrefixes": [
+      "51"
+    ],
+    "names": {
+      "en": "Peru",
+      "zh": "秘鲁"
+    },
+    "numeric": "604",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "PF",
+    "iso3": "PYF",
+    "flag": "pf",
+    "callingCodes": [
+      "689"
+    ],
+    "phonePrefixes": [
+      "689"
+    ],
+    "names": {
+      "en": "French Polynesia",
+      "zh": "法属波利尼西亚"
+    },
+    "numeric": "258",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "PG",
+    "iso3": "PNG",
+    "flag": "pg",
+    "callingCodes": [
+      "675"
+    ],
+    "phonePrefixes": [
+      "675"
+    ],
+    "names": {
+      "en": "Papua New Guinea",
+      "zh": "巴布亚新几内亚"
+    },
+    "numeric": "598",
+    "m49": {
+      "region": "009",
+      "subregion": "054"
+    }
+  },
+  {
+    "iso": "PH",
+    "iso3": "PHL",
+    "flag": "ph",
+    "callingCodes": [
+      "63"
+    ],
+    "phonePrefixes": [
+      "63"
+    ],
+    "names": {
+      "en": "Philippines",
+      "zh": "菲律宾"
+    },
+    "numeric": "608",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "PK",
+    "iso3": "PAK",
+    "flag": "pk",
+    "callingCodes": [
+      "92"
+    ],
+    "phonePrefixes": [
+      "92"
+    ],
+    "names": {
+      "en": "Pakistan",
+      "zh": "巴基斯坦"
+    },
+    "numeric": "586",
+    "m49": {
+      "region": "142",
+      "subregion": "034"
+    }
+  },
+  {
+    "iso": "PL",
+    "iso3": "POL",
+    "flag": "pl",
+    "callingCodes": [
+      "48"
+    ],
+    "phonePrefixes": [
+      "48"
+    ],
+    "names": {
+      "en": "Poland",
+      "zh": "波兰"
+    },
+    "numeric": "616",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "PM",
+    "iso3": "SPM",
+    "flag": "pm",
+    "callingCodes": [
+      "508"
+    ],
+    "phonePrefixes": [
+      "508"
+    ],
+    "names": {
+      "en": "St. Pierre \u0026 Miquelon",
+      "zh": "圣皮埃尔和密克隆群岛"
+    },
+    "numeric": "666",
+    "m49": {
+      "region": "019",
+      "subregion": "021"
+    }
+  },
+  {
+    "iso": "PN",
+    "iso3": "PCN",
+    "flag": "pn",
+    "callingCodes": [],
+    "phonePrefixes": [],
+    "names": {
+      "en": "Pitcairn Islands",
+      "zh": "皮特凯恩群岛"
+    },
+    "numeric": "612",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "PR",
+    "iso3": "PRI",
+    "flag": "pr",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1787",
+      "1939"
+    ],
+    "names": {
+      "en": "Puerto Rico",
+      "zh": "波多黎各"
+    },
+    "numeric": "630",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "PS",
+    "iso3": "PSE",
+    "flag": "ps",
+    "callingCodes": [
+      "970"
+    ],
+    "phonePrefixes": [
+      "970"
+    ],
+    "names": {
+      "en": "Palestinian Territories",
+      "zh": "巴勒斯坦领土"
+    },
+    "numeric": "275",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "PT",
+    "iso3": "PRT",
+    "flag": "pt",
+    "callingCodes": [
+      "351"
+    ],
+    "phonePrefixes": [
+      "351"
+    ],
+    "names": {
+      "en": "Portugal",
+      "zh": "葡萄牙"
+    },
+    "numeric": "620",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "PW",
+    "iso3": "PLW",
+    "flag": "pw",
+    "callingCodes": [
+      "680"
+    ],
+    "phonePrefixes": [
+      "680"
+    ],
+    "names": {
+      "en": "Palau",
+      "zh": "帕劳"
+    },
+    "numeric": "585",
+    "m49": {
+      "region": "009",
+      "subregion": "057"
+    }
+  },
+  {
+    "iso": "PY",
+    "iso3": "PRY",
+    "flag": "py",
+    "callingCodes": [
+      "595"
+    ],
+    "phonePrefixes": [
+      "595"
+    ],
+    "names": {
+      "en": "Paraguay",
+      "zh": "巴拉圭"
+    },
+    "numeric": "600",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "QA",
+    "iso3": "QAT",
+    "flag": "qa",
+    "callingCodes": [
+      "974"
+    ],
+    "phonePrefixes": [
+      "974"
+    ],
+    "names": {
+      "en": "Qatar",
+      "zh": "卡塔尔"
+    },
+    "numeric": "634",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "RE",
+    "iso3": "REU",
+    "flag": "re",
+    "callingCodes": [
+      "262"
+    ],
+    "phonePrefixes": [
+      "262"
+    ],
+    "names": {
+      "en": "Réunion",
+      "zh": "留尼汪"
+    },
+    "numeric": "638",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "RO",
+    "iso3": "ROU",
+    "flag": "ro",
+    "callingCodes": [
+      "40"
+    ],
+    "phonePrefixes": [
+      "40"
+    ],
+    "names": {
+      "en": "Romania",
+      "zh": "罗马尼亚"
+    },
+    "numeric": "642",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "RS",
+    "iso3": "SRB",
+    "flag": "rs",
+    "callingCodes": [
+      "381"
+    ],
+    "phonePrefixes": [
+      "381"
+    ],
+    "names": {
+      "en": "Serbia",
+      "zh": "塞尔维亚"
+    },
+    "numeric": "688",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "RU",
+    "iso3": "RUS",
+    "flag": "ru",
+    "callingCodes": [
+      "7"
+    ],
+    "phonePrefixes": [
+      "73",
+      "74",
+      "78",
+      "79"
+    ],
+    "names": {
+      "en": "Russia",
+      "zh": "俄罗斯"
+    },
+    "numeric": "643",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "RW",
+    "iso3": "RWA",
+    "flag": "rw",
+    "callingCodes": [
+      "250"
+    ],
+    "phonePrefixes": [
+      "250"
+    ],
+    "names": {
+      "en": "Rwanda",
+      "zh": "卢旺达"
+    },
+    "numeric": "646",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "SA",
+    "iso3": "SAU",
+    "flag": "sa",
+    "callingCodes": [
+      "966"
+    ],
+    "phonePrefixes": [
+      "966"
+    ],
+    "names": {
+      "en": "Saudi Arabia",
+      "zh": "沙特阿拉伯"
+    },
+    "numeric": "682",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "SB",
+    "iso3": "SLB",
+    "flag": "sb",
+    "callingCodes": [
+      "677"
+    ],
+    "phonePrefixes": [
+      "677"
+    ],
+    "names": {
+      "en": "Solomon Islands",
+      "zh": "所罗门群岛"
+    },
+    "numeric": "090",
+    "m49": {
+      "region": "009",
+      "subregion": "054"
+    }
+  },
+  {
+    "iso": "SC",
+    "iso3": "SYC",
+    "flag": "sc",
+    "callingCodes": [
+      "248"
+    ],
+    "phonePrefixes": [
+      "248"
+    ],
+    "names": {
+      "en": "Seychelles",
+      "zh": "塞舌尔"
+    },
+    "numeric": "690",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "SD",
+    "iso3": "SDN",
+    "flag": "sd",
+    "callingCodes": [
+      "249"
+    ],
+    "phonePrefixes": [
+      "249"
+    ],
+    "names": {
+      "en": "Sudan",
+      "zh": "苏丹"
+    },
+    "numeric": "729",
+    "m49": {
+      "region": "002",
+      "subregion": "015"
+    }
+  },
+  {
+    "iso": "SE",
+    "iso3": "SWE",
+    "flag": "se",
+    "callingCodes": [
+      "46"
+    ],
+    "phonePrefixes": [
+      "46"
+    ],
+    "names": {
+      "en": "Sweden",
+      "zh": "瑞典"
+    },
+    "numeric": "752",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "SG",
+    "iso3": "SGP",
+    "flag": "sg",
+    "callingCodes": [
+      "65"
+    ],
+    "phonePrefixes": [
+      "65"
+    ],
+    "names": {
+      "en": "Singapore",
+      "zh": "新加坡"
+    },
+    "numeric": "702",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "SH",
+    "iso3": "SHN",
+    "flag": "sh",
+    "callingCodes": [
+      "290"
+    ],
+    "phonePrefixes": [
+      "2902",
+      "2905",
+      "2906"
+    ],
+    "names": {
+      "en": "St. Helena",
+      "zh": "圣赫勒拿"
+    },
+    "numeric": "654",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "SI",
+    "iso3": "SVN",
+    "flag": "si",
+    "callingCodes": [
+      "386"
+    ],
+    "phonePrefixes": [
+      "386"
+    ],
+    "names": {
+      "en": "Slovenia",
+      "zh": "斯洛文尼亚"
+    },
+    "numeric": "705",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "SJ",
+    "iso3": "SJM",
+    "flag": "sj",
+    "callingCodes": [
+      "47"
+    ],
+    "phonePrefixes": [
+      "4779"
+    ],
+    "names": {
+      "en": "Svalbard \u0026 Jan Mayen",
+      "zh": "斯瓦尔巴和扬马延"
+    },
+    "numeric": "744",
+    "m49": {
+      "region": "150",
+      "subregion": "154"
+    }
+  },
+  {
+    "iso": "SK",
+    "iso3": "SVK",
+    "flag": "sk",
+    "callingCodes": [
+      "421"
+    ],
+    "phonePrefixes": [
+      "421"
+    ],
+    "names": {
+      "en": "Slovakia",
+      "zh": "斯洛伐克"
+    },
+    "numeric": "703",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "SL",
+    "iso3": "SLE",
+    "flag": "sl",
+    "callingCodes": [
+      "232"
+    ],
+    "phonePrefixes": [
+      "232"
+    ],
+    "names": {
+      "en": "Sierra Leone",
+      "zh": "塞拉利昂"
+    },
+    "numeric": "694",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "SM",
+    "iso3": "SMR",
+    "flag": "sm",
+    "callingCodes": [
+      "378"
+    ],
+    "phonePrefixes": [
+      "378"
+    ],
+    "names": {
+      "en": "San Marino",
+      "zh": "圣马力诺"
+    },
+    "numeric": "674",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "SN",
+    "iso3": "SEN",
+    "flag": "sn",
+    "callingCodes": [
+      "221"
+    ],
+    "phonePrefixes": [
+      "221"
+    ],
+    "names": {
+      "en": "Senegal",
+      "zh": "塞内加尔"
+    },
+    "numeric": "686",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "SO",
+    "iso3": "SOM",
+    "flag": "so",
+    "callingCodes": [
+      "252"
+    ],
+    "phonePrefixes": [
+      "252"
+    ],
+    "names": {
+      "en": "Somalia",
+      "zh": "索马里"
+    },
+    "numeric": "706",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "SR",
+    "iso3": "SUR",
+    "flag": "sr",
+    "callingCodes": [
+      "597"
+    ],
+    "phonePrefixes": [
+      "597"
+    ],
+    "names": {
+      "en": "Suriname",
+      "zh": "苏里南"
+    },
+    "numeric": "740",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "SS",
+    "iso3": "SSD",
+    "flag": "ss",
+    "callingCodes": [
+      "211"
+    ],
+    "phonePrefixes": [
+      "211"
+    ],
+    "names": {
+      "en": "South Sudan",
+      "zh": "南苏丹"
+    },
+    "numeric": "728",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "ST",
+    "iso3": "STP",
+    "flag": "st",
+    "callingCodes": [
+      "239"
+    ],
+    "phonePrefixes": [
+      "239"
+    ],
+    "names": {
+      "en": "São Tomé \u0026 Príncipe",
+      "zh": "圣多美和普林西比"
+    },
+    "numeric": "678",
+    "m49": {
+      "region": "002",
+      "subregion": "017"
+    }
+  },
+  {
+    "iso": "SV",
+    "iso3": "SLV",
+    "flag": "sv",
+    "callingCodes": [
+      "503"
+    ],
+    "phonePrefixes": [
+      "503"
+    ],
+    "names": {
+      "en": "El Salvador",
+      "zh": "萨尔瓦多"
+    },
+    "numeric": "222",
+    "m49": {
+      "region": "019",
+      "subregion": "013"
+    }
+  },
+  {
+    "iso": "SX",
+    "iso3": "SXM",
+    "flag": "sx",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1721"
+    ],
+    "names": {
+      "en": "Sint Maarten",
+      "zh": "荷属圣马丁"
+    },
+    "numeric": "534",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "SY",
+    "iso3": "SYR",
+    "flag": "sy",
+    "callingCodes": [
+      "963"
+    ],
+    "phonePrefixes": [
+      "963"
+    ],
+    "names": {
+      "en": "Syria",
+      "zh": "叙利亚"
+    },
+    "numeric": "760",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "SZ",
+    "iso3": "SWZ",
+    "flag": "sz",
+    "callingCodes": [
+      "268"
+    ],
+    "phonePrefixes": [
+      "268"
+    ],
+    "names": {
+      "en": "Eswatini",
+      "zh": "斯威士兰"
+    },
+    "numeric": "748",
+    "m49": {
+      "region": "002",
+      "subregion": "018"
+    }
+  },
+  {
+    "iso": "TC",
+    "iso3": "TCA",
+    "flag": "tc",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1649"
+    ],
+    "names": {
+      "en": "Turks \u0026 Caicos Islands",
+      "zh": "特克斯和凯科斯群岛"
+    },
+    "numeric": "796",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "TD",
+    "iso3": "TCD",
+    "flag": "td",
+    "callingCodes": [
+      "235"
+    ],
+    "phonePrefixes": [
+      "235"
+    ],
+    "names": {
+      "en": "Chad",
+      "zh": "乍得"
+    },
+    "numeric": "148",
+    "m49": {
+      "region": "002",
+      "subregion": "017"
+    }
+  },
+  {
+    "iso": "TF",
+    "iso3": "ATF",
+    "flag": "tf",
+    "callingCodes": [],
+    "phonePrefixes": [],
+    "names": {
+      "en": "French Southern Territories",
+      "zh": "法属南部领地"
+    },
+    "numeric": "260",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "TG",
+    "iso3": "TGO",
+    "flag": "tg",
+    "callingCodes": [
+      "228"
+    ],
+    "phonePrefixes": [
+      "228"
+    ],
+    "names": {
+      "en": "Togo",
+      "zh": "多哥"
+    },
+    "numeric": "768",
+    "m49": {
+      "region": "002",
+      "subregion": "011"
+    }
+  },
+  {
+    "iso": "TH",
+    "iso3": "THA",
+    "flag": "th",
+    "callingCodes": [
+      "66"
+    ],
+    "phonePrefixes": [
+      "66"
+    ],
+    "names": {
+      "en": "Thailand",
+      "zh": "泰国"
+    },
+    "numeric": "764",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "TJ",
+    "iso3": "TJK",
+    "flag": "tj",
+    "callingCodes": [
+      "992"
+    ],
+    "phonePrefixes": [
+      "992"
+    ],
+    "names": {
+      "en": "Tajikistan",
+      "zh": "塔吉克斯坦"
+    },
+    "numeric": "762",
+    "m49": {
+      "region": "142",
+      "subregion": "143"
+    }
+  },
+  {
+    "iso": "TK",
+    "iso3": "TKL",
+    "flag": "tk",
+    "callingCodes": [
+      "690"
+    ],
+    "phonePrefixes": [
+      "690"
+    ],
+    "names": {
+      "en": "Tokelau",
+      "zh": "托克劳"
+    },
+    "numeric": "772",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "TL",
+    "iso3": "TLS",
+    "flag": "tl",
+    "callingCodes": [
+      "670"
+    ],
+    "phonePrefixes": [
+      "670"
+    ],
+    "names": {
+      "en": "Timor-Leste",
+      "zh": "东帝汶"
+    },
+    "numeric": "626",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "TM",
+    "iso3": "TKM",
+    "flag": "tm",
+    "callingCodes": [
+      "993"
+    ],
+    "phonePrefixes": [
+      "993"
+    ],
+    "names": {
+      "en": "Turkmenistan",
+      "zh": "土库曼斯坦"
+    },
+    "numeric": "795",
+    "m49": {
+      "region": "142",
+      "subregion": "143"
+    }
+  },
+  {
+    "iso": "TN",
+    "iso3": "TUN",
+    "flag": "tn",
+    "callingCodes": [
+      "216"
+    ],
+    "phonePrefixes": [
+      "216"
+    ],
+    "names": {
+      "en": "Tunisia",
+      "zh": "突尼斯"
+    },
+    "numeric": "788",
+    "m49": {
+      "region": "002",
+      "subregion": "015"
+    }
+  },
+  {
+    "iso": "TO",
+    "iso3": "TON",
+    "flag": "to",
+    "callingCodes": [
+      "676"
+    ],
+    "phonePrefixes": [
+      "676"
+    ],
+    "names": {
+      "en": "Tonga",
+      "zh": "汤加"
+    },
+    "numeric": "776",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "TR",
+    "iso3": "TUR",
+    "flag": "tr",
+    "callingCodes": [
+      "90"
+    ],
+    "phonePrefixes": [
+      "90"
+    ],
+    "names": {
+      "en": "Türkiye",
+      "zh": "土耳其"
+    },
+    "numeric": "792",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "TT",
+    "iso3": "TTO",
+    "flag": "tt",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1868"
+    ],
+    "names": {
+      "en": "Trinidad \u0026 Tobago",
+      "zh": "特立尼达和多巴哥"
+    },
+    "numeric": "780",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "TV",
+    "iso3": "TUV",
+    "flag": "tv",
+    "callingCodes": [
+      "688"
+    ],
+    "phonePrefixes": [
+      "688"
+    ],
+    "names": {
+      "en": "Tuvalu",
+      "zh": "图瓦卢"
+    },
+    "numeric": "798",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "TW",
+    "iso3": "TWN",
+    "flag": "cn",
+    "callingCodes": [
+      "886"
+    ],
+    "phonePrefixes": [
+      "886"
+    ],
+    "names": {
+      "en": "Taiwan",
+      "zh": "台湾"
+    },
+    "numeric": "158",
+    "m49": {
+      "region": "142",
+      "subregion": "030"
+    }
+  },
+  {
+    "iso": "TZ",
+    "iso3": "TZA",
+    "flag": "tz",
+    "callingCodes": [
+      "255"
+    ],
+    "phonePrefixes": [
+      "255"
+    ],
+    "names": {
+      "en": "Tanzania",
+      "zh": "坦桑尼亚"
+    },
+    "numeric": "834",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "UA",
+    "iso3": "UKR",
+    "flag": "ua",
+    "callingCodes": [
+      "380"
+    ],
+    "phonePrefixes": [
+      "380"
+    ],
+    "names": {
+      "en": "Ukraine",
+      "zh": "乌克兰"
+    },
+    "numeric": "804",
+    "m49": {
+      "region": "150",
+      "subregion": "151"
+    }
+  },
+  {
+    "iso": "UG",
+    "iso3": "UGA",
+    "flag": "ug",
+    "callingCodes": [
+      "256"
+    ],
+    "phonePrefixes": [
+      "256"
+    ],
+    "names": {
+      "en": "Uganda",
+      "zh": "乌干达"
+    },
+    "numeric": "800",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "UM",
+    "iso3": "UMI",
+    "flag": "um",
+    "callingCodes": [],
+    "phonePrefixes": [],
+    "names": {
+      "en": "U.S. Outlying Islands",
+      "zh": "美国本土外小岛屿"
+    },
+    "numeric": "581",
+    "m49": {
+      "region": "009",
+      "subregion": "057"
+    }
+  },
+  {
+    "iso": "US",
+    "iso3": "USA",
+    "flag": "us",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1"
+    ],
+    "names": {
+      "en": "United States",
+      "zh": "美国"
+    },
+    "numeric": "840",
+    "m49": {
+      "region": "019",
+      "subregion": "021"
+    }
+  },
+  {
+    "iso": "UY",
+    "iso3": "URY",
+    "flag": "uy",
+    "callingCodes": [
+      "598"
+    ],
+    "phonePrefixes": [
+      "598"
+    ],
+    "names": {
+      "en": "Uruguay",
+      "zh": "乌拉圭"
+    },
+    "numeric": "858",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "UZ",
+    "iso3": "UZB",
+    "flag": "uz",
+    "callingCodes": [
+      "998"
+    ],
+    "phonePrefixes": [
+      "998"
+    ],
+    "names": {
+      "en": "Uzbekistan",
+      "zh": "乌兹别克斯坦"
+    },
+    "numeric": "860",
+    "m49": {
+      "region": "142",
+      "subregion": "143"
+    }
+  },
+  {
+    "iso": "VA",
+    "iso3": "VAT",
+    "flag": "va",
+    "callingCodes": [
+      "39"
+    ],
+    "phonePrefixes": [
+      "3906698"
+    ],
+    "names": {
+      "en": "Vatican City",
+      "zh": "梵蒂冈"
+    },
+    "numeric": "336",
+    "m49": {
+      "region": "150",
+      "subregion": "039"
+    }
+  },
+  {
+    "iso": "VC",
+    "iso3": "VCT",
+    "flag": "vc",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1784"
+    ],
+    "names": {
+      "en": "St. Vincent \u0026 Grenadines",
+      "zh": "圣文森特和格林纳丁斯"
+    },
+    "numeric": "670",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "VE",
+    "iso3": "VEN",
+    "flag": "ve",
+    "callingCodes": [
+      "58"
+    ],
+    "phonePrefixes": [
+      "58"
+    ],
+    "names": {
+      "en": "Venezuela",
+      "zh": "委内瑞拉"
+    },
+    "numeric": "862",
+    "m49": {
+      "region": "019",
+      "subregion": "005"
+    }
+  },
+  {
+    "iso": "VG",
+    "iso3": "VGB",
+    "flag": "vg",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1284"
+    ],
+    "names": {
+      "en": "British Virgin Islands",
+      "zh": "英属维尔京群岛"
+    },
+    "numeric": "092",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "VI",
+    "iso3": "VIR",
+    "flag": "vi",
+    "callingCodes": [
+      "1"
+    ],
+    "phonePrefixes": [
+      "1340"
+    ],
+    "names": {
+      "en": "U.S. Virgin Islands",
+      "zh": "美属维尔京群岛"
+    },
+    "numeric": "850",
+    "m49": {
+      "region": "019",
+      "subregion": "029"
+    }
+  },
+  {
+    "iso": "VN",
+    "iso3": "VNM",
+    "flag": "vn",
+    "callingCodes": [
+      "84"
+    ],
+    "phonePrefixes": [
+      "84"
+    ],
+    "names": {
+      "en": "Vietnam",
+      "zh": "越南"
+    },
+    "numeric": "704",
+    "m49": {
+      "region": "142",
+      "subregion": "035"
+    }
+  },
+  {
+    "iso": "VU",
+    "iso3": "VUT",
+    "flag": "vu",
+    "callingCodes": [
+      "678"
+    ],
+    "phonePrefixes": [
+      "678"
+    ],
+    "names": {
+      "en": "Vanuatu",
+      "zh": "瓦努阿图"
+    },
+    "numeric": "548",
+    "m49": {
+      "region": "009",
+      "subregion": "054"
+    }
+  },
+  {
+    "iso": "WF",
+    "iso3": "WLF",
+    "flag": "wf",
+    "callingCodes": [
+      "681"
+    ],
+    "phonePrefixes": [
+      "681"
+    ],
+    "names": {
+      "en": "Wallis \u0026 Futuna",
+      "zh": "瓦利斯和富图纳"
+    },
+    "numeric": "876",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "WS",
+    "iso3": "WSM",
+    "flag": "ws",
+    "callingCodes": [
+      "685"
+    ],
+    "phonePrefixes": [
+      "685"
+    ],
+    "names": {
+      "en": "Samoa",
+      "zh": "萨摩亚"
+    },
+    "numeric": "882",
+    "m49": {
+      "region": "009",
+      "subregion": "061"
+    }
+  },
+  {
+    "iso": "YE",
+    "iso3": "YEM",
+    "flag": "ye",
+    "callingCodes": [
+      "967"
+    ],
+    "phonePrefixes": [
+      "967"
+    ],
+    "names": {
+      "en": "Yemen",
+      "zh": "也门"
+    },
+    "numeric": "887",
+    "m49": {
+      "region": "142",
+      "subregion": "145"
+    }
+  },
+  {
+    "iso": "YT",
+    "iso3": "MYT",
+    "flag": "yt",
+    "callingCodes": [
+      "262"
+    ],
+    "phonePrefixes": [
+      "262"
+    ],
+    "names": {
+      "en": "Mayotte",
+      "zh": "马约特"
+    },
+    "numeric": "175",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "ZA",
+    "iso3": "ZAF",
+    "flag": "za",
+    "callingCodes": [
+      "27"
+    ],
+    "phonePrefixes": [
+      "27"
+    ],
+    "names": {
+      "en": "South Africa",
+      "zh": "南非"
+    },
+    "numeric": "710",
+    "m49": {
+      "region": "002",
+      "subregion": "018"
+    }
+  },
+  {
+    "iso": "ZM",
+    "iso3": "ZMB",
+    "flag": "zm",
+    "callingCodes": [
+      "260"
+    ],
+    "phonePrefixes": [
+      "260"
+    ],
+    "names": {
+      "en": "Zambia",
+      "zh": "赞比亚"
+    },
+    "numeric": "894",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  },
+  {
+    "iso": "ZW",
+    "iso3": "ZWE",
+    "flag": "zw",
+    "callingCodes": [
+      "263"
+    ],
+    "phonePrefixes": [
+      "263"
+    ],
+    "names": {
+      "en": "Zimbabwe",
+      "zh": "津巴布韦"
+    },
+    "numeric": "716",
+    "m49": {
+      "region": "002",
+      "subregion": "014"
+    }
+  }
+]

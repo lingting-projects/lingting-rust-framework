@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "framework-core",
     "framework-datetime",
+    "framework-region",
     "framework-proc-auto",
     "framework-proc-core",
     "framework-proc-ts",
