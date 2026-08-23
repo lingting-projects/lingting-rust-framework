@@ -7,6 +7,7 @@ use std::panic::Location;
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum WebErrorKind {
+    Message,
     Parameter,
     ReturnConversion,
     NotFound,
@@ -25,6 +26,11 @@ pub struct WebError {
 }
 
 impl WebError {
+    #[track_caller]
+    pub fn message(message: impl Into<String>) -> Self {
+        Self::new(WebErrorKind::Message, message)
+    }
+
     #[track_caller]
     pub fn parameter(message: impl Into<String>, source: impl Display) -> Self {
         Self::with_source(WebErrorKind::Parameter, message, source)
@@ -66,6 +72,7 @@ impl WebError {
 
     pub fn status(&self) -> u16 {
         match self.kind {
+            WebErrorKind::Message => RCodeKind::Internal.code() as u16,
             WebErrorKind::Parameter => RCodeKind::Parameter.code() as u16,
             WebErrorKind::Unauthorized => RCodeKind::Unauthorized.code() as u16,
             WebErrorKind::Forbidden => RCodeKind::Forbidden.code() as u16,
@@ -149,6 +156,7 @@ impl WebError {
 
     fn kind_name(&self) -> &'static str {
         match self.kind {
+            WebErrorKind::Message => "消息错误",
             WebErrorKind::Parameter => "参数转换",
             WebErrorKind::ReturnConversion => "返回值转换",
             WebErrorKind::NotFound => "路由不存在",

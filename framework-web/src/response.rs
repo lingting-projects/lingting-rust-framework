@@ -122,6 +122,10 @@ impl WebResponse {
 fn normalize_error(error: Error) -> Error {
     if error.is::<WebError>() {
         error
+    } else if let Some(message) = error.downcast_ref::<&'static str>() {
+        Error::from(WebError::message(*message))
+    } else if let Some(message) = error.downcast_ref::<String>() {
+        Error::from(WebError::message(message.clone()))
     } else {
         Error::from(WebError::internal("请求处理发生内部错误", error))
     }
