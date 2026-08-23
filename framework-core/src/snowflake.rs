@@ -2,7 +2,7 @@ use anyhow::{Result, anyhow};
 use framework_datetime::current_millis;
 use std::sync::{LazyLock, Mutex};
 
-const EPOCH: i64 = 1_704_067_200_000;
+const DEFAULT_EPOCH_MILLIS: i64 = 1735689600000;
 const SEQUENCE_MASK: u16 = 0x0fff;
 
 struct SnowflakeState {
@@ -13,13 +13,19 @@ struct SnowflakeState {
 static GLOBAL_SNOWFLAKE: LazyLock<Snowflake> = LazyLock::new(|| Snowflake::new(1, 1));
 
 pub struct Snowflake {
+    epoch_millis: i64,
     node: u16,
     state: Mutex<SnowflakeState>,
 }
 
 impl Snowflake {
     pub fn new(datacenter: u8, worker: u8) -> Self {
+        Self::new_with_epoch(datacenter, worker, DEFAULT_EPOCH_MILLIS)
+    }
+
+    pub fn new_with_epoch(datacenter: u8, worker: u8, epoch_millis: i64) -> Self {
         Self {
+            epoch_millis,
             node: (u16::from(datacenter & 0x1f) << 5) | u16::from(worker & 0x1f),
             state: Mutex::new(SnowflakeState {
                 last_millis: 0,
@@ -47,7 +53,7 @@ impl Snowflake {
 
         state.last_millis = logical_millis;
         let elapsed_millis = logical_millis
-            .checked_sub(EPOCH)
+            .checked_sub(self.epoch_millis)
             .ok_or_else(|| anyhow!("雪花时间差超出 i64 范围"))?;
         let timestamp_part = elapsed_millis
             .checked_mul(1 << 22)
