@@ -2,6 +2,7 @@ use crate::WebRequest;
 use anyhow::Error;
 use framework_core::types::RCodeKind;
 use log::{error, info, warn};
+use std::any::Any;
 use std::fmt::{Display, Formatter};
 use std::panic::Location;
 
@@ -22,7 +23,7 @@ pub struct WebError {
     kind: WebErrorKind,
     message: String,
     source: Option<Error>,
-    location: &'static Location<'static>,
+    location: Option<String>,
 }
 
 impl WebError {
@@ -32,12 +33,18 @@ impl WebError {
     }
 
     #[track_caller]
-    pub fn parameter(message: impl Into<String>, source: impl Display) -> Self {
+    pub fn parameter(
+        message: impl Into<String>,
+        source: impl Display + Send + Sync + 'static,
+    ) -> Self {
         Self::with_source(WebErrorKind::Parameter, message, source)
     }
 
     #[track_caller]
-    pub fn return_conversion(message: impl Into<String>, source: impl Display) -> Self {
+    pub fn return_conversion(
+        message: impl Into<String>,
+        source: impl Display + Send + Sync + 'static,
+    ) -> Self {
         Self::with_source(WebErrorKind::ReturnConversion, message, source)
     }
 
@@ -57,7 +64,10 @@ impl WebError {
     }
 
     #[track_caller]
-    pub fn internal(message: impl Into<String>, source: impl Display) -> Self {
+    pub fn internal(
+        message: impl Into<String>,
+        source: impl Display + Send + Sync + 'static,
+    ) -> Self {
         Self::with_source(WebErrorKind::Internal, message, source)
     }
 
@@ -92,46 +102,33 @@ impl WebError {
         }
     }
 
-    pub fn log(error: &Error, request: Option<&WebRequest>) {
+    pub fn log(error: &Self, request: Option<&WebRequest>) {
         let request_id = request.map_or("未知", |item| item.request_id.as_str());
         let method = request.map_or_else(|| "未知".to_string(), |item| item.method.to_string());
         let path = request.map_or("未知", |item| item.path.as_str());
         Self::log_request(error, request_id, &method, path);
     }
 
-    pub fn log_request(error: &Error, request_id: &str, method: &str, path: &str) {
-        let web_error = error.downcast_ref::<Self>();
-        let status = web_error.map_or(500, Self::status);
-        let kind = web_error.map_or("内部错误", |item| item.kind_name());
-        let location = web_error.map_or_else(
-            || "未知".to_string(),
-            |item| {
-                format!(
-                    "{}:{}:{}",
-                    item.location.file(),
-                    item.location.line(),
-                    item.location.column()
-                )
-            },
-        );
-        let request_message = format!("request_id={request_id} method={method} path={path}");
-        let chain = error
-            .chain()
+    pub fn log_request(error: &Self, request_id: &str, method: &str, path: &str) {
+        let status = error.status();
+        let kind = error.label();
+        let location = error.location.as_deref().unwrap_or("未知");
+        let chain = std::iter::successors(Some(error as &dyn std::error::Error), |error| {
+            error.source()
+        })
+        .map(ToString::to_string)
+        .collect::<Vec<_>>()
+        .join(" -> ");
+        let backtrace = error
+            .source_backtrace()
             .map(ToString::to_string)
-            .collect::<Vec<_>>()
-            .join(" -> ");
-        let message = format!(
-            "Web 请求异常 category={kind} status={status} {request_message} source={location} error_chain={chain} backtrace={}",
-            error.backtrace()
-        );
+            .unwrap_or_else(|| "未知".to_string());
 
-        match web_error.map(Self::kind) {
-            Some(WebErrorKind::Parameter) => info!("{message}"),
-            Some(WebErrorKind::NotFound)
-            | Some(WebErrorKind::Unauthorized)
-            | Some(WebErrorKind::Forbidden) => warn!("{message}"),
-            _ => error!("{message}"),
-        }
+        error!(
+            "Web 请求异常 category={kind} status={status} \
+            request_id={request_id} method={method} path={path} \
+            source={location} error_chain={chain} backtrace={backtrace}"
+        )
     }
 
     #[track_caller]
@@ -140,21 +137,74 @@ impl WebError {
             kind,
             message: message.into(),
             source: None,
-            location: Location::caller(),
+            location: Some(Self::location(Location::caller())),
         }
     }
 
     #[track_caller]
-    fn with_source(kind: WebErrorKind, message: impl Into<String>, source: impl Display) -> Self {
+    pub fn with_source(
+        kind: WebErrorKind,
+        message: impl Into<String>,
+        source: impl Display + Send + Sync + 'static,
+    ) -> Self {
+        let source_message = source.to_string();
+        let source = Box::new(source) as Box<dyn Any + Send + Sync>;
+        let source = match source.downcast::<Error>() {
+            Ok(source) => *source,
+            Err(source) => match source.downcast::<WebError>() {
+                Ok(source) => Error::new(*source),
+                Err(_) => Error::msg(source_message),
+            },
+        };
+        #[cfg(debug_assertions)]
+        let location = Self::location_from_error(&source);
+        #[cfg(not(debug_assertions))]
+        let location = None;
+
         Self {
             kind,
             message: message.into(),
-            source: Some(Error::msg(source.to_string())),
-            location: Location::caller(),
+            source: Some(source),
+            location,
         }
     }
 
-    fn kind_name(&self) -> &'static str {
+    fn location(location: &Location<'_>) -> String {
+        format!(
+            "{}:{}:{}",
+            location.file(),
+            location.line(),
+            location.column()
+        )
+    }
+
+    fn source_backtrace(&self) -> Option<&std::backtrace::Backtrace> {
+        self.source.as_ref().map(Error::backtrace)
+    }
+
+    fn location_from_error(error: &Error) -> Option<String> {
+        error
+            .chain()
+            .find_map(|error| error.downcast_ref::<Self>())
+            .and_then(|error| error.location.clone())
+            .or_else(|| Self::backtrace_location(error.backtrace()))
+    }
+
+    fn backtrace_location(backtrace: &std::backtrace::Backtrace) -> Option<String> {
+        backtrace
+            .to_string()
+            .lines()
+            .map(str::trim)
+            .filter_map(|line| line.strip_prefix("at "))
+            .find(|location| {
+                !location.starts_with("/rustc/")
+                    && !location.contains("\\.cargo\\registry\\")
+                    && !location.contains("/.cargo/registry/")
+            })
+            .map(ToOwned::to_owned)
+    }
+
+    fn label(&self) -> &'static str {
         match self.kind {
             WebErrorKind::Message => "消息错误",
             WebErrorKind::Parameter => "参数转换",
@@ -165,6 +215,34 @@ impl WebError {
             WebErrorKind::Internal => "内部错误",
             WebErrorKind::Panic => "程序崩溃",
         }
+    }
+}
+
+pub trait WebErrorExt<T> {
+    fn message(self) -> anyhow::Result<T>;
+    fn parameter(self, message: impl Into<String>) -> anyhow::Result<T>;
+    fn internal(self, message: impl Into<String>) -> anyhow::Result<T>;
+}
+
+impl<T, E> WebErrorExt<T> for Result<T, E>
+where
+    E: Display + Send + Sync + 'static,
+{
+    #[track_caller]
+    fn message(self) -> anyhow::Result<T> {
+        self.map_err(|error| {
+            WebError::with_source(WebErrorKind::Message, error.to_string(), error).into()
+        })
+    }
+
+    #[track_caller]
+    fn parameter(self, message: impl Into<String>) -> anyhow::Result<T> {
+        self.map_err(|error| WebError::parameter(message, error).into())
+    }
+
+    #[track_caller]
+    fn internal(self, message: impl Into<String>) -> anyhow::Result<T> {
+        self.map_err(|error| WebError::internal(message, error).into())
     }
 }
 

@@ -1,4 +1,4 @@
-use crate::{WebError, WebRequest};
+use crate::{WebError, WebErrorKind, WebRequest};
 use anyhow::{Error, Result};
 use bytes::Bytes;
 use framework_core::MultiStringValue;
@@ -35,10 +35,9 @@ impl WebResponse {
         Self::error_body(&error)
     }
 
-    fn error_body(error: &Error) -> Self {
-        let web_error = error.downcast_ref::<WebError>();
-        let status = web_error.map_or(500, WebError::status);
-        let message = web_error.map_or("服务器内部错误", WebError::public_message);
+    fn error_body(error: &WebError) -> Self {
+        let status = error.status();
+        let message = error.public_message();
         Self::json(status, &json!({ "code": status, "message": message }))
     }
 
@@ -119,14 +118,14 @@ impl WebResponse {
     }
 }
 
-fn normalize_error(error: Error) -> Error {
-    if error.is::<WebError>() {
-        error
-    } else if let Some(message) = error.downcast_ref::<&'static str>() {
-        Error::from(WebError::message(*message))
-    } else if let Some(message) = error.downcast_ref::<String>() {
-        Error::from(WebError::message(message.clone()))
-    } else {
-        Error::from(WebError::internal("请求处理发生内部错误", error))
-    }
+fn normalize_error(error: Error) -> WebError {
+    error.downcast::<WebError>().unwrap_or_else(|error| {
+        if let Some(message) = error.downcast_ref::<&'static str>() {
+            WebError::with_source(WebErrorKind::Message, *message, error)
+        } else if let Some(message) = error.downcast_ref::<String>() {
+            WebError::with_source(WebErrorKind::Message, message.clone(), error)
+        } else {
+            WebError::internal("请求处理发生内部错误", error)
+        }
+    })
 }
