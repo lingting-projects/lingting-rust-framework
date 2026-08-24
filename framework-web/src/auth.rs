@@ -29,13 +29,6 @@ impl AuthRule {
         }
     }
 
-    pub fn admin() -> Self {
-        Self {
-            roles: Some(vec!["relayx".to_string()]),
-            ..Default::default()
-        }
-    }
-
     pub fn check(
         &self,
         organizations: Option<&[String]>,
