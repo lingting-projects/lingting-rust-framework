@@ -12,8 +12,24 @@ pub struct WebRoute {
     pub invoke: WebRouteInvoke,
 }
 
+#[cfg(feature = "collect")]
+#[doc(hidden)]
+pub struct WebApiBuilder(pub fn() -> WebRoute);
+
+#[cfg(feature = "collect")]
+inventory::collect!(WebApiBuilder);
+
 impl WebRoute {
     pub async fn invoke(&self) -> WebResponse {
         (self.invoke)().await
     }
+}
+
+#[cfg(feature = "collect")]
+pub fn web_api_iter() -> Box<dyn Iterator<Item = WebRoute>> {
+    Box::new(
+        inventory::iter::<WebApiBuilder>
+            .into_iter()
+            .map(|builder| (builder.0)()),
+    )
 }

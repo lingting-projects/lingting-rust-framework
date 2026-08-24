@@ -17,4 +17,22 @@ pub use from_web::{FromWeb, Json, Query};
 pub use panic::catch_panic;
 pub use request::{WebMethod, WebRequest};
 pub use response::WebResponse;
+#[cfg(feature = "collect")]
+pub use route::{WebApiBuilder, web_api_iter};
+
+#[cfg(feature = "collect")]
+#[macro_export]
+macro_rules! push_web_api {
+    ($build:expr) => {
+        $crate::__private::inventory::submit! {
+            $crate::WebApiBuilder($build)
+        }
+    };
+}
+
+#[cfg(feature = "collect")]
+#[doc(hidden)]
+pub mod __private {
+    pub use inventory;
+}
 pub use route::{WebRoute, WebRouteFuture};

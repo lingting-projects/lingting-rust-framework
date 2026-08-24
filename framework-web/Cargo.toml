@@ -7,9 +7,13 @@ authors.workspace = true
 description.workspace = true
 license.workspace = true
 
+[features]
+default = []
+collect = ["dep:inventory", "framework-proc-web/collect"]
+
 [dependencies]
 framework-core = { path = "../framework-core" }
-
+inventory = { workspace = true, optional = true }
 anyhow.workspace = true
 async-trait.workspace = true
 bytes.workspace = true

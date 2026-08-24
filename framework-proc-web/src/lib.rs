@@ -59,7 +59,7 @@ fn expand(args: TokenStream2, input: TokenStream2, forced_method: Option<Method>
         Err(error) => return error.to_compile_error(),
     };
     let function_ident = &function.sig.ident;
-    let route_ident = format_ident!("{}_route", function_ident);
+    let route_ident = format_ident!("build_{}_route", function_ident);
     let method = options.method.tokens();
     let method_name = options.method.as_str();
     let path = options.path;
@@ -68,6 +68,13 @@ fn expand(args: TokenStream2, input: TokenStream2, forced_method: Option<Method>
         |value| quote!(#value),
     );
     let response = expand_response(&function.sig.output, function_ident, &call_arguments);
+    let collect = if cfg!(feature = "collect") {
+        quote! {
+            ::framework_web::push_web_api!(#route_ident);
+        }
+    } else {
+        TokenStream2::new()
+    };
 
     quote! {
         #[::framework_proc_ts::ts_api(method = #method_name, path = #path)]
@@ -104,5 +111,6 @@ fn expand(args: TokenStream2, input: TokenStream2, forced_method: Option<Method>
             }
         }
 
+        #collect
     }
 }

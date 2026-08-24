@@ -302,6 +302,7 @@ dependencies = [
  "framework-core",
  "framework-proc-web",
  "futures-util",
+ "inventory",
  "log",
  "serde",
  "serde_json",
