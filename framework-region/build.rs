@@ -58,17 +58,20 @@ fn main() {
         println!("cargo:rerun-if-changed={}", path.display());
     }
 
+    let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
     let regions = read_json::<Vec<SourceRegion>>(&regions_path);
     let phones = read_json::<Vec<SourcePhone>>(&phones_path);
     let m49 = read_json::<SourceM49Node>(&m49_path);
-    let mut output = String::new();
 
-    write_regions(&mut output, &regions);
-    write_phones(&mut output, &phones);
-    write_m49(&mut output, &m49);
-
-    let output_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("region_data.rs");
-    fs::write(output_path, output).unwrap();
+    write_data_file(&out_dir, "regions", |output| {
+        write_regions(output, &regions);
+    });
+    write_data_file(&out_dir, "phones", |output| {
+        write_phones(output, &phones);
+    });
+    write_data_file(&out_dir, "m49", |output| {
+        write_m49(output, &m49);
+    });
 }
 
 fn read_json<T>(path: &PathBuf) -> T
@@ -77,6 +80,15 @@ where
 {
     let source = fs::read_to_string(path).unwrap();
     serde_json::from_str(&source).unwrap()
+}
+
+fn write_data_file<F>(out_dir: &PathBuf, name: &str, write: F)
+where
+    F: FnOnce(&mut String),
+{
+    let mut output = String::new();
+    write(&mut output);
+    fs::write(out_dir.join(format!("{name}_data.rs")), output).unwrap();
 }
 
 fn write_regions(output: &mut String, regions: &[SourceRegion]) {
@@ -106,7 +118,7 @@ fn write_regions(output: &mut String, regions: &[SourceRegion]) {
     }
     output.push_str("];\n");
     output.push_str(
-        "pub static REGION_REGIONS: RegionList = RegionList::new(REGION_REGION_VALUES);\n\n",
+        "pub static REGION_REGIONS: RegionList = RegionList::new(REGION_REGION_VALUES);\n",
     );
 }
 
@@ -122,30 +134,42 @@ fn write_phones(output: &mut String, phones: &[SourcePhone]) {
         output.push_str(" },\n");
     }
     output.push_str("];\n");
-    output.push_str("pub static REGION_PHONES: RegionPhoneList = RegionPhoneList::new(REGION_PHONE_VALUES);\n\n");
+    output.push_str(
+        "pub static REGION_PHONES: RegionPhoneList = RegionPhoneList::new(REGION_PHONE_VALUES);\n",
+    );
 }
 
 fn write_m49(output: &mut String, node: &SourceM49Node) {
     output.push_str("pub static REGION_M49: RegionM49 = ");
-    write_m49_node(output, node);
+    write_m49_node(output, node, 0);
     output.push_str(";\n");
 }
 
-fn write_m49_node(output: &mut String, node: &SourceM49Node) {
+fn write_m49_node(output: &mut String, node: &SourceM49Node, indent: usize) {
     output.push_str("RegionM49 { code: ");
     write_string(output, &node.code);
     output.push_str(", name: RegionName { en: ");
     write_string(output, &node.name.en);
     output.push_str(", zh: ");
     write_string(output, &node.name.zh);
-    output.push_str(" }, children: &[");
-    for child in &node.children {
-        write_m49_node(output, child);
-        output.push_str(", ");
+    if !node.children.is_empty() {
+        output.push_str(" }, children: &[\n");
+        for child in &node.children {
+            write_indent(output, indent + 4);
+            write_m49_node(output, child, indent + 4);
+            output.push_str(",\n");
+        }
+        write_indent(output, indent);
+    }else {
+        output.push_str(" }, children: &[");
     }
     output.push_str("], regions: ");
     write_strings(output, &node.regions);
     output.push_str(" }");
+}
+
+fn write_indent(output: &mut String, indent: usize) {
+    output.push_str(&" ".repeat(indent));
 }
 
 fn write_strings(output: &mut String, values: &[String]) {
