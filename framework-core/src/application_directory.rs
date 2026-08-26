@@ -33,9 +33,8 @@ impl ApplicationDirectory {
         let global = if cfg!(debug_assertions) {
             debug_runtime_directory(&install)
         } else {
-            user_directory()?
+            user_directory()?.join(parent.as_ref()).join(id.as_ref())
         };
-        let global = global.join(parent.as_ref()).join(id.as_ref());
         Self::new(id, global, install)
     }
 
