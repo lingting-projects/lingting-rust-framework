@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use std::env;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -82,7 +82,7 @@ where
     serde_json::from_str(&source).unwrap()
 }
 
-fn write_data_file<F>(out_dir: &PathBuf, name: &str, write: F)
+fn write_data_file<F>(out_dir: &Path, name: &str, write: F)
 where
     F: FnOnce(&mut String),
 {
@@ -160,7 +160,7 @@ fn write_m49_node(output: &mut String, node: &SourceM49Node, indent: usize) {
             output.push_str(",\n");
         }
         write_indent(output, indent);
-    }else {
+    } else {
         output.push_str(" }, children: &[");
     }
     output.push_str("], regions: ");

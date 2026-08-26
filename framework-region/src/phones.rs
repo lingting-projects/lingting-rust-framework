@@ -12,7 +12,7 @@ static PHONE_PREFIX_TREE: OnceLock<PhonePrefixTree> = OnceLock::new();
 ///
 /// 会剔除号码开头的 `+`，并按最长电话前缀返回匹配项。
 pub fn match_phone(phone: &str) -> Option<&'static RegionPhone> {
-    let phone = phone.strip_prefix('+').unwrap_or(phone);
+    let phone = phone.trim_start_matches('+');
     phone
         .bytes()
         .all(|digit| digit.is_ascii_digit())
