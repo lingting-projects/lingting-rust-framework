@@ -1,19 +1,17 @@
 mod api_metadata;
-mod code_builder;
-mod package_builder;
 mod type_metadata;
+mod typescript;
 
 #[cfg(feature = "collect")]
 pub use api_metadata::api_metadata_iter;
 pub use api_metadata::{ApiMetadata, ApiParameterKind, ApiParameterMetadata, ApiReturnType};
-pub use code_builder::{GeneratedTypeScript, TypeScriptCodeBuilder, TypeScriptResult};
-pub use package_builder::TypeScriptPackageBuilder;
 pub use serde_json;
 #[cfg(feature = "collect")]
 pub use type_metadata::enum_metadata_iter;
 #[cfg(feature = "collect")]
 pub use type_metadata::type_metadata_iter;
 pub use type_metadata::{EnumMetadata, EnumValue, TypeKind, TypeMetadata, enum_field_value};
+pub use typescript::*;
 
 #[cfg(feature = "collect")]
 #[doc(hidden)]
