@@ -1,4 +1,6 @@
 mod api_builder;
+mod api_class;
+mod api_definition;
 mod common;
 mod enum_builder;
 mod package_builder;

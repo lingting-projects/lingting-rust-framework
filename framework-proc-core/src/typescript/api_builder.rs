@@ -1,16 +1,19 @@
 use std::borrow::Borrow;
 use std::collections::HashMap;
 
-use crate::{ApiMetadata, ApiParameterKind, ApiReturnType};
+use crate::ApiMetadata;
 
 use super::common::{build_error, is_typescript_identifier};
 use super::utils::{camel_case, collect_api_type_names};
-use super::{TypescriptBuildResult, TypescriptBuilder, TypescriptResult};
+use super::{
+    TypescriptBuildResult, TypescriptBuilder, TypescriptResult, api_class, api_definition,
+};
 
-/// 构建 API 抽象类及其类型导入。
+/// 构建 TypeScript API 定义及可选的抽象类。
 pub struct TypescriptApiBuilder {
     metadata: Vec<ApiMetadata>,
     class_name: Option<String>,
+    class_enabled: bool,
     type_import_from: String,
 }
 
@@ -19,6 +22,7 @@ impl TypescriptApiBuilder {
         Self {
             metadata: Vec::new(),
             class_name: None,
+            class_enabled: true,
             type_import_from: ".".to_string(),
         }
     }
@@ -34,6 +38,12 @@ impl TypescriptApiBuilder {
 
     pub fn class_name(mut self, name: impl Into<String>) -> Self {
         self.class_name = Some(name.into());
+        self
+    }
+
+    /// 设置是否导出 API 抽象类，默认导出。
+    pub fn with_class(mut self, enabled: bool) -> Self {
+        self.class_enabled = enabled;
         self
     }
 
@@ -54,14 +64,29 @@ impl TypescriptApiBuilder {
 
 impl TypescriptBuilder for TypescriptApiBuilder {
     fn build(&self) -> TypescriptResult<TypescriptBuildResult> {
-        let class_name = self.required_class_name()?;
         validate_api_metadata(&self.metadata)?;
+        let type_import = type_import(&self.metadata, &self.type_import_from)?;
+        let class_name = self
+            .class_enabled
+            .then(|| self.required_class_name())
+            .transpose()?;
+        let declaration_class = class_name
+            .map(|name| api_class::declaration(name, &self.metadata))
+            .unwrap_or_default();
+        let javascript_class = class_name
+            .map(|name| api_class::javascript(name, &self.metadata))
+            .unwrap_or_default();
         Ok(TypescriptBuildResult {
-            js: javascript_class(class_name, &self.metadata),
-            dts: format!(
+            js: format!(
                 "{}{}",
-                type_import(&self.metadata, &self.type_import_from)?,
-                declaration_class(class_name, &self.metadata),
+                api_definition::javascript(&self.metadata),
+                javascript_class
+            ),
+            dts: format!(
+                "{}{}{}",
+                type_import,
+                api_definition::declaration(&self.metadata),
+                declaration_class,
             ),
         })
     }
@@ -139,104 +164,4 @@ fn duplicate_sources(apis: &[&ApiMetadata]) -> String {
         .map(|api| format!("{}::{}", api.namespace, api.name))
         .collect::<Vec<_>>()
         .join(", ")
-}
-
-fn declaration_class(class_name: &str, apis: &[ApiMetadata]) -> String {
-    let methods = apis
-        .iter()
-        .map(declaration_method)
-        .collect::<Vec<_>>()
-        .join("\n\n");
-    let method_block = if methods.is_empty() {
-        String::new()
-    } else {
-        format!("\n\n{methods}")
-    };
-    format!(
-        "export declare abstract class {class_name} {{\n  protected abstract call<T>(method: string, path: string, body?: any, query?: any): Promise<T>;{method_block}\n}}\n"
-    )
-}
-
-fn declaration_method(api: &ApiMetadata) -> String {
-    let parameters = api
-        .parameters
-        .iter()
-        .map(|parameter| format!("{}: {}", parameter.name, parameter.type_name))
-        .collect::<Vec<_>>()
-        .join(", ");
-    format!(
-        "  {}({parameters}): Promise<{}>;",
-        camel_case(api.name),
-        return_type_name(api.return_type),
-    )
-}
-
-fn javascript_class(class_name: &str, apis: &[ApiMetadata]) -> String {
-    let methods = apis
-        .iter()
-        .map(javascript_method)
-        .collect::<Vec<_>>()
-        .join("\n\n");
-    let method_block = if methods.is_empty() {
-        String::new()
-    } else {
-        format!("\n\n{methods}\n")
-    };
-    format!("export class {class_name} {{{method_block}}}\n")
-}
-
-fn javascript_method(api: &ApiMetadata) -> String {
-    let parameters = api
-        .parameters
-        .iter()
-        .map(|parameter| parameter.name)
-        .collect::<Vec<_>>()
-        .join(", ");
-    let body = api
-        .parameters
-        .iter()
-        .filter(|parameter| parameter.kind == ApiParameterKind::Body)
-        .map(|parameter| parameter.name)
-        .collect::<Vec<_>>();
-    let query = api
-        .parameters
-        .iter()
-        .filter(|parameter| parameter.kind == ApiParameterKind::Query)
-        .map(|parameter| parameter.name)
-        .collect::<Vec<_>>();
-    let call_arguments = match (body, query) {
-        (body, query) if body.is_empty() && query.is_empty() => String::new(),
-        (body, query) if query.is_empty() => format!(", {}", request_value(&body)),
-        (body, query) if body.is_empty() => format!(", undefined, {}", request_value(&query)),
-        (body, query) => format!(", {}, {}", request_value(&body), request_value(&query)),
-    };
-    format!(
-        "  {}({parameters}) {{\n    return this.call(\"{}\", \"{}\"{});\n  }}",
-        camel_case(api.name),
-        api.method,
-        api.path,
-        call_arguments,
-    )
-}
-
-fn request_value(parameters: &[&str]) -> String {
-    if parameters.len() == 1 {
-        return parameters[0].to_string();
-    }
-    format!(
-        "{{ {} }}",
-        parameters
-            .iter()
-            .map(|name| format!("...{name}"))
-            .collect::<Vec<_>>()
-            .join(", "),
-    )
-}
-
-fn return_type_name(return_type: ApiReturnType) -> &'static str {
-    match return_type {
-        ApiReturnType::Void => "void",
-        ApiReturnType::Blob => "blob",
-        ApiReturnType::Type(name) => name,
-    }
 }
