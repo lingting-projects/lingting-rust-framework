@@ -1,4 +1,5 @@
 mod application_directory;
+pub mod logging;
 mod money;
 pub mod r;
 mod snowflake;

@@ -37,6 +37,10 @@ anyhow = "1.0"
 regex = { version = "1.12" }
 chrono = { version = "0.4" }
 log = { version = "0.4" }
+tracing = "0.1"
+tracing-appender = "0.2"
+tracing-log = "0.2"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
 bytes = { version = "1.11" }
 flate2 = { version = "1.1" }
 cbc = { version = "0.1" }
