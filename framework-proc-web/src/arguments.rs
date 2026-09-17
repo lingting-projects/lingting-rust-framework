@@ -1,6 +1,7 @@
+use crate::common::is_type;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
-use syn::{Error, FnArg, ItemFn, Type};
+use syn::{Error, FnArg, ItemFn};
 
 pub fn expand_arguments(
     function: &ItemFn,
@@ -45,12 +46,3 @@ pub fn expand_arguments(
     Ok((conversions, arguments))
 }
 
-fn is_type(ty: &Type, name: &str) -> bool {
-    let Type::Path(path) = ty else {
-        return false;
-    };
-    path.path
-        .segments
-        .last()
-        .is_some_and(|segment| segment.ident == name)
-}

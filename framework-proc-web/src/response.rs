@@ -1,3 +1,4 @@
+use crate::common::is_type;
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::{GenericArgument, PathArguments, ReturnType, Type};
@@ -58,16 +59,6 @@ fn expand_typed_response(
             ::framework_web::WebResponse::from_result_t(result, Some(invoke_request.as_ref()))
         }
     }
-}
-
-fn is_type(ty: &Type, name: &str) -> bool {
-    let Type::Path(path) = ty else {
-        return false;
-    };
-    path.path
-        .segments
-        .last()
-        .is_some_and(|segment| segment.ident == name)
 }
 
 fn generic_type<'a>(ty: &'a Type, name: &str) -> Option<&'a Type> {

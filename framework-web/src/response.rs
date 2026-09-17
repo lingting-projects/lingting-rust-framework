@@ -3,15 +3,61 @@ use anyhow::{Error, Result};
 use bytes::Bytes;
 use framework_core::MultiStringValue;
 use framework_core::types::R;
+use futures_util::stream::BoxStream;
 use serde::Serialize;
 use serde_json::json;
 
 const INTERNAL_ERROR_BODY: &[u8] = br#"{"code":500,"message":"Server Error"}"#;
 
+/// 响应体：一次性字节内容或持续输出的流。
+pub enum WebBody {
+    /// 一次性返回的字节内容。
+    Bytes(Bytes),
+    /// 流式返回的内容，用于 SSE 等场景。
+    Stream(BoxStream<'static, Result<Bytes, std::io::Error>>),
+}
+
+impl WebBody {
+    /// 是否为流式响应体。
+    pub fn is_stream(&self) -> bool {
+        matches!(self, Self::Stream(_))
+    }
+}
+
+impl Default for WebBody {
+    fn default() -> Self {
+        Self::Bytes(Bytes::new())
+    }
+}
+
+impl From<Bytes> for WebBody {
+    fn from(value: Bytes) -> Self {
+        Self::Bytes(value)
+    }
+}
+
+impl From<Vec<u8>> for WebBody {
+    fn from(value: Vec<u8>) -> Self {
+        Self::Bytes(Bytes::from(value))
+    }
+}
+
+impl From<String> for WebBody {
+    fn from(value: String) -> Self {
+        Self::Bytes(Bytes::from(value))
+    }
+}
+
+impl From<BoxStream<'static, Result<Bytes, std::io::Error>>> for WebBody {
+    fn from(value: BoxStream<'static, Result<Bytes, std::io::Error>>) -> Self {
+        Self::Stream(value)
+    }
+}
+
 pub struct WebResponse {
     pub status: u16,
     pub headers: MultiStringValue,
-    pub body: Bytes,
+    pub body: WebBody,
 }
 
 impl WebResponse {
@@ -19,7 +65,7 @@ impl WebResponse {
         Self {
             status: 204,
             headers: MultiStringValue::default(),
-            body: Bytes::new(),
+            body: WebBody::Bytes(Bytes::new()),
         }
     }
 
@@ -113,7 +159,18 @@ impl WebResponse {
         Self {
             status,
             headers,
-            body: Bytes::from(body),
+            body: WebBody::Bytes(Bytes::from(body)),
+        }
+    }
+
+    /// 构造流式响应，用于 SSE 等持续输出场景。
+    pub fn stream(status: u16, content_type: &str, stream: BoxStream<'static, Result<Bytes, std::io::Error>>) -> Self {
+        let mut headers = MultiStringValue::default();
+        headers.set_content_type(content_type);
+        Self {
+            status,
+            headers,
+            body: WebBody::Stream(stream),
         }
     }
 }
