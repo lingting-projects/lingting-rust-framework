@@ -164,7 +164,11 @@ impl WebResponse {
     }
 
     /// 构造流式响应，用于 SSE 等持续输出场景。
-    pub fn stream(status: u16, content_type: &str, stream: BoxStream<'static, Result<Bytes, std::io::Error>>) -> Self {
+    pub fn stream(
+        status: u16,
+        content_type: &str,
+        stream: BoxStream<'static, Result<Bytes, std::io::Error>>,
+    ) -> Self {
         let mut headers = MultiStringValue::default();
         headers.set_content_type(content_type);
         Self {

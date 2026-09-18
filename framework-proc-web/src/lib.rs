@@ -1,7 +1,7 @@
 mod arguments;
+mod common;
 mod options;
 mod response;
-mod common;
 
 use crate::arguments::expand_arguments;
 use crate::options::{Method, WebApiOptions};
