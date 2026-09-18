@@ -22,7 +22,15 @@ pub(crate) fn collect_type_names(value: &str, names: &mut BTreeSet<String>) {
         if !name.is_empty()
             && !matches!(
                 name,
-                "string" | "number" | "boolean" | "void" | "blob" | "unknown" | "null" | "Array"
+                "string"
+                    | "number"
+                    | "boolean"
+                    | "void"
+                    | "blob"
+                    | "unknown"
+                    | "null"
+                    | "Array"
+                    | "Record"
             )
         {
             names.insert(name.to_string());

@@ -226,11 +226,51 @@ fn type_name(ty: &Type) -> syn::Result<String> {
     let Type::Path(path) = ty else {
         return Err(Error::new_spanned(ty, "不支持该 TypeScript 类型"));
     };
-    path.path
-        .segments
-        .last()
-        .map(|segment| segment.ident.to_string())
-        .ok_or_else(|| Error::new_spanned(ty, "类型路径不能为空"))
+    let Some(segment) = path.path.segments.last() else {
+        return Err(Error::new_spanned(ty, "类型路径不能为空"));
+    };
+    let ident = segment.ident.to_string();
+    let arguments = generic_arguments(segment)?;
+    match ident.as_str() {
+        "Option" => {
+            let [inner] = arguments.as_slice() else {
+                return Err(Error::new_spanned(ty, "Option 必须包含唯一泛型参数"));
+            };
+            Ok(format!("{inner} | null"))
+        }
+        "Vec" => {
+            let [inner] = arguments.as_slice() else {
+                return Err(Error::new_spanned(ty, "Vec 必须包含唯一泛型参数"));
+            };
+            Ok(format!("{inner}[]"))
+        }
+        "HashMap" | "BTreeMap" => {
+            let [key, value] = arguments.as_slice() else {
+                return Err(Error::new_spanned(ty, "Map 必须包含键和值两个泛型参数"));
+            };
+            Ok(format!("Record<{key}, {value}>"))
+        }
+        _ if arguments.is_empty() => Ok(ident),
+        _ => Ok(format!("{ident}<{}>", arguments.join(", "))),
+    }
+}
+
+fn generic_arguments(segment: &syn::PathSegment) -> syn::Result<Vec<String>> {
+    let arguments = match &segment.arguments {
+        syn::PathArguments::None => return Ok(Vec::new()),
+        syn::PathArguments::AngleBracketed(arguments) => arguments,
+        syn::PathArguments::Parenthesized(arguments) => {
+            return Err(Error::new_spanned(arguments, "不支持该 TypeScript 类型"));
+        }
+    };
+    arguments
+        .args
+        .iter()
+        .map(|argument| match argument {
+            syn::GenericArgument::Type(ty) => type_name(ty),
+            argument => Err(Error::new_spanned(argument, "不支持该 TypeScript 类型")),
+        })
+        .collect()
 }
 
 fn is_unit_type(ty: &Type) -> bool {
