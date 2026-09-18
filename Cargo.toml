@@ -8,7 +8,7 @@ members = [
     "framework-proc-core",
     "framework-proc-ts",
     "framework-proc-web",
-    "framework-web",
+    "framework-web", "framework-web-axum",
 ]
 
 [workspace.package]
@@ -33,6 +33,7 @@ strum_macros = { version = "0.28" }
 blake3 = { version = "1.8" }
 url = { version = "2.5", features = ["serde"] }
 tokio = { version = "1.52", features = ["rt-multi-thread", "sync", "time", "macros"] }
+axum = { version = "0.8" }
 anyhow = "1.0"
 regex = { version = "1.12" }
 chrono = { version = "0.4" }

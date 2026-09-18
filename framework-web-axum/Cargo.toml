@@ -1,0 +1,22 @@
+[package]
+name = "framework-web-axum"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+description.workspace = true
+license.workspace = true
+
+[features]
+default = ["collect"]
+collect = ["framework-web/collect"]
+
+[dependencies]
+framework-core = { path = "../framework-core" }
+framework-web = { path = "../framework-web" }
+anyhow.workspace = true
+axum.workspace = true
+futures-util.workspace = true
+log.workspace = true
+tokio = { workspace = true, features = ["net"] }
+url.workspace = true
