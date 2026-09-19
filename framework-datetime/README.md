@@ -51,29 +51,57 @@ let calibrated: bool = is_ntp();
 # Ok::<(), Box<dyn std::error::Error>>(())
 ```
 
+`current_millis_i128()` 在锚点建立时读取系统时间：原生平台使用 `SystemTime`（Epoch 前返回负值），
+浏览器 wasm 使用 `Date.now()`（非有限数值时报错）。锚点建立后，读取结果由锚点时间加单调时钟经过的毫秒数得到。
+
 ## 非 JS/wasm NTP
 
-非 JS/wasm 平台的 NTP 行为保持不变。`NtpConfig` 使用 NTP 服务器列表、请求超时、同步间隔和重试间隔：
+`NtpConfig` 使用 NTP 服务器列表、请求超时、同步间隔和重试间隔：
 
-| 配置项            | 默认值  |
-|-------------------|---------|
-| `request_timeout` | 5 秒    |
-| `sync_interval`   | 10 分钟 |
-| `retry_interval`  | 5 秒    |
+| 配置项            | 默认值                    |
+|-------------------|---------------------------|
+| `servers`         | `NTP_SERVERS`（18 个公共 NTP 服务器） |
+| `request_timeout` | 5 秒                      |
+| `sync_interval`   | 10 分钟                   |
+| `retry_interval`  | 5 秒                      |
+
+`NTP_SERVERS` 同时作为公开常量导出，默认值为 `time.cloudflare.com`、`time.google.com`、`pool.ntp.org`、
+`time.windows.com`、`time.nist.gov`、`time.apple.com`、`time.asia.apple.com`、`cn.ntp.org.cn`、
+`ntp.ntsc.ac.cn`、`cn.pool.ntp.org` 及阿里云 `ntp.aliyun.com`、`ntp1.aliyun.com` 至 `ntp7.aliyun.com`。
 
 ```rust
 use framework_datetime::{NtpConfig, init_ntp};
 
+// 使用内置服务器列表
 init_ntp(NtpConfig::default())?;
+
+// 自定义服务器列表
+let config = NtpConfig {
+    servers: vec!["ntp.aliyun.com".to_string(), "cn.pool.ntp.org".to_string()],
+    ..NtpConfig::default()
+};
+init_ntp(config)?;
 # Ok::<(), Box<dyn std::error::Error>>(())
 ```
 
+配置校验：`servers` 不能为空，`request_timeout`、`sync_interval`、`retry_interval` 都必须大于零，
+否则 `init_ntp` 返回错误。
+
 未启用 `tokio` 时，NTP 查询使用标准库线程并发执行；启用 `tokio` 时，查询由专用后台线程中的 Tokio runtime
-管理。初始化只启动一个常驻任务，NTP 失败会按重试间隔继续尝试。
+管理。初始化只启动一个常驻任务：重复调用 `init_ntp` 直接返回 `Ok(())`，不会替换首个任务；
+首次启动失败时会重置初始化标记，允许再次调用重试。
+
+每轮同步会同时向 `servers` 中的全部服务器发起查询，采用最先成功返回的结果（Tokio 实现会中止其余任务，
+标准库实现返回后其余线程的结果被丢弃），全部失败则等待 `retry_interval` 后重试；同步成功后等待
+`sync_interval` 再进入下一轮。写入新锚点失败时同样按 `retry_interval` 重试。
+
+校时值由**本地系统时间加 NTP 时钟偏移**得到，因此本地系统时间本身偏离过大时，校时结果也会随之偏离。
+校时成功后锚点被替换，`is_ntp()` 开始返回 `true`，`wait_ntp()` 的等待者会被唤醒。
 
 ## 浏览器 wasm NTP
 
-浏览器 wasm 不直接访问 NTP 服务器。启用 `ntp` 后，`NtpConfig` 仅包含 `sync_interval`，`init_ntp` 必须同时接收配置和同步时间提供函数：
+浏览器 wasm 不直接访问 NTP 服务器。启用 `ntp` 后，`NtpConfig` 仅包含 `sync_interval`（默认 10 分钟），
+`init_ntp` 必须同时接收配置和同步时间提供函数：
 
 ```rust
 use anyhow::Result;
@@ -95,7 +123,8 @@ init_ntp(config, || -> Result<u128> {
 偏移量、秒或纳秒；值超过 `i128::MAX` 时视为该次校时失败。
 
 初始化会建立浏览器 `setInterval` 定时器并立即调用一次回调。回调失败不会停止定时器，后续周期会自动重试；首次成功前
-`is_ntp()` 返回 `false`，`wait_ntp()` 会持续等待。重复初始化不会替换首个定时器或回调，页面生命周期内不提供停止接口。
+`is_ntp()` 返回 `false`，`wait_ntp()` 会持续等待。重复初始化不会替换首个定时器或回调，页面生命周期内不提供停止接口；
+`setInterval` 创建失败时会重置初始化标记并返回错误，可再次调用重试。
 
 `sync_interval` 必须至少为 1 毫秒，且不能超过 `2_147_483_647` 毫秒。浏览器中的网络请求通常是异步的，调用方应在回调执行前完成请求并缓存最近一次可用的校准时间。
 
