@@ -12,3 +12,4 @@ pub use common::{TypescriptBuildResult, TypescriptBuilder, TypescriptResult};
 pub use enum_builder::TypescriptEnumBuilder;
 pub use package_builder::PackageBuilder;
 pub use type_builder::TypescriptTypeBuilder;
+pub use utils::camel_case;

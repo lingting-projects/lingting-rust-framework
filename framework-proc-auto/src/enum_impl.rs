@@ -8,6 +8,8 @@ use syn::{FnArg, ImplItemFn, LitStr, ReturnType, Type};
 
 #[cfg(feature = "collect")]
 use crate::type_transform::TypeTransform;
+#[cfg(feature = "collect")]
+use framework_proc_core::camel_case;
 
 pub fn expand(mut item: ItemImpl) -> syn::Result<TokenStream> {
     if item.trait_.is_some() {
@@ -221,25 +223,4 @@ fn enum_field_value(method: &ImplItemFn) -> syn::Result<TokenStream> {
     Ok(transform
         .enum_value(method)
         .unwrap_or_else(|| quote!(::framework_proc_core::enum_field_value(value.#method())?)))
-}
-
-#[cfg(feature = "collect")]
-fn camel_case(name: &str) -> String {
-    let mut value = String::new();
-    let mut uppercase_next = false;
-    for (index, character) in name.chars().enumerate() {
-        if character == '_' || character == '-' {
-            uppercase_next = !value.is_empty();
-            continue;
-        }
-        if index == 0 {
-            value.extend(character.to_lowercase());
-        } else if uppercase_next {
-            value.extend(character.to_uppercase());
-            uppercase_next = false;
-        } else {
-            value.push(character);
-        }
-    }
-    value
 }

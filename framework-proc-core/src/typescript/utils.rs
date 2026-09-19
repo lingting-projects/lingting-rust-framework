@@ -38,7 +38,7 @@ pub(crate) fn collect_type_names(value: &str, names: &mut BTreeSet<String>) {
     }
 }
 
-pub(crate) fn camel_case(name: &str) -> String {
+pub fn camel_case(name: &str) -> String {
     let mut result = String::new();
     let mut uppercase_next = false;
     for (index, character) in name.chars().enumerate() {

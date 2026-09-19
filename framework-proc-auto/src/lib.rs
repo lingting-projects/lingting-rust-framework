@@ -132,11 +132,11 @@ fn expand_auto_enum(args: TokenStream2, input: TokenStream2) -> TokenStream2 {
     let derives = options.derive_options();
     ensure_derives(&mut item.attrs, &derives);
     if options.strum {
-        ensure_item_strum_serialize_all(&mut item.attrs, "UPPERCASE");
+        ensure_item_strum_serialize_all(&mut item.attrs, "SCREAMING_SNAKE_CASE");
         ensure_item_strum_ascii_case_insensitive(&mut item.attrs);
     }
     if options.serde {
-        ensure_item_serde_rename_all(&mut item.attrs, "UPPERCASE");
+        ensure_item_serde_rename_all(&mut item.attrs, "SCREAMING_SNAKE_CASE");
     }
     let ident = item.ident.clone();
 
