@@ -1,8 +1,8 @@
 use framework_proc_auto::{auto_enum, auto_type};
 use std::sync::Arc;
 
-pub const R_CODE_SUCCCESS: u32 = 200;
-pub const R_MESSAGE_SUCCCESS: &str = "Success";
+pub const R_CODE_SUCCESS: u32 = 200;
+pub const R_MESSAGE_SUCCESS: &str = "Success";
 
 #[auto_enum]
 pub enum RCodeKind {

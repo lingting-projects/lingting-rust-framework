@@ -8,6 +8,6 @@ mod value;
 
 pub use application_directory::*;
 pub use framework_datetime::*;
-pub use money::Money;
+pub use money::{Money, MoneyParseError};
 pub use snowflake::{Snowflake, next_id};
 pub use value::*;

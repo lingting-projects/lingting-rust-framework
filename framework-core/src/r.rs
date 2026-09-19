@@ -1,4 +1,4 @@
-use crate::types::{R, R_CODE_SUCCCESS, R_MESSAGE_SUCCCESS, RCodeKind};
+use crate::types::{R, R_CODE_SUCCESS, R_MESSAGE_SUCCESS, RCodeKind};
 use framework_proc_auto::auto_enum_impl;
 
 #[auto_enum_impl]
@@ -6,7 +6,7 @@ impl RCodeKind {
     #[auto_enum_field]
     pub fn code(&self) -> u32 {
         match self {
-            RCodeKind::Success => R_CODE_SUCCCESS,
+            RCodeKind::Success => R_CODE_SUCCESS,
             RCodeKind::Parameter => 400,
             RCodeKind::Unauthorized => 401,
             RCodeKind::Forbidden => 403,
@@ -18,15 +18,15 @@ impl RCodeKind {
 impl<D> R<D> {
     pub fn ok(data: D) -> Self {
         Self {
-            code: R_CODE_SUCCCESS,
-            message: R_MESSAGE_SUCCCESS.to_string(),
+            code: R_CODE_SUCCESS,
+            message: R_MESSAGE_SUCCESS.to_string(),
             data: Some(data),
         }
     }
     pub fn ok_none() -> Self {
         Self {
-            code: R_CODE_SUCCCESS,
-            message: R_MESSAGE_SUCCCESS.to_string(),
+            code: R_CODE_SUCCESS,
+            message: R_MESSAGE_SUCCESS.to_string(),
             data: None,
         }
     }
@@ -50,8 +50,8 @@ where
     fn from(result: Result<D, E>) -> Self {
         match result {
             Ok(data) => Self {
-                code: R_CODE_SUCCCESS,
-                message: R_MESSAGE_SUCCCESS.to_string(),
+                code: R_CODE_SUCCESS,
+                message: R_MESSAGE_SUCCESS.to_string(),
                 data: Some(data),
             },
             Err(error) => Self {
