@@ -65,7 +65,7 @@ fn javascript_method(api: &ApiMetadata) -> String {
     )
 }
 
-fn request_value(parameters: &Vec<String>) -> String {
+fn request_value(parameters: &[String]) -> String {
     if parameters.len() == 1 {
         return parameters[0].to_string();
     }
