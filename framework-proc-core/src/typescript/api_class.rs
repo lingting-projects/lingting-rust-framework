@@ -48,7 +48,7 @@ fn javascript_method(api: &ApiMetadata) -> String {
         .map(|parameter| parameter.name)
         .collect::<Vec<_>>()
         .join(", ");
-    let body = api.parameter_names(ApiParameterKind::Query);
+    let body = api.parameter_names(ApiParameterKind::Body);
     let query = api.parameter_names(ApiParameterKind::Query);
     let call_arguments = match (body, query) {
         (body, query) if body.is_empty() && query.is_empty() => String::new(),
