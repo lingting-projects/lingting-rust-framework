@@ -2,6 +2,7 @@ use anyhow::{Context, Result};
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
+use crate::{system_directory, home_directory};
 
 /// 应用运行所需的目录集合。
 #[derive(Debug)]
@@ -33,7 +34,7 @@ impl ApplicationDirectory {
         let global = if cfg!(debug_assertions) {
             debug_runtime_directory(&install)
         } else {
-            user_directory()?.join(parent.as_ref()).join(id.as_ref())
+            home_directory()?.join(parent.as_ref()).join(id.as_ref())
         };
         Self::new(id, global, install)
     }
@@ -89,23 +90,4 @@ fn debug_runtime_directory(install: &Path) -> PathBuf {
         install
     };
     base.join("runtime")
-}
-
-fn system_directory() -> Result<PathBuf> {
-    if cfg!(windows) {
-        return env::var_os("ALLUSERSPROFILE")
-            .map(PathBuf::from)
-            .context("未设置 ALLUSERSPROFILE 环境变量");
-    }
-    if cfg!(target_os = "linux") {
-        return Ok(PathBuf::from("/usr/local/share"));
-    }
-    Ok(PathBuf::from("/Library/Application Support"))
-}
-
-fn user_directory() -> Result<PathBuf> {
-    let variable = if cfg!(windows) { "USERPROFILE" } else { "HOME" };
-    env::var_os(variable)
-        .map(PathBuf::from)
-        .with_context(|| format!("未设置 {variable} 环境变量"))
 }
