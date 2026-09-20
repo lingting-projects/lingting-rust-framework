@@ -64,6 +64,10 @@ pub async fn find_user(params: Query<FindUserParams>) -> Result<UserVO, anyhow::
 
 | Rust 类型 | TypeScript 文本 |
 |-----------|-----------------|
+| `String`、`str`、`char` | `string` |
+| `bool` | `boolean` |
+| `i8`、`i16`、`i32`、`u8`、`u16`、`u32`、`isize`、`usize`、`f32`、`f64` | `number` |
+| `i64`、`u64`、`i128`、`u128` | `string` |
 | `Option<T>` | `T \| null` |
 | `Vec<T>` | `T[]` |
 | `HashMap<K, V>`、`BTreeMap<K, V>` | `Record<K, V>` |
@@ -72,6 +76,10 @@ pub async fn find_user(params: Query<FindUserParams>) -> Result<UserVO, anyhow::
 
 泛型参数递归转换，因此 `Option<Vec<UserVO>>` 得到 `UserVO[] | null`。
 不支持的类型（如元组、函数指针、带括号的泛型参数）会报错。
+
+`i64`、`u64`、`i128`、`u128` 映射为 `string`，与 `auto_type` 对同名字段的 `DisplayFromStr` 处理保持一致。
+因此裸 `i64` 返回值会被标注为 `string`，而 serde 实际输出的是数字；返回值中的 id 请用 `auto_type`
+结构体包装，避免类型标注与运行时不一致。
 
 ## 注册结果
 

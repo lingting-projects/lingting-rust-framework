@@ -1,4 +1,5 @@
 use std::io;
+use crate::ApiReturnType;
 
 pub type TypescriptResult<T> = Result<T, Box<dyn std::error::Error + Send + Sync>>;
 
@@ -41,4 +42,12 @@ pub(crate) fn javascript_property(name: &str) -> String {
 
 pub(crate) fn json_string(value: &str) -> TypescriptResult<String> {
     serde_json::to_string(value).map_err(|error| Box::new(error) as _)
+}
+
+pub fn return_type_name(return_type: ApiReturnType) -> &'static str {
+    match return_type {
+        ApiReturnType::Void => "void",
+        ApiReturnType::Blob => "Blob",
+        ApiReturnType::Type(name) => name,
+    }
 }

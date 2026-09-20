@@ -231,6 +231,11 @@ fn type_name(ty: &Type) -> syn::Result<String> {
     };
     let ident = segment.ident.to_string();
     let arguments = generic_arguments(segment)?;
+    if arguments.is_empty()
+        && let Some(primitive) = primitive_type_name(&ident)
+    {
+        return Ok(primitive.to_string());
+    }
     match ident.as_str() {
         "Option" => {
             let [inner] = arguments.as_slice() else {
@@ -252,6 +257,22 @@ fn type_name(ty: &Type) -> syn::Result<String> {
         }
         _ if arguments.is_empty() => Ok(ident),
         _ => Ok(format!("{ident}<{}>", arguments.join(", "))),
+    }
+}
+
+/// Rust 原始类型对应的 TypeScript 类型名；不是原始类型时返回 `None`。
+///
+/// `i64` / `u64` / `i128` / `u128` 按项目约定序列化为字符串，
+/// 与 `auto_type` 对同名字段的 `DisplayFromStr` 处理保持一致。
+fn primitive_type_name(name: &str) -> Option<&'static str> {
+    match name {
+        "String" | "str" | "char" => Some("string"),
+        "bool" => Some("boolean"),
+        "i8" | "i16" | "i32" | "u8" | "u16" | "u32" | "isize" | "usize" | "f32" | "f64" => {
+            Some("number")
+        }
+        "i64" | "u64" | "i128" | "u128" => Some("string"),
+        _ => None,
     }
 }
 

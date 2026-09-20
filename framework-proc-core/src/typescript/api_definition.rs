@@ -1,6 +1,6 @@
-use crate::{ApiMetadata, ApiReturnType};
-
 use super::utils::camel_case;
+use crate::ApiMetadata;
+use crate::typescript::common::return_type_name;
 
 pub(crate) fn declaration(apis: &[ApiMetadata]) -> String {
     format!(
@@ -38,12 +38,7 @@ fn declaration_definitions(apis: &[ApiMetadata]) -> String {
 }
 
 fn declaration_definition(api: &ApiMetadata) -> String {
-    let parameters = api
-        .parameters
-        .iter()
-        .map(|parameter| format!("{}: {}", parameter.name, parameter.type_name))
-        .collect::<Vec<_>>()
-        .join(", ");
+    let parameters = api.parameters_colon().join(", ");
     format!(
         "  readonly {}: ApiDefinition<[{parameters}], {}>;",
         camel_case(api.name),
@@ -64,12 +59,4 @@ fn javascript_definition(api: &ApiMetadata) -> String {
         api.method,
         api.path,
     )
-}
-
-fn return_type_name(return_type: ApiReturnType) -> &'static str {
-    match return_type {
-        ApiReturnType::Void => "void",
-        ApiReturnType::Blob => "blob",
-        ApiReturnType::Type(name) => name,
-    }
 }

@@ -32,6 +32,23 @@ pub struct ApiMetadata {
     pub return_type: ApiReturnType,
 }
 
+impl ApiMetadata {
+    pub fn parameters_colon(&self) -> Vec<String> {
+        self.parameters
+            .iter()
+            .map(|parameter| format!("{}: {}", parameter.name, parameter.type_name))
+            .collect::<Vec<_>>()
+    }
+
+    pub fn parameter_names(&self, kind: ApiParameterKind) -> Vec<String> {
+        self.parameters
+            .iter()
+            .filter(|parameter| parameter.kind == kind)
+            .map(|parameter| parameter.name.to_string())
+            .collect::<Vec<_>>()
+    }
+}
+
 #[cfg(feature = "collect")]
 inventory::collect!(ApiMetadata);
 

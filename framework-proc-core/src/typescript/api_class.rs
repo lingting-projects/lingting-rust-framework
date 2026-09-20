@@ -1,6 +1,6 @@
-use crate::{ApiMetadata, ApiParameterKind, ApiReturnType};
-
 use super::utils::camel_case;
+use crate::typescript::common::return_type_name;
+use crate::{ApiMetadata, ApiParameterKind};
 
 pub(crate) fn declaration(class_name: &str, apis: &[ApiMetadata]) -> String {
     let methods = apis
@@ -33,12 +33,7 @@ pub(crate) fn javascript(class_name: &str, apis: &[ApiMetadata]) -> String {
 }
 
 fn declaration_method(api: &ApiMetadata) -> String {
-    let parameters = api
-        .parameters
-        .iter()
-        .map(|parameter| format!("{}: {}", parameter.name, parameter.type_name))
-        .collect::<Vec<_>>()
-        .join(", ");
+    let parameters = api.parameters_colon().join(", ");
     format!(
         "  {}({parameters}): Promise<{}>;",
         camel_case(api.name),
@@ -53,18 +48,8 @@ fn javascript_method(api: &ApiMetadata) -> String {
         .map(|parameter| parameter.name)
         .collect::<Vec<_>>()
         .join(", ");
-    let body = api
-        .parameters
-        .iter()
-        .filter(|parameter| parameter.kind == ApiParameterKind::Body)
-        .map(|parameter| parameter.name)
-        .collect::<Vec<_>>();
-    let query = api
-        .parameters
-        .iter()
-        .filter(|parameter| parameter.kind == ApiParameterKind::Query)
-        .map(|parameter| parameter.name)
-        .collect::<Vec<_>>();
+    let body = api.parameter_names(ApiParameterKind::Query);
+    let query = api.parameter_names(ApiParameterKind::Query);
     let call_arguments = match (body, query) {
         (body, query) if body.is_empty() && query.is_empty() => String::new(),
         (body, query) if query.is_empty() => format!(", {}", request_value(&body)),
@@ -80,7 +65,7 @@ fn javascript_method(api: &ApiMetadata) -> String {
     )
 }
 
-fn request_value(parameters: &[&str]) -> String {
+fn request_value(parameters: &Vec<String>) -> String {
     if parameters.len() == 1 {
         return parameters[0].to_string();
     }
@@ -92,12 +77,4 @@ fn request_value(parameters: &[&str]) -> String {
             .collect::<Vec<_>>()
             .join(", "),
     )
-}
-
-fn return_type_name(return_type: ApiReturnType) -> &'static str {
-    match return_type {
-        ApiReturnType::Void => "void",
-        ApiReturnType::Blob => "blob",
-        ApiReturnType::Type(name) => name,
-    }
 }
