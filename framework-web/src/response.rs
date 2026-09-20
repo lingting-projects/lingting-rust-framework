@@ -6,6 +6,8 @@ use framework_core::types::R;
 use futures_util::stream::BoxStream;
 use serde::Serialize;
 use serde_json::json;
+use std::marker::PhantomData;
+use std::ops::{Deref, DerefMut};
 
 const INTERNAL_ERROR_BODY: &[u8] = br#"{"code":500,"message":"Server Error"}"#;
 
@@ -58,6 +60,62 @@ pub struct WebResponse {
     pub status: u16,
     pub headers: MultiStringValue,
     pub body: WebBody,
+}
+
+/// 声明载荷类型的 [`WebResponse`] 包装。
+///
+/// 运行时行为与 [`WebResponse`] 完全一致，状态码、响应头与响应体通过 [`Deref`] / [`DerefMut`]
+/// 直接访问。仅用于让 `web_api*` / `ts_api` 宏在显式构造 `WebResponse`（自定义响应头、
+/// 状态码等）时推导出实际载荷类型，从而导出准确的 TypeScript 返回类型。
+/// 仅返回二进制或流式响应时仍直接使用 `WebResponse`。
+pub struct WebResponseOf<T> {
+    response: WebResponse,
+    payload: PhantomData<fn() -> T>,
+}
+
+impl<T> WebResponseOf<T> {
+    /// 序列化载荷并构造 200 响应。
+    pub fn from_t(value: T, request: Option<&WebRequest>) -> Self
+    where
+        T: Serialize,
+    {
+        Self::from_response(WebResponse::from_t(value, request))
+    }
+
+    /// 序列化载荷结果并构造响应，失败时返回错误响应。
+    pub fn from_result_t(result: Result<T>, request: Option<&WebRequest>) -> Self
+    where
+        T: Serialize,
+    {
+        Self::from_response(WebResponse::from_result_t(result, request))
+    }
+
+    /// 包装已构造的响应。
+    pub fn from_response(response: WebResponse) -> Self {
+        Self {
+            response,
+            payload: PhantomData,
+        }
+    }
+
+    /// 取出底层响应。
+    pub fn into_response(self) -> WebResponse {
+        self.response
+    }
+}
+
+impl<T> Deref for WebResponseOf<T> {
+    type Target = WebResponse;
+
+    fn deref(&self) -> &Self::Target {
+        &self.response
+    }
+}
+
+impl<T> DerefMut for WebResponseOf<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.response
+    }
 }
 
 impl WebResponse {

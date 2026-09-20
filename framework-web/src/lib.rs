@@ -16,7 +16,7 @@ pub use framework_proc_web::{
 pub use from_web::{FromWeb, Json, Query};
 pub use panic::catch_panic;
 pub use request::{WebMethod, WebRequest};
-pub use response::{WebBody, WebResponse};
+pub use response::{WebBody, WebResponse, WebResponseOf};
 #[cfg(feature = "collect")]
 pub use route::{WebApiBuilder, web_api_iter};
 

@@ -181,6 +181,10 @@ fn api_return_type(output: &ReturnType) -> syn::Result<TokenStream2> {
     while let Some(inner) = result_or_r_type(ty) {
         ty = inner;
     }
+    if let Some(inner) = generic_type(ty, "WebResponseOf") {
+        let name = syn::LitStr::new(&type_name(inner)?, inner.span());
+        return Ok(quote!(::framework_proc_core::ApiReturnType::Type(#name)));
+    }
     if is_type(ty, "WebResponse") {
         return Ok(quote!(::framework_proc_core::ApiReturnType::Blob));
     }

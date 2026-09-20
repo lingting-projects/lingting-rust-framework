@@ -18,6 +18,11 @@ pub fn expand_response(
             #function(#(#arguments),*)
                 .await
         },
+        ReturnType::Type(_, ty) if is_type(ty, "WebResponseOf") => quote! {
+            #function(#(#arguments),*)
+                .await
+                .into_response()
+        },
         ReturnType::Type(_, ty) if is_type(ty, "R") => quote! {
             let result = #function(#(#arguments),*)
                 .await;
@@ -45,6 +50,15 @@ fn expand_typed_response(
             let result = #function(#(#arguments),*)
                 .await;
             ::framework_web::WebResponse::from_result(result, Some(invoke_request.as_ref()))
+        }
+    } else if is_type(inner, "WebResponseOf") {
+        quote! {
+            let result = #function(#(#arguments),*)
+                .await;
+            ::framework_web::WebResponse::from_result(
+                result.map(|response| response.into_response()),
+                Some(invoke_request.as_ref()),
+            )
         }
     } else if is_type(inner, "R") {
         quote! {
