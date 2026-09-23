@@ -30,6 +30,7 @@ framework-web = { path = "../framework-web" }
 | `body` | 原始请求体 `Bytes` |
 | `client_ip` | 客户端地址，可选 |
 | `request_id` | 请求标识，用于日志关联 |
+| `receive_time` | 服务器收到请求的时刻，毫秒时间戳 |
 
 `WebMethod` 包含 `Get`、`Post`、`Put`、`Patch`、`Delete`、`Options` 与 `Other(String)`。
 `WebMethod::from_name` 会转大写后匹配，未识别的方法落入 `Other`。

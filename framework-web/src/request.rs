@@ -53,4 +53,6 @@ pub struct WebRequest {
     pub body: Bytes,
     pub client_ip: Option<String>,
     pub request_id: String,
+    /// 服务器收到请求的时刻（毫秒时间戳）。
+    pub receive_time: i64,
 }
