@@ -52,7 +52,8 @@ pub struct WebRequest {
     pub query: MultiStringValue,
     pub body: Bytes,
     pub client_ip: Option<String>,
-    pub request_id: String,
+    /// 链路标识：优先取 `x-trace-id` 请求头，缺失时由服务器生成。
+    pub trace_id: String,
     /// 服务器收到请求的时刻（毫秒时间戳）。
     pub receive_time: i64,
 }

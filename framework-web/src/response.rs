@@ -133,9 +133,9 @@ impl WebResponse {
         Self::error_body(&error)
     }
 
-    pub fn from_error_request(error: Error, request_id: &str, method: &str, path: &str) -> Self {
+    pub fn from_error_request(error: Error, trace_id: &str, method: &str, path: &str) -> Self {
         let error = normalize_error(error);
-        WebError::log_request(&error, request_id, method, path);
+        WebError::log_request(&error, trace_id, method, path);
         Self::error_body(&error)
     }
 

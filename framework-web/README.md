@@ -29,7 +29,7 @@ framework-web = { path = "../framework-web" }
 | `query` | 查询参数，`MultiStringValue` |
 | `body` | 原始请求体 `Bytes` |
 | `client_ip` | 客户端地址，可选 |
-| `request_id` | 请求标识，用于日志关联 |
+| `trace_id` | 链路标识：优先取 `x-trace-id` 请求头，缺失时由服务器生成雪花 ID |
 | `receive_time` | 服务器收到请求的时刻，毫秒时间戳 |
 
 `WebMethod` 包含 `Get`、`Post`、`Put`、`Patch`、`Delete`、`Options` 与 `Other(String)`。
@@ -88,7 +88,7 @@ scope_web(context, async {
 | `from_result_t` / `from_result_r` | 从 `Result` 转换，错误转为错误响应 |
 | `from_result(response, request)` | 从 `Result<WebResponse>` 转换 |
 | `from_error(error, request)` | 错误响应，同时记录日志 |
-| `from_error_request(error, request_id, method, path)` | 无 `WebRequest` 时记录日志 |
+| `from_error_request(error, trace_id, method, path)` | 无 `WebRequest` 时记录日志 |
 | `stream(status, content_type, stream)` | 流式响应 |
 
 JSON 响应会设置 `content-type: application/json; charset=utf-8` 与 `content-length`。
@@ -112,7 +112,7 @@ JSON 响应会设置 `content-type: application/json; charset=utf-8` 与 `conten
 构造方法：`message`、`parameter`、`return_conversion`、`not_found`、`unauthorized`、`forbidden`、
 `internal`、`panic`、`with_source`。带 `source` 的构造方法在 debug 构建下会记录源码位置。
 
-`log` / `log_request` 输出包含分类、状态码、`request_id`、方法、路径、源码位置、
+`log` / `log_request` 输出包含分类、状态码、`trace_id`、方法、路径、源码位置、
 错误链与 backtrace 的 `error!` 日志。`source_backtrace` 取 `anyhow` 的 backtrace。
 
 `WebErrorExt` 为 `Result<T, E>` 提供快捷转换：`message()`、`parameter(msg)`、`internal(msg)`。

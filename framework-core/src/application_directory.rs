@@ -1,8 +1,8 @@
+use crate::{home_directory, system_directory};
 use anyhow::{Context, Result};
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
-use crate::{system_directory, home_directory};
 
 /// 应用运行所需的目录集合。
 #[derive(Debug)]

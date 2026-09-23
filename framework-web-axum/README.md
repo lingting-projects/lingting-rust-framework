@@ -58,13 +58,13 @@ let wrapper: WebRouteWrapper = Arc::new(|route| {
 
 `dispatch` 作为 axum 的 fallback 处理所有请求：
 
-1. 读取 `x-request-id` 请求头，为空时用 `next_id()` 生成雪花 ID。
+1. 读取 `x-trace-id` 请求头，为空时用 `next_id()` 生成雪花 ID。
 2. 收集请求头（键名转小写）与查询参数（保留原大小写），读取请求体，上限 16 MiB。
 3. 组装 `WebRequest`：`scheme` 缺失时取 `http`，`authority` 缺失时取 `host` 请求头，
    `client_ip` 取连接对端 IP。
 4. `OPTIONS` 请求直接返回 `WebResponse::empty()`（204），不进入路由查找。
 5. 其他请求在 `catch_panic` 中执行 `WebRouter::invoke`，panic 与错误都转为错误响应。
-6. 应用 CORS 响应头，写入 `x-request-id`，转换为 axum `Response`。
+6. 应用 CORS 响应头，写入 `x-trace-id`，转换为 axum `Response`。
 
 响应体支持一次性 `Bytes` 与流式 `BoxStream`，分别映射为 `Body::from` 与 `Body::from_stream`。
 

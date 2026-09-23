@@ -103,13 +103,13 @@ impl WebError {
     }
 
     pub fn log(error: &Self, request: Option<&WebRequest>) {
-        let request_id = request.map_or("未知", |item| item.request_id.as_str());
+        let trace_id = request.map_or("未知", |item| item.trace_id.as_str());
         let method = request.map_or_else(|| "未知".to_string(), |item| item.method.to_string());
         let path = request.map_or("未知", |item| item.path.as_str());
-        Self::log_request(error, request_id, &method, path);
+        Self::log_request(error, trace_id, &method, path);
     }
 
-    pub fn log_request(error: &Self, request_id: &str, method: &str, path: &str) {
+    pub fn log_request(error: &Self, trace_id: &str, method: &str, path: &str) {
         let status = error.status();
         let kind = error.label();
         let location = error.location.as_deref().unwrap_or("未知");
@@ -126,7 +126,7 @@ impl WebError {
 
         error!(
             "Web 请求异常 category={kind} status={status} \
-            request_id={request_id} method={method} path={path} \
+            trace_id={trace_id} method={method} path={path} \
             source={location} error_chain={chain} backtrace={backtrace}"
         )
     }

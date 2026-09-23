@@ -4,7 +4,7 @@ use axum::body::{Body, to_bytes};
 use axum::extract::{ConnectInfo, Request, State};
 use axum::http::{HeaderName, HeaderValue, StatusCode};
 use axum::response::Response;
-use framework_core::{MultiStringValue, next_id};
+use framework_core::{MultiStringValue, current_millis, next_id};
 use framework_web::{WebBody, WebContext, WebMethod, WebRequest, WebResponse, catch_panic};
 use log::error;
 use std::collections::HashMap;
@@ -41,7 +41,8 @@ pub(crate) async fn dispatch(
 }
 
 async fn dispatch_inner(state: AxumState, peer: SocketAddr, request: Request) -> Result<Response> {
-    let request_id = request_id(&request);
+    let receive_time = current_millis().unwrap_or_default();
+    let trace_id = trace_id(&request);
     let method = request.method().to_string();
     let uri = request.uri().clone();
     let mut headers = HashMap::<String, Vec<String>>::new();
@@ -79,7 +80,8 @@ async fn dispatch_inner(state: AxumState, peer: SocketAddr, request: Request) ->
         query: MultiStringValue::create(false, query),
         body,
         client_ip: Some(peer.ip().to_string()),
-        request_id: request_id.clone(),
+        trace_id: trace_id.clone(),
+        receive_time,
     });
     let context = WebContext::new(Arc::clone(&web_request));
     let cors = (state.cors)(&context);
@@ -93,21 +95,21 @@ async fn dispatch_inner(state: AxumState, peer: SocketAddr, request: Request) ->
         }
     };
     cors.apply(&mut response.headers);
-    response.headers.set("x-request-id", &request_id);
+    response.headers.set("x-trace-id", &trace_id);
     to_axum_response(response)
 }
 
-fn request_id(request: &Request) -> String {
+fn trace_id(request: &Request) -> String {
     request
         .headers()
-        .get("x-request-id")
+        .get("x-trace-id")
         .and_then(|value| value.to_str().ok())
         .filter(|value| !value.trim().is_empty())
         .map(str::to_string)
         .unwrap_or_else(|| {
             next_id()
                 .map(|value| value.to_string())
-                .unwrap_or_else(|_| "request-id-unavailable".into())
+                .unwrap_or_else(|_| "trace-id-unavailable".into())
         })
 }
 
