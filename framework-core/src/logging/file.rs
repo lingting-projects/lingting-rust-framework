@@ -11,8 +11,7 @@ use tracing_subscriber::fmt;
 use tracing_subscriber::layer::Layer;
 
 use super::archive;
-use super::core::{BoxLayer, DefaultLoggerFilter};
-use super::visitor_logging::{LogDebugFilter, LogStrFilter};
+use super::core::{BoxLayer, CombinedFilter, LoggingFilter};
 
 /// 单级别日志文件与其过滤级别。
 const LEVEL_FILES: [(&str, Level); 5] = [
@@ -28,22 +27,11 @@ pub(crate) fn layers(
     directory: &Path,
     max_level: LevelFilter,
     workers: &mut Vec<WorkerGuard>,
-    str_filters: &[LogStrFilter],
-    debug_filters: &[LogDebugFilter],
+    filters: &[LoggingFilter],
 ) -> io::Result<Vec<BoxLayer>> {
     LEVEL_FILES
         .iter()
-        .map(|(file_name, level)| {
-            layer(
-                directory,
-                file_name,
-                *level,
-                max_level,
-                workers,
-                str_filters,
-                debug_filters,
-            )
-        })
+        .map(|(file_name, level)| layer(directory, file_name, *level, max_level, workers, filters))
         .collect()
 }
 
@@ -65,8 +53,7 @@ fn layer(
     level: Level,
     max_level: LevelFilter,
     workers: &mut Vec<WorkerGuard>,
-    str_filters: &[LogStrFilter],
-    debug_filters: &[LogDebugFilter],
+    filters: &[LoggingFilter],
 ) -> io::Result<BoxLayer> {
     let writer = current_file_writer(directory, file_name, workers)?;
     Ok(Box::new(
@@ -77,10 +64,7 @@ fn layer(
             .with_filter(filter_fn(move |metadata| {
                 *metadata.level() == level && metadata.level() <= &max_level
             }))
-            .with_filter(DefaultLoggerFilter::new(
-                str_filters.to_vec(),
-                debug_filters.to_vec(),
-            )),
+            .with_filter(CombinedFilter::new(filters)),
     ))
 }
 

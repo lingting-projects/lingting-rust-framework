@@ -16,7 +16,7 @@ framework-core = { path = "../framework-core" }
 |------|------|
 | `r` | `R<D>` 统一响应与其构造方法 |
 | `types` | `RCodeKind`、分页类型、通用 PO/VO 与回调别名 |
-| `logging` | `LoggingConfig`、`LogArchiveConfig`、`LoggingGuard`、`LogStrFilter`、`LogDebugFilter`、`init` |
+| `logging` | `LoggingConfig`、`LogArchiveConfig`、`LoggingFilter`、`LoggingGuard`、`DefaultSqlxFilter`、`init` |
 | 根导出 | `Snowflake`、`next_id`、`Money`、`MultiStringValue`、`ApplicationDirectory` |
 | 重导出 | `framework_datetime::*`，如 `current_millis`、`wait_ntp` |
 
@@ -133,30 +133,48 @@ let guard = init(&config)?;
 `archive/YYYY-MM-DD-<name>.gz`；归档线程每小时清理一次超出 `retention_days` 的文件。
 空日志文件不生成归档。
 
-日志层会过滤无意义的事件：target 为 `sqlx::query` 时，由 `record_str_filters` 与 `record_debug_filters`
-中的过滤函数判定，任一函数返回 `true` 即忽略该事件。
+日志层会过滤无意义的事件：`LoggingConfig::filters` 中的过滤器全部放行时才记录该事件，
+任一过滤器返回 `false` 即忽略。
 
-`LoggingConfig` 的默认过滤器：`db.statement` / `message` 包含 `lib_queue`，或 `summary` 等于 `COMMIT`。
+`LoggingConfig::new()` 默认注册 `DefaultSqlxFilter`：target 为 `sqlx::query` 且
+`db.statement` / `message` 包含 `lib_queue`，或 `summary` 等于 `COMMIT` 时忽略该事件；
+其余事件一律放行。
+
+过滤器类型为 `LoggingFilter`，即
+`Arc<dyn tracing_subscriber::layer::Filter<tracing_subscriber::Registry> + Send + Sync + 'static>`，
+用 `Arc` 包裹便于在多个日志层之间复用同一实例。外部实现 `Filter` 后通过 `push_filter` 追加：
 
 ```rust
 use framework_core::logging::{LoggingConfig, init};
 use std::sync::Arc;
+use tracing::{Event, Metadata, Subscriber};
+use tracing_subscriber::layer::{Context, Filter};
+use tracing_subscriber::registry::LookupSpan;
+
+#[derive(Debug)]
+struct NoisyTableFilter;
+
+impl<S> Filter<S> for NoisyTableFilter
+where
+    S: Subscriber + for<'lookup> LookupSpan<'lookup>,
+{
+    fn enabled(&self, _: &Metadata<'_>, _: &Context<'_, S>) -> bool {
+        true
+    }
+
+    fn event_enabled(&self, event: &Event<'_>, _: &Context<'_, S>) -> bool {
+        event.metadata().target() != "sqlx::query"
+    }
+}
 
 let mut config = LoggingConfig::new();
-config.push_str_filter(Arc::new(|field, value| {
-    field.name() == "db.statement" && value.contains("noisy_table")
-}));
-config.push_debug_filter(Arc::new(|field, value| {
-    field.name() == "summary" && format!("{value:?}") == "BEGIN"
-}));
+config.push_filter(Arc::new(NoisyTableFilter));
 
 let guard = init(&config)?;
 # Ok::<(), std::io::Error>(())
 ```
 
-过滤函数类型为 `LogStrFilter` 与 `LogDebugFilter`，即
-`Arc<dyn Fn(&tracing::field::Field, &str) -> bool + Send + Sync>` 与其 `Debug` 版本；
-两个字段本身也是公开的，可直接读写。
+`filters` 字段本身也是公开的，可直接读写。
 
 ## 多值映射
 

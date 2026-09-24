@@ -4,7 +4,7 @@ mod archive;
 mod combined;
 mod core;
 mod file;
-mod visitor_logging;
+mod filter_sqlx;
 
 use std::fs;
 use std::io;
@@ -12,8 +12,8 @@ use std::io;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 
-pub use core::{LogArchiveConfig, LoggingConfig, LoggingGuard};
-pub use visitor_logging::{LogDebugFilter, LogStrFilter};
+pub use core::{LogArchiveConfig, LoggingConfig, LoggingFilter, LoggingGuard};
+pub use filter_sqlx::DefaultSqlxFilter;
 
 /// 初始化 tracing 日志订阅器。
 ///
@@ -24,11 +24,7 @@ pub fn init(config: &LoggingConfig) -> io::Result<LoggingGuard> {
     let mut archive = None;
 
     if config.console {
-        layers.push(core::console_layer(
-            config.level,
-            &config.record_str_filters,
-            &config.record_debug_filters,
-        ));
+        layers.push(core::console_layer(config.level, &config.filters));
     }
 
     if let Some(directory) = config.directory.as_deref() {
@@ -37,16 +33,14 @@ pub fn init(config: &LoggingConfig) -> io::Result<LoggingGuard> {
             directory,
             config.level,
             &mut workers,
-            &config.record_str_filters,
-            &config.record_debug_filters,
+            &config.filters,
         )?);
         if config.combined {
             layers.push(combined::layer(
                 directory,
                 config.level,
                 &mut workers,
-                &config.record_str_filters,
-                &config.record_debug_filters,
+                &config.filters,
             )?);
         }
         if let Some(archive_config) = config.archive {
