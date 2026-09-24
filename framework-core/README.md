@@ -16,7 +16,7 @@ framework-core = { path = "../framework-core" }
 |------|------|
 | `r` | `R<D>` 统一响应与其构造方法 |
 | `types` | `RCodeKind`、分页类型、通用 PO/VO 与回调别名 |
-| `logging` | `LoggingConfig`、`LogArchiveConfig`、`LoggingGuard`、`init` |
+| `logging` | `LoggingConfig`、`LogArchiveConfig`、`LoggingGuard`、`LogStrFilter`、`LogDebugFilter`、`init` |
 | 根导出 | `Snowflake`、`next_id`、`Money`、`MultiStringValue`、`ApplicationDirectory` |
 | 重导出 | `framework_datetime::*`，如 `current_millis`、`wait_ntp` |
 
@@ -133,8 +133,30 @@ let guard = init(&config)?;
 `archive/YYYY-MM-DD-<name>.gz`；归档线程每小时清理一次超出 `retention_days` 的文件。
 空日志文件不生成归档。
 
-日志层会过滤无意义的 SQL 日志：target 为 `sqlx::query` 且语句包含 `lib_queue`
-或摘要为 `COMMIT` 的事件不会输出。
+日志层会过滤无意义的事件：target 为 `sqlx::query` 时，由 `record_str_filters` 与 `record_debug_filters`
+中的过滤函数判定，任一函数返回 `true` 即忽略该事件。
+
+`LoggingConfig` 的默认过滤器：`db.statement` / `message` 包含 `lib_queue`，或 `summary` 等于 `COMMIT`。
+
+```rust
+use framework_core::logging::{LoggingConfig, init};
+use std::sync::Arc;
+
+let mut config = LoggingConfig::new();
+config.push_str_filter(Arc::new(|field, value| {
+    field.name() == "db.statement" && value.contains("noisy_table")
+}));
+config.push_debug_filter(Arc::new(|field, value| {
+    field.name() == "summary" && format!("{value:?}") == "BEGIN"
+}));
+
+let guard = init(&config)?;
+# Ok::<(), std::io::Error>(())
+```
+
+过滤函数类型为 `LogStrFilter` 与 `LogDebugFilter`，即
+`Arc<dyn Fn(&tracing::field::Field, &str) -> bool + Send + Sync>` 与其 `Debug` 版本；
+两个字段本身也是公开的，可直接读写。
 
 ## 多值映射
 

@@ -4,7 +4,7 @@ mod archive;
 mod combined;
 mod core;
 mod file;
-mod visitor_sql;
+mod visitor_logging;
 
 use std::fs;
 use std::io;
@@ -13,6 +13,7 @@ use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 
 pub use core::{LogArchiveConfig, LoggingConfig, LoggingGuard};
+pub use visitor_logging::{LogDebugFilter, LogStrFilter};
 
 /// 初始化 tracing 日志订阅器。
 ///
@@ -23,14 +24,30 @@ pub fn init(config: &LoggingConfig) -> io::Result<LoggingGuard> {
     let mut archive = None;
 
     if config.console {
-        layers.push(core::console_layer(config.level));
+        layers.push(core::console_layer(
+            config.level,
+            &config.record_str_filters,
+            &config.record_debug_filters,
+        ));
     }
 
     if let Some(directory) = config.directory.as_deref() {
         fs::create_dir_all(directory)?;
-        layers.extend(file::layers(directory, config.level, &mut workers)?);
+        layers.extend(file::layers(
+            directory,
+            config.level,
+            &mut workers,
+            &config.record_str_filters,
+            &config.record_debug_filters,
+        )?);
         if config.combined {
-            layers.push(combined::layer(directory, config.level, &mut workers)?);
+            layers.push(combined::layer(
+                directory,
+                config.level,
+                &mut workers,
+                &config.record_str_filters,
+                &config.record_debug_filters,
+            )?);
         }
         if let Some(archive_config) = config.archive {
             archive = Some(archive::ArchiveWorker::start(

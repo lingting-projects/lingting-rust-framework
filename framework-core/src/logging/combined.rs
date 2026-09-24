@@ -8,6 +8,7 @@ use tracing_subscriber::layer::Layer;
 
 use super::core::{BoxLayer, DefaultLoggerFilter};
 use super::file;
+use super::visitor_logging::{LogDebugFilter, LogStrFilter};
 
 /// 聚合日志文件名。
 const FILE_NAME: &str = "combined.log";
@@ -17,6 +18,8 @@ pub(crate) fn layer(
     directory: &Path,
     max_level: LevelFilter,
     workers: &mut Vec<WorkerGuard>,
+    str_filters: &[LogStrFilter],
+    debug_filters: &[LogDebugFilter],
 ) -> io::Result<BoxLayer> {
     let writer = file::current_file_writer(directory, FILE_NAME, workers)?;
     Ok(Box::new(
@@ -25,6 +28,9 @@ pub(crate) fn layer(
             .with_target(true)
             .with_writer(writer)
             .with_filter(filter_fn(move |metadata| metadata.level() <= &max_level))
-            .with_filter(DefaultLoggerFilter),
+            .with_filter(DefaultLoggerFilter::new(
+                str_filters.to_vec(),
+                debug_filters.to_vec(),
+            )),
     ))
 }
