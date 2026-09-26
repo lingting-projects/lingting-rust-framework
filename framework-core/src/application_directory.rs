@@ -39,6 +39,14 @@ impl ApplicationDirectory {
 
     /// 创建使用当前用户目录的应用目录。
     pub fn user(id: impl AsRef<str>) -> Result<Self> {
+        Self::with_user(id, None::<String>)
+    }
+
+    pub fn user_in(id: impl AsRef<str>, parent: impl AsRef<str>) -> Result<Self> {
+        Self::with_user(id, Some(parent))
+    }
+
+    fn with_user(id: impl AsRef<str>, parent: Option<impl AsRef<str>>) -> Result<Self> {
         if cfg!(debug_assertions) {
             return Self::with_debug();
         }
@@ -51,7 +59,11 @@ impl ApplicationDirectory {
             .map(OsStr::to_string_lossy)
             .with_context(|| format!("无法从用户目录获取用户名: {}", home.display()))?
             .into_owned();
-        let root = home.join(id);
+        let root = match parent {
+            None => home,
+            Some(parent) => home.join(parent.as_ref()),
+        }
+        .join(id);
         let temp = env::temp_dir();
 
         Self::new(
@@ -70,6 +82,25 @@ impl ApplicationDirectory {
         }
 
         Self::wrapper(root.as_ref())
+    }
+
+    /// 创建使用安装目录的应用目录。
+    pub fn with_install() -> Result<Self> {
+        if cfg!(debug_assertions) {
+            return Self::with_debug();
+        }
+
+        let install = &install_directory()?;
+        Self::wrapper(install)
+    }
+
+    /// 创建使用启动目录的应用目录。
+    pub fn with_startup() -> Result<Self> {
+        if cfg!(debug_assertions) {
+            return Self::with_debug();
+        }
+        let startup = &startup_directory()?;
+        Self::wrapper(startup)
     }
 
     /// 调试模式统一使用运行目录。
@@ -98,7 +129,7 @@ impl ApplicationDirectory {
         logs: PathBuf,
         install: PathBuf,
     ) -> Result<Self> {
-        let startup = env::current_dir().context("获取启动目录失败")?;
+        let startup = startup_directory()?;
 
         Ok(Self {
             data,
@@ -109,6 +140,10 @@ impl ApplicationDirectory {
             install,
         })
     }
+}
+
+fn startup_directory() -> Result<PathBuf> {
+    env::current_dir().context("获取启动目录失败")
 }
 
 fn create_directory(directory: &Path) -> Result<PathBuf> {
