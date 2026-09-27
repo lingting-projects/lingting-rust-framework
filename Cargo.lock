@@ -340,7 +340,7 @@ dependencies = [
 
 [[package]]
 name = "framework-core"
-version = "26.8.143"
+version = "26.8.144"
 dependencies = [
  "anyhow",
  "chrono",
@@ -365,7 +365,7 @@ dependencies = [
 
 [[package]]
 name = "framework-datetime"
-version = "26.8.143"
+version = "26.8.144"
 dependencies = [
  "anyhow",
  "arc-swap",
@@ -378,7 +378,7 @@ dependencies = [
 
 [[package]]
 name = "framework-proc-auto"
-version = "26.8.143"
+version = "26.8.144"
 dependencies = [
  "framework-proc-core",
  "proc-macro2",
@@ -388,7 +388,7 @@ dependencies = [
 
 [[package]]
 name = "framework-proc-core"
-version = "26.8.143"
+version = "26.8.144"
 dependencies = [
  "inventory",
  "serde",
@@ -400,7 +400,7 @@ dependencies = [
 
 [[package]]
 name = "framework-proc-ts"
-version = "26.8.143"
+version = "26.8.144"
 dependencies = [
  "framework-proc-core",
  "proc-macro2",
@@ -410,7 +410,7 @@ dependencies = [
 
 [[package]]
 name = "framework-proc-web"
-version = "26.8.143"
+version = "26.8.144"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -419,7 +419,7 @@ dependencies = [
 
 [[package]]
 name = "framework-region"
-version = "26.8.143"
+version = "26.8.144"
 dependencies = [
  "serde",
  "serde_json",
@@ -427,7 +427,7 @@ dependencies = [
 
 [[package]]
 name = "framework-web"
-version = "26.8.143"
+version = "26.8.144"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -444,7 +444,7 @@ dependencies = [
 
 [[package]]
 name = "framework-web-axum"
-version = "26.8.143"
+version = "26.8.144"
 dependencies = [
  "anyhow",
  "axum",
