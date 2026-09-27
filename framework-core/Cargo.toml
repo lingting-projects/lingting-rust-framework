@@ -6,12 +6,13 @@ rust-version.workspace = true
 authors.workspace = true
 description.workspace = true
 license.workspace = true
+repository.workspace = true
 
 [dependencies]
-framework-datetime = { path = "../framework-datetime" }
-framework-proc-auto = { path = "../framework-proc-auto" }
-framework-proc-core = { path = "../framework-proc-core" }
-framework-proc-ts = { path = "../framework-proc-ts" }
+framework-datetime = { workspace = true }
+framework-proc-auto = { workspace = true }
+framework-proc-core = { workspace = true }
+framework-proc-ts = { workspace = true }
 
 anyhow.workspace = true
 log.workspace = true

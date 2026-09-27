@@ -6,6 +6,7 @@ rust-version.workspace = true
 authors.workspace = true
 description.workspace = true
 license.workspace = true
+repository.workspace = true
 
 [lib]
 proc-macro = true
@@ -18,4 +19,4 @@ collect = ["framework-proc-core/collect"]
 proc-macro2.workspace = true
 quote.workspace = true
 syn.workspace = true
-framework-proc-core = { path = "../framework-proc-core" }
+framework-proc-core = { workspace = true }

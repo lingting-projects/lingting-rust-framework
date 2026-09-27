@@ -3,12 +3,7 @@
 提供 `auto_type`、`auto_enum`、`auto_enum_impl`、`auto_enum_field` 四个属性宏，
 用一行注解补齐 serde、specta、strum 派生与命名转换，并可选地注册类型元数据。
 
-## 安装
-
-```toml
-[dependencies]
-framework-proc-auto = { path = "../framework-proc-auto" }
-```
+## 使用
 
 宏生成的代码会引用以下 crate，使用方需要在自身依赖中声明：
 

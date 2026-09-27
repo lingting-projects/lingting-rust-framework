@@ -6,12 +6,7 @@
 宏只生成路由与参数提取代码，运行时的请求上下文、错误处理、响应构造位于
 [framework-web](../framework-web/README.md)。
 
-## 安装
-
-```toml
-[dependencies]
-framework-proc-web = { path = "../framework-proc-web" }
-```
+## 使用
 
 生成的代码引用 `framework_web`、`framework_proc_ts` 与 `framework_proc_core`，
 使用方需要自行声明这些依赖（通常通过 `framework-web` 间接获得）。

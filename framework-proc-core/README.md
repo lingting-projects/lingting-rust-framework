@@ -6,13 +6,6 @@
 本 crate 不导出任何宏，宏位于 [framework-proc-auto](../framework-proc-auto/README.md)、
 [framework-proc-ts](../framework-proc-ts/README.md)、[framework-proc-web](../framework-proc-web/README.md)。
 
-## 安装
-
-```toml
-[dependencies]
-framework-proc-core = { path = "../framework-proc-core" }
-```
-
 ## feature
 
 | feature | 作用 |

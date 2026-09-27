@@ -2,13 +2,6 @@
 
 提供国家、地区、电话前缀和联合国 M49 区域数据的静态访问能力。
 
-## 安装
-
-```toml
-[dependencies]
-framework-region = { path = "../framework-region" }
-```
-
 ## 静态数据
 
 | 常量 | 类型 | 内容 |

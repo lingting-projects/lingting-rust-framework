@@ -3,13 +3,6 @@
 Web 层运行时核心：请求与响应模型、请求上下文、错误分类与日志、参数提取 trait、授权规则与路由模型。
 框架无关，HTTP 服务器实现见 [framework-web-axum](../framework-web-axum/README.md)。
 
-## 安装
-
-```toml
-[dependencies]
-framework-web = { path = "../framework-web" }
-```
-
 ## feature
 
 | feature | 作用 |

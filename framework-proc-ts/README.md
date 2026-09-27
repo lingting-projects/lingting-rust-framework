@@ -6,13 +6,6 @@
 [framework-proc-core](../framework-proc-core/README.md) 的 `TypescriptApiBuilder`。
 [framework-proc-web](../framework-proc-web/README.md) 的 `web_api` 宏内部会自动叠加 `ts_api`。
 
-## 安装
-
-```toml
-[dependencies]
-framework-proc-ts = { path = "../framework-proc-ts" }
-```
-
 ## feature
 
 | feature | 作用 |

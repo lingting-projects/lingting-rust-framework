@@ -3,13 +3,6 @@
 提供跨项目复用的基础类型与运行时能力：统一响应、分页类型、雪花 ID、精确金额、应用目录、日志初始化、多值映射，
 并重导出 `framework-datetime` 的全部时间接口。
 
-## 安装
-
-```toml
-[dependencies]
-framework-core = { path = "../framework-core" }
-```
-
 ## 模块概览
 
 | 路径 | 内容 |

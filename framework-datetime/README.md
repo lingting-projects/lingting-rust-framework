@@ -4,31 +4,6 @@
 
 内部时钟使用 Unix 毫秒时间戳和 `Instant` 组成锚点。首次读取建立锚点，后续读取由单调时钟推进，因此常规读取不会受到系统时钟回拨或前跳影响。校时成功后会替换锚点，以校准时间为准。
 
-## 安装
-
-默认仅提供本地时间读取：
-
-```toml
-[dependencies]
-framework-datetime = { path = "../framework-datetime" }
-```
-
-启用校时能力：
-
-```toml
-[dependencies]
-framework-datetime = { path = "../framework-datetime", features = ["ntp"] }
-```
-
-非 JS/wasm 平台可选启用 Tokio 管理 NTP 并发查询：
-
-```toml
-[dependencies]
-framework-datetime = { path = "../framework-datetime", features = ["tokio"] }
-```
-
-`tokio` feature 自动包含 `ntp`。
-
 ## 平台支持
 
 `wasm32-unknown-unknown` 视为浏览器 JS/wasm 平台，使用独立实现：`Date.now()` 只用于建立初始时间锚点，后续读取由

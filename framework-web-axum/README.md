@@ -3,13 +3,6 @@
 基于 axum 的 HTTP 服务器适配层：请求分发、路由收集、CORS 处理与服务启动。
 请求/响应模型与错误处理由 [framework-web](../framework-web/README.md) 提供。
 
-## 安装
-
-```toml
-[dependencies]
-framework-web-axum = { path = "../framework-web-axum" }
-```
-
 ## feature
 
 | feature | 作用 |

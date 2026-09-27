@@ -6,14 +6,15 @@ rust-version.workspace = true
 authors.workspace = true
 description.workspace = true
 license.workspace = true
+repository.workspace = true
 
 [features]
 default = ["collect"]
 collect = ["framework-web/collect"]
 
 [dependencies]
-framework-core = { path = "../framework-core" }
-framework-web = { path = "../framework-web" }
+framework-core = { workspace = true }
+framework-web = { workspace = true }
 anyhow.workspace = true
 axum.workspace = true
 futures-util.workspace = true
