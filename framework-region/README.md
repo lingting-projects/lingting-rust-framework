@@ -58,14 +58,14 @@ assert_eq!(china.map(|phone| phone.region), Some("CN"));
 
 ## 数据生成
 
-数据在构建期由 `build.rs` 从仓库根目录的 `assets/area/` 读取 JSON，生成 Rust 源码到 `OUT_DIR` 后由各模块
+数据在构建期由 `build.rs` 从仓库根目录的 `assets` 读取 JSON，生成 Rust 源码到 `OUT_DIR` 后由各模块
 `include!`：
 
 | 源文件 | 生成目标 |
 |--------|----------|
-| `assets/area/regions.json` | `regions_data.rs`，产出 `REGION_REGIONS` |
-| `assets/area/phones.json` | `phones_data.rs`，产出 `REGION_PHONES` |
-| `assets/area/m49.json` | `m49_data.rs`，产出 `REGION_M49` |
+| `assets` | `regions_data.rs`，产出 `REGION_REGIONS` |
+| `assets` | `phones_data.rs`，产出 `REGION_PHONES` |
+| `assets` | `m49_data.rs`，产出 `REGION_M49` |
 
 源文件变更会触发重新构建。
 

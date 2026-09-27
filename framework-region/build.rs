@@ -49,7 +49,7 @@ struct SourceM49Node {
 
 fn main() {
     let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-    let assets_dir = manifest_dir.join("../assets/area");
+    let assets_dir = manifest_dir.join("assets");
     let regions_path = assets_dir.join("regions.json");
     let phones_path = assets_dir.join("phones.json");
     let m49_path = assets_dir.join("m49.json");
