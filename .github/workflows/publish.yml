@@ -25,8 +25,11 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+
       - name: Install cargo-release
-        run: cargo install cargo-release --locked
+        uses: taiki-e/install-action@cargo-release
 
       - name: Publish
         run: bash scripts/publish.sh
