@@ -1,6 +1,6 @@
 ```shell
 # 强制同步新版本号, 仅添加主tag
-cargo workspaces version custom 26.8.141 --no-individual-tags --force '*' -y
+bash scripts/tag.sh  26.8.142
 # 发布
 cargo release --workspace --registry crates-io
 ```

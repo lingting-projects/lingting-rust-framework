@@ -12,7 +12,7 @@ members = [
 ]
 
 [workspace.package]
-version = "26.8.141"
+version = "26.8.142"
 edition = "2024"
 rust-version = "1.98.0"
 authors = ["lingting"]
@@ -21,15 +21,15 @@ license = "MIT"
 repository = "https://github.com/lingting-projects/lingting-rust-framework"
 
 [workspace.dependencies]
-framework-core = { path = "framework-core", version = "26.8.14" }
-framework-datetime = { path = "framework-datetime", version = "26.8.14" }
-framework-region = { path = "framework-region", version = "26.8.14" }
-framework-proc-auto = { path = "framework-proc-auto", version = "26.8.14" }
-framework-proc-core = { path = "framework-proc-core", version = "26.8.14" }
-framework-proc-ts = { path = "framework-proc-ts", version = "26.8.14" }
-framework-proc-web = { path = "framework-proc-web", version = "26.8.14" }
-framework-web = { path = "framework-web", version = "26.8.14" }
-framework-web-axum = { path = "framework-web-axum", version = "26.8.14" }
+framework-core = { path = "framework-core", version = "26.8.142" }
+framework-datetime = { path = "framework-datetime", version = "26.8.142" }
+framework-region = { path = "framework-region", version = "26.8.142" }
+framework-proc-auto = { path = "framework-proc-auto", version = "26.8.142" }
+framework-proc-core = { path = "framework-proc-core", version = "26.8.142" }
+framework-proc-ts = { path = "framework-proc-ts", version = "26.8.142" }
+framework-proc-web = { path = "framework-proc-web", version = "26.8.142" }
+framework-web = { path = "framework-web", version = "26.8.142" }
+framework-web-axum = { path = "framework-web-axum", version = "26.8.142" }
 
 aes = { version = "0.8" }
 base64 = { version = "0.22" }
