@@ -33,5 +33,8 @@ jobs:
         with:
           tool: cargo-workspaces
 
+      - name: Checkout release branch
+        run: git checkout -B release
+
       - name: Publish
         run: bash scripts/publish.sh

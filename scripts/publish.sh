@@ -74,4 +74,4 @@ echo "版本检查通过: 所有 framework 版本均为 ${BASE_VERSION}"
 echo "开始发布..."
 
 # 对新crate 有 每分钟5个的并发限制, 所以要加发布间隔
-cargo workspaces publish --locked --yes --allow-branch '*,HEAD' --publish-interval 15 --registry crates-io
+cargo workspaces publish --publish-as-is --locked --yes --no-git-commit --no-git-push --publish-interval 15 --registry crates-io
