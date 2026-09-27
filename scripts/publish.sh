@@ -73,4 +73,4 @@ fi
 echo "版本检查通过: 所有 framework 版本均为 ${BASE_VERSION}"
 echo "开始发布..."
 
-cargo release --workspace --registry crates-io --execute
+cargo release --workspace --registry crates-io --execute --allow-branch '*,HEAD'
