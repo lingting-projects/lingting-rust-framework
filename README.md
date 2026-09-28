@@ -54,8 +54,8 @@ framework-region（独立 crate，无内部依赖）
 
 ```bash
 cargo check --workspace
-cargo clippy --fix --allow-dirty --allow-staged
 cargo fmt
+cargo clippy --fix --allow-dirty --allow-staged --all-features
 ```
 
 仓库根目录的 `.cargo/config.toml` 放宽了部分 lint（`non_upper_case_globals`、`unused_imports`、
