@@ -13,6 +13,7 @@ impl MultiStringValue {
         Self { lower, map }
     }
 
+    #[allow(unused)]
     fn new(lower: bool) -> Self {
         Self {
             lower,
