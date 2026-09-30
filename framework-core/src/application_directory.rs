@@ -1,3 +1,4 @@
+use crate::utils::to_hex;
 use crate::{home_directory, system_directory};
 use anyhow::{Context, Result};
 use std::env;
@@ -32,7 +33,7 @@ impl ApplicationDirectory {
             create_directory(&root.join("data"))?,
             create_directory(&root.join("cache"))?,
             create_directory(&temp.join(id))?,
-            create_directory(&temp.join(format!("{id}_logs")))?,
+            create_directory(&root.join("logs"))?,
             install,
         )
     }
@@ -54,23 +55,31 @@ impl ApplicationDirectory {
         let id = id.as_ref();
         let install = install_directory()?;
         let home = home_directory()?;
-        let username = home
-            .file_name()
-            .map(OsStr::to_string_lossy)
-            .with_context(|| format!("无法从用户目录获取用户名: {}", home.display()))?
-            .into_owned();
+        let temp = env::temp_dir();
+
+        let tmp = if cfg!(not(target_os = "windows")) {
+            let username = home
+                .file_name()
+                .map(OsStr::to_string_lossy)
+                .with_context(|| format!("无法从用户目录获取用户名: {}", home.display()))?
+                .into_owned();
+            let hex = to_hex(&username);
+            temp.join(format!("{id}_{hex}"))
+        } else {
+            temp.join(id)
+        };
+
         let root = match parent {
             None => home,
             Some(parent) => home.join(parent.as_ref()),
         }
         .join(id);
-        let temp = env::temp_dir();
 
         Self::new(
             create_directory(&root.join("data"))?,
             create_directory(&root.join("cache"))?,
-            create_directory(&temp.join(format!("{id}_{username}")))?,
-            create_directory(&temp.join(format!("{id}_{username}_logs")))?,
+            create_directory(&tmp)?,
+            create_directory(&root.join("logs"))?,
             install,
         )
     }
