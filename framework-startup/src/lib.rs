@@ -11,9 +11,6 @@
 pub mod config;
 pub mod startup;
 
-#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
-mod command;
-
 mod platform;
 mod scope;
 

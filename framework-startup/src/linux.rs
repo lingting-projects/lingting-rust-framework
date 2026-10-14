@@ -4,10 +4,11 @@
 //! 用户级操作需要额外的 `--user` 参数，并要求该用户存在可用的 systemd 用户实例。
 
 use std::path::PathBuf;
+use std::process::Command;
 
 use anyhow::Result;
+use framework_system::CommandExt;
 
-use crate::command;
 use crate::config::StartupConfig;
 use crate::directory::{self, SYSTEM_UNIT_DIRECTORY};
 use crate::file;
@@ -28,31 +29,45 @@ impl Platform for LinuxStartup {
 
     fn is_run(&self, config: &StartupConfig, scope: Scope) -> Result<bool> {
         // is-active 在单元未运行时返回非零退出码，输出不是 running 即视为未运行。
-        let output = command::stdout("systemctl", &arguments(scope, &["is-active", &config.name]));
+        let output = Command::new("systemctl")
+            .args(arguments(scope, &["is-active", &config.name]))
+            .command_stdout();
 
         Ok(output.is_some_and(|output| output.trim() == "active"))
     }
 
     fn install(&self, config: &StartupConfig, scope: Scope) -> Result<()> {
         file::write_file(&unit_path(config, scope)?, &unit_content(config, scope))?;
-        command::run("systemctl", &arguments(scope, &["daemon-reload"]))?;
+        Command::new("systemctl")
+            .args(arguments(scope, &["daemon-reload"]))
+            .command_run()?;
         // 未启用的单元不会随系统启动，注册流程必须一并启用。
-        command::run("systemctl", &arguments(scope, &["enable", &config.name]))
+        Command::new("systemctl")
+            .args(arguments(scope, &["enable", &config.name]))
+            .command_run()
     }
 
     fn uninstall(&self, config: &StartupConfig, scope: Scope) -> Result<()> {
         // 未启用时 disable 会报错，注销流程不应因此中断。
-        let _ = command::run("systemctl", &arguments(scope, &["disable", &config.name]));
+        let _ = Command::new("systemctl")
+            .args(arguments(scope, &["disable", &config.name]))
+            .command_run();
         file::remove_file(&unit_path(config, scope)?)?;
-        command::run("systemctl", &arguments(scope, &["daemon-reload"]))
+        Command::new("systemctl")
+            .args(arguments(scope, &["daemon-reload"]))
+            .command_run()
     }
 
     fn start(&self, config: &StartupConfig, scope: Scope) -> Result<()> {
-        command::run("systemctl", &arguments(scope, &["start", &config.name]))
+        Command::new("systemctl")
+            .args(arguments(scope, &["start", &config.name]))
+            .command_run()
     }
 
     fn stop(&self, config: &StartupConfig, scope: Scope) -> Result<()> {
-        command::run("systemctl", &arguments(scope, &["stop", &config.name]))
+        Command::new("systemctl")
+            .args(arguments(scope, &["stop", &config.name]))
+            .command_run()
     }
 }
 

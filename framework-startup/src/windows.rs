@@ -3,11 +3,12 @@
 //! 系统级任务在开机时以 `SYSTEM` 身份运行，用户级任务在用户登录时以当前用户身份运行。
 
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 use anyhow::Result;
+use framework_system::CommandExt;
 use sysinfo::{ProcessRefreshKind, RefreshKind, System, UpdateKind};
 
-use crate::command;
 use crate::config::StartupConfig;
 use crate::platform::Platform;
 use crate::scope::Scope;
@@ -18,7 +19,10 @@ pub(crate) struct WindowsStartup;
 impl Platform for WindowsStartup {
     fn exists(&self, config: &StartupConfig, _scope: Scope) -> Result<bool> {
         // 任务存在时 query 返回成功，不存在时返回非零退出码。
-        Ok(command::stdout("schtasks", &["/query", "/tn", &config.name]).is_some())
+        Ok(Command::new("schtasks")
+            .args(["/query", "/tn", &config.name])
+            .command_stdout()
+            .is_some())
     }
 
     fn is_run(&self, config: &StartupConfig, _scope: Scope) -> Result<bool> {
@@ -52,20 +56,26 @@ impl Platform for WindowsStartup {
 
         args.push("/f".to_string());
 
-        command::run("schtasks", &args)
+        Command::new("schtasks").args(&args).command_run()
     }
 
     fn uninstall(&self, config: &StartupConfig, _scope: Scope) -> Result<()> {
         // /f 跳过删除确认，避免命令等待输入。
-        command::run("schtasks", &["/delete", "/tn", &config.name, "/f"])
+        Command::new("schtasks")
+            .args(["/delete", "/tn", &config.name, "/f"])
+            .command_run()
     }
 
     fn start(&self, config: &StartupConfig, _scope: Scope) -> Result<()> {
-        command::run("schtasks", &["/run", "/tn", &config.name])
+        Command::new("schtasks")
+            .args(["/run", "/tn", &config.name])
+            .command_run()
     }
 
     fn stop(&self, config: &StartupConfig, _scope: Scope) -> Result<()> {
-        command::run("schtasks", &["/end", "/tn", &config.name])
+        Command::new("schtasks")
+            .args(["/end", "/tn", &config.name])
+            .command_run()
     }
 }
 

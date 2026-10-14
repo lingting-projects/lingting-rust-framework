@@ -15,7 +15,8 @@
 实现方式为「写入自启定义文件 + 调用系统命令」：Windows 调用 `schtasks`，Linux 调用 `systemctl`
 （用户级附加 `--user`），macOS 调用 `launchctl`。命令失败时会带上退出码与完整输出，便于直接展示给用户。
 
-`sysinfo` 仅在 Windows 目标下参与编译，用于按可执行文件路径判断运行状态。
+外部命令通过 [`framework-system`](../framework-system/README.md) 的 `CommandExt` 执行，错误信息与命令行
+由该扩展统一生成。`sysinfo` 仅在 Windows 目标下参与编译，用于按可执行文件路径判断运行状态。
 
 ## 用法
 

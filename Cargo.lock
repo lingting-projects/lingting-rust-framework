@@ -436,7 +436,17 @@ name = "framework-startup"
 version = "26.8.150"
 dependencies = [
  "anyhow",
+ "framework-system",
  "sysinfo",
+]
+
+[[package]]
+name = "framework-system"
+version = "26.8.150"
+dependencies = [
+ "anyhow",
+ "libc",
+ "windows-sys",
 ]
 
 [[package]]

@@ -10,6 +10,7 @@ repository.workspace = true
 
 [dependencies]
 anyhow.workspace = true
+framework-system.workspace = true
 
 [target.'cfg(windows)'.dependencies]
 sysinfo.workspace = true

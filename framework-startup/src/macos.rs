@@ -4,10 +4,11 @@
 //! 两者的 `launchctl` 命令形式一致，由系统按 plist 所在目录决定运行身份。
 
 use std::path::PathBuf;
+use std::process::Command;
 
 use anyhow::Result;
+use framework_system::CommandExt;
 
-use crate::command;
 use crate::config::StartupConfig;
 use crate::directory::{self, SYSTEM_PLIST_DIRECTORY};
 use crate::file;
@@ -28,7 +29,9 @@ impl Platform for MacosStartup {
 
     fn is_run(&self, config: &StartupConfig, _scope: Scope) -> Result<bool> {
         // list 输出中带 PID 键表示正在运行；作业未加载时返回非零退出码，取不到输出即视为未运行。
-        let output = command::stdout("launchctl", &["list", &config.name]);
+        let output = Command::new("launchctl")
+            .args(["list", &config.name])
+            .command_stdout();
 
         Ok(output.is_some_and(|output| output.contains("\"PID\"")))
     }
@@ -39,21 +42,29 @@ impl Platform for MacosStartup {
 
         file::write_file(&plist, &plist_content(config))?;
         // -w 覆盖已有的 disabled 标记，保证随系统启动。
-        command::run("launchctl", &["load", "-w", plist_text.as_str()])
+        Command::new("launchctl")
+            .args(["load", "-w", plist_text.as_str()])
+            .command_run()
     }
 
     fn uninstall(&self, config: &StartupConfig, scope: Scope) -> Result<()> {
         // 未加载时 remove 会报错，注销流程不应因此中断。
-        let _ = command::run("launchctl", &["remove", &config.name]);
+        let _ = Command::new("launchctl")
+            .args(["remove", &config.name])
+            .command_run();
         file::remove_file(&plist_path(config, scope)?)
     }
 
     fn start(&self, config: &StartupConfig, _scope: Scope) -> Result<()> {
-        command::run("launchctl", &["start", &config.name])
+        Command::new("launchctl")
+            .args(["start", &config.name])
+            .command_run()
     }
 
     fn stop(&self, config: &StartupConfig, _scope: Scope) -> Result<()> {
-        command::run("launchctl", &["stop", &config.name])
+        Command::new("launchctl")
+            .args(["stop", &config.name])
+            .command_run()
     }
 }
 
