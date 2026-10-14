@@ -14,6 +14,7 @@ Rust 业务框架，按 crate 拆分职责：基础类型与运行时能力、We
 | [framework-core](framework-core/README.md) | 统一响应 `R`、分页类型、雪花 ID、精确金额、应用目录、日志初始化、多值映射 |
 | [framework-datetime](framework-datetime/README.md) | Unix 毫秒时间戳与可选 NTP 校时，区分原生与浏览器 wasm 平台 |
 | [framework-region](framework-region/README.md) | 国家、地区、电话前缀与联合国 M49 区域静态数据 |
+| [framework-startup](framework-startup/README.md) | 开机自启的注册、注销与启停，区分系统级与用户级 |
 | [framework-web](framework-web/README.md) | 请求/响应模型、请求上下文、错误分类与日志、参数提取、授权规则、路由模型 |
 | [framework-web-axum](framework-web-axum/README.md) | 基于 axum 的服务器适配：请求分发、路由收集、CORS 与服务启动 |
 
@@ -40,6 +41,7 @@ framework-proc-ts ───┘                          ▲
 framework-proc-web ─────────────────────────────┘
 
 framework-region（独立 crate，无内部依赖）
+framework-startup（独立 crate，无内部依赖）
 ```
 
 - `framework-core` 重导出 `framework-datetime` 的全部接口。

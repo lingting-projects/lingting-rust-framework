@@ -4,11 +4,13 @@ members = [
     "framework-core",
     "framework-datetime",
     "framework-region",
+    "framework-startup",
     "framework-proc-auto",
     "framework-proc-core",
     "framework-proc-ts",
     "framework-proc-web",
-    "framework-web", "framework-web-axum",
+    "framework-web",
+    "framework-web-axum",
 ]
 
 [workspace.package]
@@ -24,6 +26,7 @@ repository = "https://github.com/lingting-projects/lingting-rust-framework"
 framework-core = { path = "framework-core", version = "26.8.150" }
 framework-datetime = { path = "framework-datetime", version = "26.8.150" }
 framework-region = { path = "framework-region", version = "26.8.150" }
+framework-startup = { path = "framework-startup", version = "26.8.150" }
 framework-proc-auto = { path = "framework-proc-auto", version = "26.8.150" }
 framework-proc-core = { path = "framework-proc-core", version = "26.8.150" }
 framework-proc-ts = { path = "framework-proc-ts", version = "26.8.150" }
@@ -70,6 +73,7 @@ dashmap = { version = "6.1" }
 cef = { version = "149.3.0" }
 tao = { version = "0.35" }
 windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging"] }
+sysinfo = { version = "0.38", default-features = false, features = ["system"] }
 sqlx = { version = "0.8", default-features = false, features = ["any", "json", "macros", "postgres", "runtime-tokio-rustls", "sqlite"] }
 proc-macro2 = { version = "1.0" }
 quote = { version = "1.0" }
