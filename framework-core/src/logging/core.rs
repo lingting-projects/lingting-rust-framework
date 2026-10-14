@@ -2,12 +2,14 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use tracing::{Event, Metadata};
+#[cfg(not(target_arch = "wasm32"))]
 use tracing_appender::non_blocking::WorkerGuard;
 use tracing_subscriber::Registry;
 use tracing_subscriber::filter::LevelFilter;
 use tracing_subscriber::fmt;
 use tracing_subscriber::layer::{Context, Filter, Layer};
 
+#[cfg(not(target_arch = "wasm32"))]
 use super::archive::ArchiveWorker;
 use super::filter_sqlx::DefaultSqlxFilter;
 
@@ -78,16 +80,19 @@ impl std::fmt::Debug for LoggingConfig {
 
 /// 日志写入器与归档线程的生命周期守卫。
 pub struct LoggingGuard {
+    #[cfg(not(target_arch = "wasm32"))]
     workers: Vec<WorkerGuard>,
+    #[cfg(not(target_arch = "wasm32"))]
     archive: Option<ArchiveWorker>,
 }
 
 impl LoggingGuard {
+    #[cfg(not(target_arch = "wasm32"))]
     pub(crate) fn new(workers: Vec<WorkerGuard>, archive: Option<ArchiveWorker>) -> Self {
         Self { workers, archive }
     }
 }
-
+#[cfg(not(target_arch = "wasm32"))]
 impl Drop for LoggingGuard {
     fn drop(&mut self) {
         // 先停止归档线程，再释放日志写入器，避免退出过程继续访问日志目录。
