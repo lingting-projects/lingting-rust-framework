@@ -7,6 +7,7 @@ authors.workspace = true
 description.workspace = true
 license.workspace = true
 repository.workspace = true
+readme = "../doc/framework-web-axum/README.md"
 
 [features]
 default = ["collect"]

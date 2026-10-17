@@ -7,6 +7,7 @@ authors.workspace = true
 description.workspace = true
 license.workspace = true
 repository.workspace = true
+readme = "../doc/framework-startup/README.md"
 
 [dependencies]
 anyhow.workspace = true
