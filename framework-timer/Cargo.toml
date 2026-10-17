@@ -1,0 +1,23 @@
+[package]
+name = "framework-timer"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[features]
+default = []
+generate = ["dep:syn"]
+
+[dependencies]
+anyhow.workspace = true
+futures-util.workspace = true
+inventory.workspace = true
+log.workspace = true
+framework-core.workspace = true
+framework-proc-timer.workspace = true
+tokio.workspace = true
+syn = { workspace = true, features = ["full", "visit"], optional = true }

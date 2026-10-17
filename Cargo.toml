@@ -10,6 +10,8 @@ members = [
     "framework-proc-core",
     "framework-proc-ts",
     "framework-proc-web",
+    "framework-timer",
+    "framework-proc-timer",
     "framework-web",
     "framework-web-axum",
 ]
@@ -33,6 +35,8 @@ framework-proc-auto = { path = "framework-proc-auto", version = "26.8.150" }
 framework-proc-core = { path = "framework-proc-core", version = "26.8.150" }
 framework-proc-ts = { path = "framework-proc-ts", version = "26.8.150" }
 framework-proc-web = { path = "framework-proc-web", version = "26.8.150" }
+framework-timer = { path = "framework-timer", version = "26.8.150" }
+framework-proc-timer = { path = "framework-proc-timer", version = "26.8.150" }
 framework-web = { path = "framework-web", version = "26.8.150" }
 framework-web-axum = { path = "framework-web-axum", version = "26.8.150" }
 
