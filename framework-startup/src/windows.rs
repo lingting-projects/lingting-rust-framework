@@ -49,9 +49,16 @@ impl Platform for WindowsStartup {
                 args.push("/rl".to_string());
                 args.push("highest".to_string());
             }
-            // /sc onlogon 登录时启动；不指定 /ru 时以当前登录用户身份运行，
-            // 此时 /rl highest 要求管理员权限，受限账号会创建失败，故不加该参数。
-            Scope::User => args.push("onlogon".to_string()),
+            // /sc onlogon 登录时启动；不指定 /ru 时以当前登录用户身份运行。
+            // /rl highest 让任务用提权后的令牌启动且不弹 UAC，代价是账号不在管理员组时注册会失败，
+            // 因此只在配置显式要求时追加。
+            Scope::User => {
+                args.push("onlogon".to_string());
+                if config.highest {
+                    args.push("/rl".to_string());
+                    args.push("highest".to_string());
+                }
+            }
         }
 
         args.push("/f".to_string());

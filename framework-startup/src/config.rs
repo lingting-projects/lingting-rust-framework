@@ -19,6 +19,13 @@ pub struct StartupConfig {
     /// 自启未注册时 `start`、`stop`、`is_run`、`restart` 与 `uninstall` 的行为：
     /// 为真时直接返回成功或假，为假时返回错误。默认为真，便于把这些操作当作清理手段重复调用。
     pub ignore_not_installed: bool,
+    /// 是否以最高可用权限启动，仅 Windows 生效。
+    ///
+    /// 为真时用户级计划任务追加 `/rl highest`：登录时以当前用户身份、用提权后的令牌启动，
+    /// 不触发 UAC 弹窗；账号不在管理员组时注册或启动会失败。
+    /// 系统级任务固定以 `SYSTEM` 身份运行，该字段对它无意义。
+    #[cfg(target_os = "windows")]
+    pub highest: bool,
 }
 
 impl StartupConfig {
@@ -31,6 +38,8 @@ impl StartupConfig {
             args: Vec::new(),
             working_directory: None,
             ignore_not_installed: true,
+            #[cfg(target_os = "windows")]
+            highest: false,
         }
     }
 

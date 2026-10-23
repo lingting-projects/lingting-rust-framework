@@ -54,6 +54,7 @@ startup.restart()?;
 | `args` | 启动参数 |
 | `working_directory` | 工作目录；为空表示由系统决定 |
 | `ignore_not_installed` | 未注册时 `start` / `stop` / `is_run` / `restart` / `uninstall` 是忽略还是报错，默认为 `true` |
+| `highest` | 仅 Windows 编译时存在。为 `true` 时用户级任务追加 `/rl highest`，登录后以提权令牌启动且不弹 UAC；账号不在管理员组时注册会失败。系统级任务固定以 `SYSTEM` 运行，该字段对它无意义。默认为 `false` |
 
 `StartupConfig::new(name)` 只设置名称，其余字段按需赋值。
 
@@ -84,6 +85,8 @@ startup.restart()?;
 
 - Windows 计划任务的启动目标是完整命令行；systemd 单元的 `ExecStart` 与 launchd 的
   `ProgramArguments` 由同一份配置生成，含空格的路径会自动加引号或拆分。
+- Windows 的权限级别：系统级任务以 `SYSTEM` 身份运行（`/ru SYSTEM /rl highest`），用户级任务默认用
+  未提权的令牌启动；只有 `StartupConfig::highest` 为真时才追加 `/rl highest`。
 - Windows 计划任务名在任务树的根目录下唯一，系统级与用户级不能使用同名任务；systemd 与 launchd
   的两种级别存放于不同目录，可以同名。
 - Linux 用户级单元的 `[Install]` 目标为 `default.target`（系统级为 `multi-user.target`）。
