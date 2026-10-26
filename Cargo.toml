@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "framework-bus",
     "framework-core",
     "framework-datetime",
     "framework-region",
@@ -26,6 +27,7 @@ license = "MIT"
 repository = "https://github.com/lingting-projects/lingting-rust-framework"
 
 [workspace.dependencies]
+framework-bus = { path = "framework-bus", version = "26.8.151" }
 framework-core = { path = "framework-core", version = "26.8.151" }
 framework-datetime = { path = "framework-datetime", version = "26.8.151" }
 framework-region = { path = "framework-region", version = "26.8.151" }

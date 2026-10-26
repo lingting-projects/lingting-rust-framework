@@ -13,6 +13,7 @@ Rust 业务框架，按 crate 拆分职责：基础类型与运行时能力、We
 
 | crate | 说明 |
 |-------|------|
+| [framework-bus](doc/framework-bus/README.md) | 与 UI 无关的进程内通知总线：纯通知、类型即事件、边沿触发与合并 |
 | [framework-core](doc/framework-core/README.md) | 统一响应 `R`、分页类型、雪花 ID、精确金额、应用目录、日志初始化、多值映射 |
 | [framework-datetime](doc/framework-datetime/README.md) | Unix 毫秒时间戳与可选 NTP 校时，区分原生与浏览器 wasm 平台 |
 | [framework-region](doc/framework-region/README.md) | 国家、地区、电话前缀与联合国 M49 区域静态数据 |
@@ -43,6 +44,7 @@ framework-proc-ts ───┘                          ▲
                                                 │
 framework-proc-web ─────────────────────────────┘
 
+framework-bus（独立 crate，无内部依赖）
 framework-region（独立 crate，无内部依赖）
 framework-system（独立 crate，无内部依赖）
 framework-startup ──> framework-system

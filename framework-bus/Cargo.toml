@@ -1,0 +1,17 @@
+[package]
+name = "framework-bus"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "../doc/framework-bus/README.md"
+
+[dependencies]
+log.workspace = true
+tokio = { version = "1", default-features = false, features = ["sync"] }
+
+[dev-dependencies]
+futures = "0.3"

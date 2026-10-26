@@ -6,6 +6,7 @@
 
 | crate | 说明 |
 |-------|------|
+| [framework-bus](framework-bus/README.md) | 与 UI 无关的进程内通知总线：纯通知、类型即事件、边沿触发与合并 |
 | [framework-core](framework-core/README.md) | 统一响应 `R`、分页类型、雪花 ID、精确金额、应用目录、日志初始化、多值映射 |
 | [framework-datetime](framework-datetime/README.md) | Unix 毫秒时间戳与可选 NTP 校时，区分原生与浏览器 wasm 平台 |
 | [framework-region](framework-region/README.md) | 国家、地区、电话前缀与联合国 M49 区域静态数据 |
