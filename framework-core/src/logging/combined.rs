@@ -8,6 +8,7 @@ use tracing_subscriber::layer::Layer;
 
 use super::core::{BoxLayer, CombinedFilter, LoggingFilter};
 use super::file;
+use super::flush::FileFlush;
 
 /// 聚合日志文件名。
 const FILE_NAME: &str = "combined.log";
@@ -16,10 +17,11 @@ const FILE_NAME: &str = "combined.log";
 pub(crate) fn layer(
     directory: &Path,
     max_level: LevelFilter,
+    flushes: &mut Vec<FileFlush>,
     workers: &mut Vec<WorkerGuard>,
     filters: &[LoggingFilter],
 ) -> io::Result<BoxLayer> {
-    let writer = file::current_file_writer(directory, FILE_NAME, workers)?;
+    let writer = file::current_file_writer(directory, FILE_NAME, flushes, workers)?;
     Ok(Box::new(
         fmt::layer()
             .with_ansi(false)

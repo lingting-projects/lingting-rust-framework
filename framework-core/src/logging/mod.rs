@@ -8,6 +8,8 @@ mod core;
 #[cfg(not(target_arch = "wasm32"))]
 mod file;
 mod filter_sqlx;
+#[cfg(not(target_arch = "wasm32"))]
+mod flush;
 
 #[cfg(not(target_arch = "wasm32"))]
 use std::fs;
@@ -32,6 +34,7 @@ pub fn init(config: &LoggingConfig) -> io::Result<LoggingGuard> {
     #[cfg(not(target_arch = "wasm32"))]
     let guard = {
         let mut workers = Vec::new();
+        let mut flushes = Vec::new();
         let mut archive = None;
 
         if let Some(directory) = config.directory.as_deref() {
@@ -39,6 +42,7 @@ pub fn init(config: &LoggingConfig) -> io::Result<LoggingGuard> {
             layers.extend(file::layers(
                 directory,
                 config.level,
+                &mut flushes,
                 &mut workers,
                 &config.filters,
             )?);
@@ -46,6 +50,7 @@ pub fn init(config: &LoggingConfig) -> io::Result<LoggingGuard> {
                 layers.push(combined::layer(
                     directory,
                     config.level,
+                    &mut flushes,
                     &mut workers,
                     &config.filters,
                 )?);
@@ -58,7 +63,7 @@ pub fn init(config: &LoggingConfig) -> io::Result<LoggingGuard> {
             }
         }
 
-        LoggingGuard::new(workers, archive)
+        LoggingGuard::new(workers, flushes, archive)
     };
 
     #[cfg(target_arch = "wasm32")]

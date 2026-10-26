@@ -12,6 +12,8 @@ use tracing_subscriber::layer::{Context, Filter, Layer};
 #[cfg(not(target_arch = "wasm32"))]
 use super::archive::ArchiveWorker;
 use super::filter_sqlx::DefaultSqlxFilter;
+#[cfg(not(target_arch = "wasm32"))]
+use super::flush::FileFlush;
 
 /// 外部可扩展的日志过滤器：返回 `false` 表示忽略对应事件。
 ///
@@ -83,13 +85,34 @@ pub struct LoggingGuard {
     #[cfg(not(target_arch = "wasm32"))]
     workers: Vec<WorkerGuard>,
     #[cfg(not(target_arch = "wasm32"))]
+    flushes: Vec<FileFlush>,
+    #[cfg(not(target_arch = "wasm32"))]
     archive: Option<ArchiveWorker>,
 }
 
 impl LoggingGuard {
     #[cfg(not(target_arch = "wasm32"))]
-    pub(crate) fn new(workers: Vec<WorkerGuard>, archive: Option<ArchiveWorker>) -> Self {
-        Self { workers, archive }
+    pub(crate) fn new(
+        workers: Vec<WorkerGuard>,
+        flushes: Vec<FileFlush>,
+        archive: Option<ArchiveWorker>,
+    ) -> Self {
+        Self {
+            workers,
+            flushes,
+            archive,
+        }
+    }
+
+    /// 立即把日志刷到磁盘。
+    ///
+    /// 日志是异步写的，正常退出由析构收尾；进程被 panic 中止时走不到析构，
+    /// 而最后一条日志往往正是崩溃原因，因此需要在异常退出前主动调用一次。
+    #[cfg(not(target_arch = "wasm32"))]
+    pub fn flush(&self) {
+        for flush in &self.flushes {
+            flush.flush();
+        }
     }
 }
 #[cfg(not(target_arch = "wasm32"))]

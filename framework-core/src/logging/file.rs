@@ -12,6 +12,7 @@ use tracing_subscriber::layer::Layer;
 
 use super::archive;
 use super::core::{BoxLayer, CombinedFilter, LoggingFilter};
+use super::flush::FileFlush;
 
 /// 单级别日志文件与其过滤级别。
 const LEVEL_FILES: [(&str, Level); 5] = [
@@ -26,22 +27,32 @@ const LEVEL_FILES: [(&str, Level); 5] = [
 pub(crate) fn layers(
     directory: &Path,
     max_level: LevelFilter,
+    flushes: &mut Vec<FileFlush>,
     workers: &mut Vec<WorkerGuard>,
     filters: &[LoggingFilter],
 ) -> io::Result<Vec<BoxLayer>> {
     LEVEL_FILES
         .iter()
-        .map(|(file_name, level)| layer(directory, file_name, *level, max_level, workers, filters))
+        .map(|(file_name, level)| {
+            layer(
+                directory, file_name, *level, max_level, flushes, workers, filters,
+            )
+        })
         .collect()
 }
 
 /// 创建按天切分的日志写入器，供单级别日志层与聚合日志层复用。
+///
+/// 同时登记一个 [`FileFlush`]：异步写入器的析构在进程异常结束时不会运行，
+/// 调用方需要另一条路径把最后的日志刷到磁盘。
 pub(crate) fn current_file_writer(
     directory: &Path,
     file_name: &str,
+    flushes: &mut Vec<FileFlush>,
     workers: &mut Vec<WorkerGuard>,
 ) -> io::Result<NonBlocking> {
     let writer = CurrentFileWriter::new(directory.to_owned(), file_name)?;
+    flushes.push(FileFlush::new(writer.state.clone()));
     let (writer, guard) = tracing_appender::non_blocking(writer);
     workers.push(guard);
     Ok(writer)
@@ -52,10 +63,11 @@ fn layer(
     file_name: &str,
     level: Level,
     max_level: LevelFilter,
+    flushes: &mut Vec<FileFlush>,
     workers: &mut Vec<WorkerGuard>,
     filters: &[LoggingFilter],
 ) -> io::Result<BoxLayer> {
-    let writer = current_file_writer(directory, file_name, workers)?;
+    let writer = current_file_writer(directory, file_name, flushes, workers)?;
     Ok(Box::new(
         fmt::layer()
             .with_ansi(false)
@@ -108,12 +120,12 @@ impl Write for CurrentFileWriter {
     }
 }
 
-struct CurrentFileState {
+pub(crate) struct CurrentFileState {
     directory: PathBuf,
     archive_directory: PathBuf,
     file_name: String,
     date: NaiveDate,
-    file: Option<File>,
+    pub(crate) file: Option<File>,
 }
 
 impl CurrentFileState {
