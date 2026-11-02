@@ -18,7 +18,7 @@ members = [
 ]
 
 [workspace.package]
-version = "26.8.151"
+version = "26.11.0"
 edition = "2024"
 rust-version = "1.98.0"
 authors = ["lingting"]
@@ -27,20 +27,20 @@ license = "MIT"
 repository = "https://github.com/lingting-projects/lingting-rust-framework"
 
 [workspace.dependencies]
-framework-bus = { path = "framework-bus", version = "26.8.151" }
-framework-core = { path = "framework-core", version = "26.8.151" }
-framework-datetime = { path = "framework-datetime", version = "26.8.151" }
-framework-region = { path = "framework-region", version = "26.8.151" }
-framework-startup = { path = "framework-startup", version = "26.8.151" }
-framework-system = { path = "framework-system", version = "26.8.151" }
-framework-proc-auto = { path = "framework-proc-auto", version = "26.8.151" }
-framework-proc-core = { path = "framework-proc-core", version = "26.8.151" }
-framework-proc-ts = { path = "framework-proc-ts", version = "26.8.151" }
-framework-proc-web = { path = "framework-proc-web", version = "26.8.151" }
-framework-timer = { path = "framework-timer", version = "26.8.151" }
-framework-proc-timer = { path = "framework-proc-timer", version = "26.8.151" }
-framework-web = { path = "framework-web", version = "26.8.151" }
-framework-web-axum = { path = "framework-web-axum", version = "26.8.151" }
+framework-bus = { path = "framework-bus", version = "26.11.0" }
+framework-core = { path = "framework-core", version = "26.11.0" }
+framework-datetime = { path = "framework-datetime", version = "26.11.0" }
+framework-region = { path = "framework-region", version = "26.11.0" }
+framework-startup = { path = "framework-startup", version = "26.11.0" }
+framework-system = { path = "framework-system", version = "26.11.0" }
+framework-proc-auto = { path = "framework-proc-auto", version = "26.11.0" }
+framework-proc-core = { path = "framework-proc-core", version = "26.11.0" }
+framework-proc-ts = { path = "framework-proc-ts", version = "26.11.0" }
+framework-proc-web = { path = "framework-proc-web", version = "26.11.0" }
+framework-timer = { path = "framework-timer", version = "26.11.0" }
+framework-proc-timer = { path = "framework-proc-timer", version = "26.11.0" }
+framework-web = { path = "framework-web", version = "26.11.0" }
+framework-web-axum = { path = "framework-web-axum", version = "26.11.0" }
 
 aes = { version = "0.8" }
 base64 = { version = "0.22" }

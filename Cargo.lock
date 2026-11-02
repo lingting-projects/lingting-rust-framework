@@ -346,7 +346,7 @@ dependencies = [
 
 [[package]]
 name = "framework-bus"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "futures",
  "log",
@@ -355,7 +355,7 @@ dependencies = [
 
 [[package]]
 name = "framework-core"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -380,7 +380,7 @@ dependencies = [
 
 [[package]]
 name = "framework-datetime"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "anyhow",
  "arc-swap",
@@ -393,7 +393,7 @@ dependencies = [
 
 [[package]]
 name = "framework-proc-auto"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "framework-proc-core",
  "proc-macro2",
@@ -403,7 +403,7 @@ dependencies = [
 
 [[package]]
 name = "framework-proc-core"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "inventory",
  "serde",
@@ -415,7 +415,7 @@ dependencies = [
 
 [[package]]
 name = "framework-proc-timer"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -424,7 +424,7 @@ dependencies = [
 
 [[package]]
 name = "framework-proc-ts"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "framework-proc-core",
  "proc-macro2",
@@ -434,7 +434,7 @@ dependencies = [
 
 [[package]]
 name = "framework-proc-web"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -443,7 +443,7 @@ dependencies = [
 
 [[package]]
 name = "framework-region"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -451,7 +451,7 @@ dependencies = [
 
 [[package]]
 name = "framework-startup"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "anyhow",
  "framework-system",
@@ -460,7 +460,7 @@ dependencies = [
 
 [[package]]
 name = "framework-system"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "anyhow",
  "libc",
@@ -469,7 +469,7 @@ dependencies = [
 
 [[package]]
 name = "framework-timer"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "anyhow",
  "framework-core",
@@ -483,7 +483,7 @@ dependencies = [
 
 [[package]]
 name = "framework-web"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -500,7 +500,7 @@ dependencies = [
 
 [[package]]
 name = "framework-web-axum"
-version = "26.8.151"
+version = "26.11.0"
 dependencies = [
  "anyhow",
  "axum",
