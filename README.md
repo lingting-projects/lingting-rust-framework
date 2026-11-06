@@ -3,73 +3,14 @@
 Rust 业务框架，按 crate 拆分职责：基础类型与运行时能力、Web 层运行时与 axum 适配，
 以及一组支撑属性宏与 TypeScript 代码生成的 proc-macro crate。
 
-## crate 一览
+## 文档索引
 
-完整文档位于 [`doc/`](doc/readme.md)，入口为 [doc/readme.md](doc/readme.md)，其中按 crate 汇总了全部文档索引。
-
-每个子 crate 的用途、用法与 feature 说明都在 `doc/<crate>/README.md` 中，点击名称查看：
-
-### 运行时
-
-| crate | 说明 |
-|-------|------|
-| [framework-bus](doc/framework-bus/README.md) | 与 UI 无关的进程内通知总线：纯通知、类型即事件、边沿触发与合并 |
-| [framework-core](doc/framework-core/README.md) | 统一响应 `R`、分页类型、雪花 ID、精确金额、应用目录、日志初始化、多值映射 |
-| [framework-datetime](doc/framework-datetime/README.md) | Unix 毫秒时间戳与可选 NTP 校时，区分原生与浏览器 wasm 平台 |
-| [framework-region](doc/framework-region/README.md) | 国家、地区、电话前缀与联合国 M49 区域静态数据 |
-| [framework-startup](doc/framework-startup/README.md) | 开机自启的注册、注销与启停，区分系统级与用户级 |
-| [framework-system](doc/framework-system/README.md) | 提权判断 `is_elevated` 与 `std::process::Command` 扩展 `CommandExt` |
-| [framework-web](doc/framework-web/README.md) | 请求/响应模型、请求上下文、错误分类与日志、参数提取、授权规则、路由模型 |
-| [framework-web-axum](doc/framework-web-axum/README.md) | 基于 axum 的服务器适配：请求分发、路由收集、CORS 与服务启动 |
-
-### 宏与代码生成
-
-| crate | 说明 |
-|-------|------|
-| [framework-proc-core](doc/framework-proc-core/README.md) | 元数据结构与注册表、TypeScript 类型/枚举/API 导出、npm 包打包 |
-| [framework-proc-auto](doc/framework-proc-auto/README.md) | `auto_type`、`auto_enum`、`auto_enum_impl`、`auto_enum_field` |
-| [framework-proc-ts](doc/framework-proc-ts/README.md) | `ts_api`：从函数签名收集 TypeScript 接口元数据 |
-| [framework-proc-web](doc/framework-proc-web/README.md) | `web_api` 及 HTTP 方法简化宏，展开为 `WebRoute` 构造函数 |
-
-## 依赖方向
-
-```text
-framework-proc-core ──> framework-proc-auto
-                    └──> framework-proc-ts
-
-framework-datetime ─┐
-framework-proc-auto ─┤
-framework-proc-core ─┼──> framework-core ──> framework-web ──> framework-web-axum
-framework-proc-ts ───┘                          ▲
-                                                │
-framework-proc-web ─────────────────────────────┘
-
-framework-bus（独立 crate，无内部依赖）
-framework-region（独立 crate，无内部依赖）
-framework-system（独立 crate，无内部依赖）
-framework-startup ──> framework-system
-```
-
-- `framework-core` 重导出 `framework-datetime` 的全部接口。
-- `framework-web` 重导出 `framework-proc-web` 的宏。
-- `collect` feature 用于开启基于 `inventory` 的静态注册，需要在最终二进制所在的 crate 上启用。
-- `ts` feature 用于开启 TypeScript 元数据注入与代码生成，`framework-proc-core`、`framework-proc-web`、
-  `framework-web`、`framework-web-axum` 各有一份且默认关闭，由 `framework-web` / `framework-web-axum` 逐层传递。
-
-## 环境要求
-
-- Rust 1.98.0（见 `rust-version`），edition 2024。
-
-## 开发
-
-```bash
-cargo check --workspace
-cargo fmt
-cargo clippy --fix --allow-dirty --allow-staged --all-features
-```
-
-仓库根目录的 `.cargo/config.toml` 放宽了部分 lint（`non_upper_case_globals`、`unused_imports`、
-`unused_variables`、`dead_code`、`non_snake_case`）。
+| 文档 | 内容 |
+|------|------|
+| [workspace.md](workspace.md) | 仓库结构、crate 分层与依赖方向 |
+| [develop.md](develop.md) | 环境要求、开发命令、feature、版本与发布 |
+| [AGENTS.md](AGENTS.md) | Agent 工作说明与文档同步要求 |
+| [doc/readme.md](doc/readme.md) | 各 crate 的完整文档索引，入口文档 |
 
 ## 许可证
 
