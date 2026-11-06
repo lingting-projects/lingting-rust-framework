@@ -7,6 +7,7 @@ pub struct TypeTransform {
     pub is_option: bool,
     pub serde_adapter: Option<TokenStream>,
     pub specta_type: Option<TokenStream>,
+    #[allow(dead_code)]
     enum_value: Option<EnumValueTransform>,
 }
 
@@ -25,6 +26,7 @@ impl TypeTransform {
         special_type(ty).into_transform()
     }
 
+    #[allow(dead_code)]
     pub fn enum_value(&self, method: &syn::Ident) -> Option<TokenStream> {
         self.enum_value.map(|transform| transform.tokens(method))
     }
@@ -55,6 +57,7 @@ impl EnumValueTransform {
         }
     }
 
+    #[allow(dead_code)]
     fn tokens(self, method: &syn::Ident) -> TokenStream {
         match self {
             Self::Plain => quote!(::framework_proc_core::serde_json::Value::String(

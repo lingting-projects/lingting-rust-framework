@@ -76,9 +76,16 @@ fn expand(args: TokenStream2, input: TokenStream2, forced_method: Option<Method>
     } else {
         TokenStream2::new()
     };
+    let ts_api = if cfg!(feature = "ts") {
+        quote! {
+            #[::framework_proc_ts::ts_api(method = #method_name, path = #path)]
+        }
+    } else {
+        TokenStream2::new()
+    };
 
     quote! {
-        #[::framework_proc_ts::ts_api(method = #method_name, path = #path)]
+        #ts_api
         #function
 
         pub(crate) fn #route_ident() -> ::framework_web::WebRoute {

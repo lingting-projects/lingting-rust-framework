@@ -1,6 +1,6 @@
-use super::utils::camel_case;
 use crate::ApiMetadata;
 use crate::typescript::common::return_type_name;
+use crate::utils::camel_case;
 
 pub(crate) fn declaration(apis: &[ApiMetadata]) -> String {
     format!(

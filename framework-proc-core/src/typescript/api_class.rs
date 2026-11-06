@@ -1,5 +1,5 @@
-use super::utils::camel_case;
 use crate::typescript::common::return_type_name;
+use crate::utils;
 use crate::{ApiMetadata, ApiParameterKind};
 
 pub(crate) fn declaration(class_name: &str, apis: &[ApiMetadata]) -> String {
@@ -36,7 +36,7 @@ fn declaration_method(api: &ApiMetadata) -> String {
     let parameters = api.parameters_colon().join(", ");
     format!(
         "  {}({parameters}): Promise<{}>;",
-        camel_case(api.name),
+        utils::camel_case(api.name),
         return_type_name(api.return_type),
     )
 }
@@ -58,7 +58,7 @@ fn javascript_method(api: &ApiMetadata) -> String {
     };
     format!(
         "  {}({parameters}) {{\n    return this.call(\"{}\", \"{}\"{});\n  }}",
-        camel_case(api.name),
+        utils::camel_case(api.name),
         api.method,
         api.path,
         call_arguments,

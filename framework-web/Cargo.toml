@@ -12,6 +12,7 @@ readme = "../doc/framework-web/README.md"
 [features]
 default = []
 collect = ["dep:inventory", "framework-proc-web/collect"]
+ts = ["framework-proc-web/ts"]
 
 [dependencies]
 framework-core = { workspace = true }

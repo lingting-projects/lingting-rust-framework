@@ -4,10 +4,11 @@ use std::collections::HashMap;
 use crate::ApiMetadata;
 
 use super::common::{build_error, is_typescript_identifier};
-use super::utils::{camel_case, collect_api_type_names};
+use super::utils::collect_api_type_names;
 use super::{
     TypescriptBuildResult, TypescriptBuilder, TypescriptResult, api_class, api_definition,
 };
+use crate::utils;
 
 /// 构建 TypeScript API 定义及可选的抽象类。
 pub struct TypescriptApiBuilder {
@@ -129,7 +130,10 @@ fn validate_api_metadata(apis: &[ApiMetadata]) -> TypescriptResult<()> {
     let mut names = HashMap::<String, Vec<&ApiMetadata>>::new();
     let mut routes = HashMap::<String, Vec<&ApiMetadata>>::new();
     for api in apis {
-        names.entry(camel_case(api.name)).or_default().push(api);
+        names
+            .entry(utils::camel_case(api.name))
+            .or_default()
+            .push(api);
         routes
             .entry(format!("{} {}", api.method, api.path))
             .or_default()

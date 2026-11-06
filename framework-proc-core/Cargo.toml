@@ -12,6 +12,7 @@ readme = "../doc/framework-proc-core/README.md"
 [features]
 default = []
 collect = ["dep:inventory"]
+ts = []
 
 [dependencies]
 inventory = { workspace = true, optional = true }

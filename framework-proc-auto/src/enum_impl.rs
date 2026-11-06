@@ -9,7 +9,7 @@ use syn::{FnArg, ImplItemFn, LitStr, ReturnType, Type};
 #[cfg(feature = "collect")]
 use crate::type_transform::TypeTransform;
 #[cfg(feature = "collect")]
-use framework_proc_core::camel_case;
+use framework_proc_core::utils::camel_case;
 
 pub fn expand(mut item: ItemImpl) -> syn::Result<TokenStream> {
     if item.trait_.is_some() {
