@@ -1,14 +1,14 @@
 # framework-proc-web
 
 提供 `web_api` 及 HTTP 方法简化宏，把 `async fn` 展开为可调用的 `WebRoute` 构造函数，
-并自动叠加 [framework-proc-ts](../framework-proc-ts/README.md) 的 `ts_api` 元数据收集。
+并在开启 `ts` 特性时叠加 [framework-proc-ts](../framework-proc-ts/README.md) 的 `ts_api` 元数据收集。
 
 宏只生成路由与参数提取代码，运行时的请求上下文、错误处理、响应构造位于
 [framework-web](../framework-web/README.md)。
 
 ## 使用
 
-生成的代码引用 `framework_web`、`framework_proc_ts` 与 `framework_proc_core`，
+生成的代码引用 `framework_web`；开启 `ts` 特性时还会引用 `framework_proc_ts`（其展开结果引用 `framework_proc_core`）。
 使用方需要自行声明这些依赖（通常通过 `framework-web` 间接获得）。
 
 ## feature
@@ -16,9 +16,13 @@
 | feature | 作用 |
 |---------|------|
 | `collect`（默认关闭） | 额外生成 `push_web_api!` 调用，把路由注册进 `inventory` |
+| `ts`（默认关闭） | 在原函数上叠加 `framework_proc_ts::ts_api` 属性，收集 TypeScript 接口元数据 |
 
-`framework-web` 的 `collect` 会传递开启本 feature；未开启时路由构造函数依然生成，
+`framework-web` 的 `collect` 会传递开启本 crate 的 `collect`；未开启时路由构造函数依然生成，
 但不会自动注册，需要手动挂载。
+
+`framework-web` 的 `ts` 会传递开启本 crate 的 `ts`；未开启时宏不会注入 `ts_api` 属性，
+生成的代码也不需要 `framework_proc_ts` 依赖，接口函数照常作为路由使用。
 
 ## 宏
 
@@ -78,7 +82,7 @@ pub async fn create_user(params: Json<CreateUserParams>) -> Result<UserVO, anyho
 
 对于函数 `create_user`，宏生成：
 
-1. 原函数，并叠加 `#[framework_proc_ts::ts_api(method = "...", path = "...")]`。
+1. 原函数；开启 `ts` 特性时还在其上叠加 `#[framework_proc_ts::ts_api(method = "...", path = "...")]`。
 2. `pub(crate) fn build_create_user_route() -> framework_web::WebRoute`。
 
 路由的 `invoke` 闭包内依次完成：读取 `use_web()` 上下文、提取各参数、

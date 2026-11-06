@@ -8,6 +8,7 @@
 | feature | 作用 |
 |---------|------|
 | `collect`（默认开启） | 传递开启 `framework-web/collect`，使 `web_api` 宏生成的路由被自动收集 |
+| `ts`（默认关闭） | 传递开启 `framework-web/ts`，为 `web_api` 宏生成的路由函数叠加 `ts_api` 属性 |
 
 ## 启动服务
 

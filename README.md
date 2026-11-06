@@ -53,6 +53,8 @@ framework-startup ──> framework-system
 - `framework-core` 重导出 `framework-datetime` 的全部接口。
 - `framework-web` 重导出 `framework-proc-web` 的宏。
 - `collect` feature 用于开启基于 `inventory` 的静态注册，需要在最终二进制所在的 crate 上启用。
+- `ts` feature 用于开启 TypeScript 元数据注入与代码生成，`framework-proc-core`、`framework-proc-web`、
+  `framework-web`、`framework-web-axum` 各有一份且默认关闭，由 `framework-web` / `framework-web-axum` 逐层传递。
 
 ## 环境要求
 

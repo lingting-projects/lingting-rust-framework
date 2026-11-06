@@ -11,9 +11,13 @@
 | feature | 作用 |
 |---------|------|
 | `collect`（默认关闭） | 启用基于 `inventory` 的静态注册表，提供 `type_metadata_iter`、`enum_metadata_iter`、`api_metadata_iter` |
+| `ts`（默认关闭） | 编译 TypeScript 代码生成部分：`typescript` 模块及 `TypescriptTypeBuilder`、`TypescriptEnumBuilder`、`TypescriptApiBuilder`、`PackageBuilder` 等导出 |
 
 未开启 `collect` 时，`push_*_metadata!` 宏内部的 `inventory` 路径不可用，因此注册宏与迭代函数都只在
 开启该 feature 后生效；宏 crate 通过自身的 `collect` feature 传递开启。
+
+`ts` 与 `collect` 互不依赖：`collect` 只影响静态注册表，`ts` 只影响构建器代码是否编译。
+元数据（`TypeMetadata`、`EnumMetadata`、`ApiMetadata` 及对应的迭代函数）不受 `ts` 控制，始终可用。
 
 ## 元数据
 
@@ -46,6 +50,8 @@ framework_proc_core::push_api_metadata!(framework_proc_core::ApiMetadata { .. })
 
 所有构建器实现 `TypescriptBuilder`，`build()` 返回 `TypescriptBuildResult { js, dts }`，
 错误类型为 `TypescriptResult<T>`。
+
+以下构建器仅在开启 `ts` 特性时存在。
 
 ### TypescriptTypeBuilder
 
@@ -120,12 +126,12 @@ package.write()?;
 `index.js`、`index.d.ts`。`package.json` 中 `type` 为 `module`，`exports` 包含根入口与每个模块入口。
 模块名不能为空、不能是 `index`、不能包含路径分隔符，也不能重复。
 
-## camel_case
+## utils
 
-`camel_case` 供本 crate 与其他宏 crate 复用，用于把 `snake_case` 或 `kebab-case` 转为 camelCase：
+`camel_case` 位于始终编译的 `utils` 模块，供本 crate 与其他宏 crate 复用，用于把 `snake_case` 或 `kebab-case` 转为 camelCase：
 
 ```rust
-use framework_proc_core::camel_case;
+use framework_proc_core::utils::camel_case;
 
 assert_eq!(camel_case("find_user"), "findUser");
 ```

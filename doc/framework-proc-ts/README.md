@@ -4,7 +4,7 @@
 
 宏本身不生成 TypeScript 代码，只做元数据收集；生成代码位于
 [framework-proc-core](../framework-proc-core/README.md) 的 `TypescriptApiBuilder`。
-[framework-proc-web](../framework-proc-web/README.md) 的 `web_api` 宏内部会自动叠加 `ts_api`。
+[framework-proc-web](../framework-proc-web/README.md) 的 `web_api` 宏在开启 `ts` 特性时会叠加 `ts_api`。
 
 ## feature
 

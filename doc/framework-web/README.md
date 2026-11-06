@@ -8,6 +8,7 @@ Web 层运行时核心：请求与响应模型、请求上下文、错误分类�
 | feature | 作用 |
 |---------|------|
 | `collect`（默认关闭） | 启用基于 `inventory` 的路由收集，提供 `web_api_iter`，并传递开启 `framework-proc-web/collect` |
+| `ts`（默认关闭） | 传递开启 `framework-proc-web/ts`，使 `web_api` 宏为路由函数叠加 `ts_api` 属性 |
 
 ## 请求
 
