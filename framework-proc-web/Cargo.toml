@@ -15,7 +15,6 @@ proc-macro = true
 [features]
 default = []
 collect = []
-ts = []
 
 [dependencies]
 proc-macro2.workspace = true

@@ -13,7 +13,6 @@ readme = "../doc/framework-core/README.md"
 framework-datetime = { workspace = true }
 framework-proc-auto = { workspace = true }
 framework-proc-core = { workspace = true }
-framework-proc-ts = { workspace = true }
 
 anyhow.workspace = true
 log.workspace = true

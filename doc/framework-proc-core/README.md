@@ -4,7 +4,7 @@
 类型声明导出、枚举运行时导出、API 定义导出，以及打包为 npm ESM 包的 `PackageBuilder`。
 
 本 crate 不导出任何宏，宏位于 [framework-proc-auto](../framework-proc-auto/README.md)、
-[framework-proc-ts](../framework-proc-ts/README.md)、[framework-proc-web](../framework-proc-web/README.md)。
+[framework-proc-web](../framework-proc-web/README.md)。
 
 ## feature
 
@@ -14,7 +14,9 @@
 | `ts`（默认关闭） | 编译 TypeScript 代码生成部分：`typescript` 模块及 `TypescriptTypeBuilder`、`TypescriptEnumBuilder`、`TypescriptApiBuilder`、`PackageBuilder` 等导出 |
 
 未开启 `collect` 时，`push_*_metadata!` 宏内部的 `inventory` 路径不可用，因此注册宏与迭代函数都只在
-开启该 feature 后生效；宏 crate 通过自身的 `collect` feature 传递开启。
+开启该 feature 后生效。`framework-proc-auto` 通过自身的 `collect` 特性传递开启；`framework-proc-web` 不依赖
+本 crate，其生成的注册代码经 `framework-web` 的 `#[doc(hidden)]` 重导出路径引用，由 `framework-web` 的
+`collect` 特性一并开启本 crate 的 `collect`。
 
 `ts` 与 `collect` 互不依赖：`collect` 只影响静态注册表，`ts` 只影响构建器代码是否编译。
 元数据（`TypeMetadata`、`EnumMetadata`、`ApiMetadata` 及对应的迭代函数）不受 `ts` 控制，始终可用。

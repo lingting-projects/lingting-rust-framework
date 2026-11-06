@@ -363,7 +363,6 @@ dependencies = [
  "framework-datetime",
  "framework-proc-auto",
  "framework-proc-core",
- "framework-proc-ts",
  "log",
  "serde",
  "serde_json",
@@ -417,16 +416,6 @@ dependencies = [
 name = "framework-proc-timer"
 version = "26.11.0"
 dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.119",
-]
-
-[[package]]
-name = "framework-proc-ts"
-version = "26.11.0"
-dependencies = [
- "framework-proc-core",
  "proc-macro2",
  "quote",
  "syn 2.0.119",
@@ -489,6 +478,7 @@ dependencies = [
  "async-trait",
  "bytes",
  "framework-core",
+ "framework-proc-core",
  "framework-proc-web",
  "futures-util",
  "inventory",

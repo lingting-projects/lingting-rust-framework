@@ -1,5 +1,6 @@
 mod arguments;
 mod common;
+mod metadata;
 mod options;
 mod response;
 
@@ -76,16 +77,16 @@ fn expand(args: TokenStream2, input: TokenStream2, forced_method: Option<Method>
     } else {
         TokenStream2::new()
     };
-    let ts_api = if cfg!(feature = "ts") {
-        quote! {
-            #[::framework_proc_ts::ts_api(method = #method_name, path = #path)]
+    let metadata = if cfg!(feature = "collect") {
+        match metadata::expand_api_metadata(&function, method_name, &path) {
+            Ok(metadata) => metadata,
+            Err(error) => return error.to_compile_error(),
         }
     } else {
         TokenStream2::new()
     };
 
     quote! {
-        #ts_api
         #function
 
         pub(crate) fn #route_ident() -> ::framework_web::WebRoute {
@@ -120,5 +121,7 @@ fn expand(args: TokenStream2, input: TokenStream2, forced_method: Option<Method>
         }
 
         #collect
+
+        #metadata
     }
 }

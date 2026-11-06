@@ -7,8 +7,12 @@ Web 层运行时核心：请求与响应模型、请求上下文、错误分类�
 
 | feature | 作用 |
 |---------|------|
-| `collect`（默认关闭） | 启用基于 `inventory` 的路由收集，提供 `web_api_iter`，并传递开启 `framework-proc-web/collect` |
-| `ts`（默认关闭） | 传递开启 `framework-proc-web/ts`，使 `web_api` 宏为路由函数叠加 `ts_api` 属性 |
+| `collect`（默认关闭） | 启用基于 `inventory` 的路由收集，提供 `web_api_iter`，并传递开启 `framework-proc-web/collect` 与 `framework-proc-core/collect` |
+| `ts`（默认关闭） | 开启 `collect`，并传递开启 `framework-proc-core/ts`，提供 TypeScript 代码生成构建器 |
+
+`collect` 同时让 `web_api` 把接口签名登记为 `framework_proc_core::ApiMetadata`；本 crate 以
+`#[doc(hidden)]` 重导出 `framework_proc_core`，生成代码经 `framework_web::framework_proc_core` 引用，
+使用方不必再自己声明该依赖。
 
 ## 请求
 

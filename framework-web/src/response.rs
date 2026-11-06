@@ -65,8 +65,8 @@ pub struct WebResponse {
 /// 声明载荷类型的 [`WebResponse`] 包装。
 ///
 /// 运行时行为与 [`WebResponse`] 完全一致，状态码、响应头与响应体通过 [`Deref`] / [`DerefMut`]
-/// 直接访问。仅用于让 `web_api*` / `ts_api` 宏在显式构造 `WebResponse`（自定义响应头、
-/// 状态码等）时推导出实际载荷类型，从而导出准确的 TypeScript 返回类型。
+/// 直接访问。仅用于让 `web_api*` 宏在开启 `ts` 特性后，从显式构造 `WebResponse`
+/// （自定义响应头、状态码等）的场景推导出实际载荷类型，从而导出准确的 TypeScript 返回类型。
 /// 仅返回二进制或流式响应时仍直接使用 `WebResponse`。
 pub struct WebResponseOf<T> {
     response: WebResponse,
