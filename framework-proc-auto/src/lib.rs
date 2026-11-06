@@ -1,5 +1,6 @@
 mod attributes;
 mod collection;
+mod definition;
 mod derives;
 mod enum_impl;
 mod fields;
@@ -78,12 +79,14 @@ fn expand_auto_type(args: TokenStream2, input: TokenStream2) -> TokenStream2 {
         _ => unreachable!("字段类型已在前面校验"),
     };
 
+    let definition = definition::struct_definition(&item);
     let collection = collection::expand(
         &ident,
         &item.generics,
         quote!(::framework_proc_core::TypeKind::Struct),
         derive_metadata(&item.attrs),
         attributes,
+        definition,
         options.specta,
     );
     quote!(#item #collection)
@@ -140,12 +143,14 @@ fn expand_auto_enum(args: TokenStream2, input: TokenStream2) -> TokenStream2 {
     }
     let ident = item.ident.clone();
 
+    let definition = definition::enum_definition(&item);
     let collection = collection::expand(
         &ident,
         &item.generics,
         quote!(::framework_proc_core::TypeKind::Enum),
         derive_metadata(&item.attrs),
         attribute_metadata(&item.attrs, None),
+        definition,
         options.specta,
     );
     quote!(#item #collection)

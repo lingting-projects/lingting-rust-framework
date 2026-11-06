@@ -13,6 +13,7 @@ readme = "../doc/framework-web-axum/README.md"
 default = ["collect"]
 collect = ["framework-web/collect"]
 ts = ["framework-web/ts"]
+rust = ["framework-web/rust"]
 
 [dependencies]
 framework-core = { workspace = true }

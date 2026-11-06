@@ -20,7 +20,7 @@
 
 | crate | 说明 |
 |-------|------|
-| [framework-proc-core](framework-proc-core/README.md) | 元数据结构与注册表、TypeScript 类型/枚举/API 导出、npm 包打包 |
+| [framework-proc-core](framework-proc-core/README.md) | 元数据结构与注册表、TypeScript 类型/枚举/API 导出与 npm 包打包、Rust crate 生成 |
 | [framework-proc-auto](framework-proc-auto/README.md) | `auto_type`、`auto_enum`、`auto_enum_impl`、`auto_enum_field` |
 | [framework-proc-web](framework-proc-web/README.md) | `web_api` 及 HTTP 方法简化宏，展开为 `WebRoute` 构造函数 |
 | [framework-proc-timer](framework-proc-timer/README.md) | `#[timer]` 属性宏，把 async 函数注册为定时任务 |

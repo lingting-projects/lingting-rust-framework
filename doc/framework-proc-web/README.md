@@ -90,18 +90,18 @@ pub async fn create_user(params: Json<CreateUserParams>) -> Result<UserVO, anyho
 供 `framework-web-axum` 的 `WebRouter` 自动收集。
 
 开启 `collect` 时还会生成 `framework_web::framework_proc_core::push_api_metadata!` 调用，
-把接口签名登记到 API 元数据注册表，供生成 TypeScript 代码使用。
+把接口签名登记到 API 元数据注册表，供生成 TypeScript / Rust 代码使用。
 
 ## 接口元数据（`collect` 特性）
 
 开启 `collect` 后，宏按函数签名生成 `ApiMetadata` 注册代码，由
-[framework-proc-core](../framework-proc-core/README.md) 的 `TypescriptApiBuilder` 消费；
-宏本身不生成 TypeScript 文本，构建器代码由 `framework-proc-core/ts` 特性提供。
+[framework-proc-core](../framework-proc-core/README.md) 的 `TypescriptApiBuilder` 与 `RustApiBuilder` 消费；
+宏本身不生成代码文本，构建器代码分别由 `framework-proc-core` 的 `ts` / `rust` 特性提供。
 
 ### 参数规则
 
-| 参数类型 | 位置 | TypeScript 类型来源 |
-|----------|------|---------------------|
+| 参数类型 | 位置 | 类型名来源 |
+|----------|------|-----------|
 | `Json<T>` | `Body` | `T` |
 | `Query<T>` | `Query` | `T` |
 | `PaginationParams` | `Body` | `PaginationParams` |
@@ -109,39 +109,46 @@ pub async fn create_user(params: Json<CreateUserParams>) -> Result<UserVO, anyho
 开启 `collect` 时其他参数类型会报错，因此自定义 `FromWeb` 提取器不能与 `collect` 同时使用。
 参数名取自模式中的唯一绑定名，`Json(params)` 这类单元素元组结构体模式会被解包。
 
+每个参数都按目标语言同时登记两个类型名，通过
+`ApiParameterMetadata::new(name, kind, ts_type_name, rust_type_name)` 一次性写入。
+
 ### 返回值规则
 
 先逐层剥掉 `Result<T>` 与 `R<T>` 包装，再按下表判定：
 
 | 剥壳后的类型 | `ApiReturnType` |
 |--------------|-----------------|
-| 省略返回类型或 `()` | `Void` |
-| `WebResponse` | `Blob` |
-| `WebResponseOf<T>` | `Type(T)` |
-| 其他类型 | `Type(name)` |
+| 省略返回类型或 `()` | `void()` |
+| `WebResponse` | `blob()` |
+| `WebResponseOf<T>` | `ty(ts_name, rust_name)` |
+| 其他类型 | `ty(ts_name, rust_name)` |
+
+`ApiReturnType` 只记录类别（`ApiReturnKind::Void` / `Blob` / `Type`）与两个目标语言的类型名，
+`Type` 以外不记录类型名。TypeScript 侧 `Void` 输出 `void`、`Blob` 输出 `Blob`；
+Rust 侧 `Void` 输出 `()`、`Blob` 输出 `Vec<u8>`。
 
 ### 类型名转换
 
-`Type(name)` 与参数类型名由 Rust 类型名转换为 TypeScript 文本：
+参数与返回值的类型名由 Rust 类型同时转换为两个目标语言的文本：
 
-| Rust 类型 | TypeScript 文本 |
-|-----------|-----------------|
-| `String`、`str`、`char` | `string` |
-| `bool` | `boolean` |
-| `i8`、`i16`、`i32`、`u8`、`u16`、`u32`、`isize`、`usize`、`f32`、`f64` | `number` |
-| `i64`、`u64`、`i128`、`u128` | `string` |
-| `Option<T>` | `T \| null` |
-| `Vec<T>` | `T[]` |
-| `HashMap<K, V>`、`BTreeMap<K, V>` | `Record<K, V>` |
-| 无泛型参数的类型 | 最后一段标识符，如 `UserVO` |
-| 其他泛型类型 | `Name<A, B>` |
+| Rust 类型 | TypeScript 文本 | Rust 文本 |
+|-----------|-----------------|-----------|
+| `String`、`str`、`char` | `string` | `String` |
+| `bool` | `boolean` | `bool` |
+| `i8`、`i16`、`i32`、`u8`、`u16`、`u32`、`isize`、`usize`、`f32`、`f64` | `number` | 原名 |
+| `i64`、`u64`、`i128`、`u128` | `string` | 原名 |
+| `Option<T>` | `T \| null` | `Option<T>` |
+| `Vec<T>` | `T[]` | `Vec<T>` |
+| `HashMap<K, V>`、`BTreeMap<K, V>` | `Record<K, V>` | `HashMap<K, V>` / `BTreeMap<K, V>` |
+| 无泛型参数的类型 | 最后一段标识符，如 `UserVO` | 最后一段标识符 |
+| 其他泛型类型 | `Name<A, B>` | `Name<A, B>` |
 
-泛型参数递归转换，因此 `Option<Vec<UserVO>>` 得到 `UserVO[] | null`。
+泛型参数递归转换，因此 `Option<Vec<UserVO>>` 得到 `UserVO[] | null` 与 `Option<Vec<UserVO>>`。
 不支持的类型（如元组、函数指针、带括号的泛型参数）会报错。
 
-`i64`、`u64`、`i128`、`u128` 映射为 `string`，与 `auto_type` 对同名字段的 `DisplayFromStr` 处理保持一致。
-因此裸 `i64` 返回值会被标注为 `string`，而 serde 实际输出的是数字；返回值中的 id 请用 `auto_type`
-结构体包装，避免类型标注与运行时不一致。
+`i64`、`u64`、`i128`、`u128` 在 TypeScript 侧映射为 `string`，与 `auto_type` 对同名字段的 `DisplayFromStr`
+处理保持一致；Rust 侧保留原名，因此不产生有损转换。TypeScript 侧裸 `i64` 返回值会被标注为 `string`，
+而 serde 实际输出的是数字；返回值中的 id 请用 `auto_type` 结构体包装，避免类型标注与运行时不一致。
 
 ### 注册结果
 
@@ -150,11 +157,12 @@ pub async fn create_user(params: Json<CreateUserParams>) -> Result<UserVO, anyho
 - `name`：函数名。
 - `namespace`：`module_path!()`。
 - `method`、`path`：宏参数。
-- `parameters`：参数名、TypeScript 类型名与位置。
-- `return_type`：返回值描述。
+- `parameters`：参数名、位置，以及 TypeScript 与 Rust 两个类型名。
+- `return_type`：返回值类别与两个目标语言的类型名。
 
-`TypescriptApiBuilder` 会基于这些信息生成 `ApiDefinitions`、抽象类与类型导入，
-并对方法名重复、`method + path` 重复做校验。
+`TypescriptApiBuilder` 会基于 TypeScript 类型名生成 `ApiDefinitions`、抽象类与类型导入，
+`RustApiBuilder` 会基于 Rust 类型名生成 `ApiDefinition` 常量与 `ApiClient` trait，
+二者都对方法名重复、`method + path` 重复做校验。
 
 ## 说明
 

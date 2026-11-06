@@ -14,7 +14,8 @@ pub(crate) fn expand_api_metadata(
     let return_type = api_return_type(&function.sig.output)?;
     let ident = &function.sig.ident;
     let names = parameters.iter().map(|parameter| &parameter.name);
-    let type_names = parameters.iter().map(|parameter| &parameter.type_name);
+    let ts_type_names = parameters.iter().map(|parameter| &parameter.ts_type_name);
+    let rust_type_names = parameters.iter().map(|parameter| &parameter.rust_type_name);
     let kinds = parameters.iter().map(|parameter| &parameter.kind);
     Ok(quote! {
         ::framework_web::framework_proc_core::push_api_metadata! {
@@ -24,11 +25,12 @@ pub(crate) fn expand_api_metadata(
                 method: #method,
                 path: #path,
                 parameters: &[
-                    #(::framework_web::framework_proc_core::ApiParameterMetadata {
-                        name: #names,
-                        type_name: #type_names,
-                        kind: #kinds,
-                    }),*
+                    #(::framework_web::framework_proc_core::ApiParameterMetadata::new(
+                        #names,
+                        #kinds,
+                        #ts_type_names,
+                        #rust_type_names,
+                    )),*
                 ],
                 return_type: #return_type,
             }
@@ -38,7 +40,8 @@ pub(crate) fn expand_api_metadata(
 
 struct ApiParameter {
     name: syn::LitStr,
-    type_name: syn::LitStr,
+    ts_type_name: syn::LitStr,
+    rust_type_name: syn::LitStr,
     kind: TokenStream2,
 }
 
@@ -66,14 +69,16 @@ fn api_parameters(item: &ItemFn) -> syn::Result<Vec<ApiParameter>> {
         } else {
             return Err(Error::new_spanned(
                 &argument.ty,
-                "web_api 开启 ts 特性时，参数仅支持 Json<T>、Query<T> 或 PaginationParams",
+                "生成 API 元数据时，参数仅支持 Json<T>、Query<T> 或 PaginationParams",
             ));
         };
         let name = pattern_name(&argument.pat)?;
-        let type_name = type_name(inner)?;
+        let ts_type_name = ts_type_name(inner)?;
+        let rust_type_name = rust_type_name(inner)?;
         parameters.push(ApiParameter {
             name: syn::LitStr::new(&name, argument.pat.span()),
-            type_name: syn::LitStr::new(&type_name, inner.span()),
+            ts_type_name: syn::LitStr::new(&ts_type_name, inner.span()),
+            rust_type_name: syn::LitStr::new(&rust_type_name, inner.span()),
             kind,
         });
     }
@@ -95,7 +100,7 @@ fn pattern_name(pattern: &Pat) -> syn::Result<String> {
 fn api_return_type(output: &ReturnType) -> syn::Result<TokenStream2> {
     let ReturnType::Type(_, ty) = output else {
         return Ok(quote!(
-            ::framework_web::framework_proc_core::ApiReturnType::Void
+            ::framework_web::framework_proc_core::ApiReturnType::void()
         ));
     };
     let mut ty = ty.as_ref();
@@ -103,28 +108,34 @@ fn api_return_type(output: &ReturnType) -> syn::Result<TokenStream2> {
         ty = inner;
     }
     if let Some(inner) = generic_type(ty, "WebResponseOf") {
-        let name = syn::LitStr::new(&type_name(inner)?, inner.span());
-        return Ok(quote!(::framework_web::framework_proc_core::ApiReturnType::Type(#name)));
+        let ts_type_name = syn::LitStr::new(&ts_type_name(inner)?, inner.span());
+        let rust_type_name = syn::LitStr::new(&rust_type_name(inner)?, inner.span());
+        return Ok(quote!(
+            ::framework_web::framework_proc_core::ApiReturnType::ty(#ts_type_name, #rust_type_name)
+        ));
     }
     if is_type(ty, "WebResponse") {
         return Ok(quote!(
-            ::framework_web::framework_proc_core::ApiReturnType::Blob
+            ::framework_web::framework_proc_core::ApiReturnType::blob()
         ));
     }
     if is_unit_type(ty) {
         return Ok(quote!(
-            ::framework_web::framework_proc_core::ApiReturnType::Void
+            ::framework_web::framework_proc_core::ApiReturnType::void()
         ));
     }
-    let name = syn::LitStr::new(&type_name(ty)?, ty.span());
-    Ok(quote!(::framework_web::framework_proc_core::ApiReturnType::Type(#name)))
+    let ts_type_name = syn::LitStr::new(&ts_type_name(ty)?, ty.span());
+    let rust_type_name = syn::LitStr::new(&rust_type_name(ty)?, ty.span());
+    Ok(quote!(
+        ::framework_web::framework_proc_core::ApiReturnType::ty(#ts_type_name, #rust_type_name)
+    ))
 }
 
 fn result_or_r_type(ty: &Type) -> Option<&Type> {
     generic_type(ty, "Result").or_else(|| generic_type(ty, "R"))
 }
 
-fn type_name(ty: &Type) -> syn::Result<String> {
+fn ts_type_name(ty: &Type) -> syn::Result<String> {
     let Type::Path(path) = ty else {
         return Err(Error::new_spanned(ty, "不支持该 TypeScript 类型"));
     };
@@ -132,7 +143,7 @@ fn type_name(ty: &Type) -> syn::Result<String> {
         return Err(Error::new_spanned(ty, "类型路径不能为空"));
     };
     let ident = segment.ident.to_string();
-    let arguments = generic_arguments(segment)?;
+    let arguments = generic_arguments(segment, ts_type_name)?;
     if arguments.is_empty()
         && let Some(primitive) = primitive_type_name(&ident)
     {
@@ -178,7 +189,48 @@ fn primitive_type_name(name: &str) -> Option<&'static str> {
     }
 }
 
-fn generic_arguments(segment: &syn::PathSegment) -> syn::Result<Vec<String>> {
+/// Rust 类型名本身，仅把 `str` / `char` 归一为 `String`。
+fn rust_type_name(ty: &Type) -> syn::Result<String> {
+    let Type::Path(path) = ty else {
+        return Err(Error::new_spanned(ty, "不支持该 Rust 类型"));
+    };
+    let Some(segment) = path.path.segments.last() else {
+        return Err(Error::new_spanned(ty, "类型路径不能为空"));
+    };
+    let ident = segment.ident.to_string();
+    let arguments = generic_arguments(segment, rust_type_name)?;
+    match ident.as_str() {
+        "str" | "char" if arguments.is_empty() => return Ok("String".to_string()),
+        "Option" => {
+            let [inner] = arguments.as_slice() else {
+                return Err(Error::new_spanned(ty, "Option 必须包含唯一泛型参数"));
+            };
+            return Ok(format!("Option<{inner}>"));
+        }
+        "Vec" => {
+            let [inner] = arguments.as_slice() else {
+                return Err(Error::new_spanned(ty, "Vec 必须包含唯一泛型参数"));
+            };
+            return Ok(format!("Vec<{inner}>"));
+        }
+        "HashMap" | "BTreeMap" => {
+            let [key, value] = arguments.as_slice() else {
+                return Err(Error::new_spanned(ty, "Map 必须包含键和值两个泛型参数"));
+            };
+            return Ok(format!("{ident}<{key}, {value}>"));
+        }
+        _ => {}
+    }
+    if arguments.is_empty() {
+        return Ok(ident);
+    }
+    Ok(format!("{ident}<{}>", arguments.join(", ")))
+}
+
+fn generic_arguments(
+    segment: &syn::PathSegment,
+    convert: fn(&Type) -> syn::Result<String>,
+) -> syn::Result<Vec<String>> {
     let arguments = match &segment.arguments {
         syn::PathArguments::None => return Ok(Vec::new()),
         syn::PathArguments::AngleBracketed(arguments) => arguments,
@@ -190,7 +242,7 @@ fn generic_arguments(segment: &syn::PathSegment) -> syn::Result<Vec<String>> {
         .args
         .iter()
         .map(|argument| match argument {
-            syn::GenericArgument::Type(ty) => type_name(ty),
+            syn::GenericArgument::Type(ty) => convert(ty),
             argument => Err(Error::new_spanned(argument, "不支持该 TypeScript 类型")),
         })
         .collect()

@@ -9,6 +9,7 @@ Web 层运行时核心：请求与响应模型、请求上下文、错误分类�
 |---------|------|
 | `collect`（默认关闭） | 启用基于 `inventory` 的路由收集，提供 `web_api_iter`，并传递开启 `framework-proc-web/collect` 与 `framework-proc-core/collect` |
 | `ts`（默认关闭） | 开启 `collect`，并传递开启 `framework-proc-core/ts`，提供 TypeScript 代码生成构建器 |
+| `rust`（默认关闭） | 开启 `collect`，并传递开启 `framework-proc-core/rust`，提供 Rust crate 生成构建器 |
 
 `collect` 同时让 `web_api` 把接口签名登记为 `framework_proc_core::ApiMetadata`；本 crate 以
 `#[doc(hidden)]` 重导出 `framework_proc_core`，生成代码经 `framework_web::framework_proc_core` 引用，

@@ -1,4 +1,4 @@
-use crate::ApiReturnType;
+use crate::{ApiReturnKind, ApiReturnType};
 use std::io;
 
 pub type TypescriptResult<T> = Result<T, Box<dyn std::error::Error + Send + Sync>>;
@@ -45,9 +45,9 @@ pub(crate) fn json_string(value: &str) -> TypescriptResult<String> {
 }
 
 pub fn return_type_name(return_type: ApiReturnType) -> &'static str {
-    match return_type {
-        ApiReturnType::Void => "void",
-        ApiReturnType::Blob => "Blob",
-        ApiReturnType::Type(name) => name,
+    match return_type.kind {
+        ApiReturnKind::Void => "void",
+        ApiReturnKind::Blob => "Blob",
+        ApiReturnKind::Type => return_type.ts_type_name().unwrap_or("unknown"),
     }
 }

@@ -1,15 +1,18 @@
 use std::collections::BTreeSet;
 
-use crate::{ApiMetadata, ApiReturnType};
+use crate::{ApiMetadata, ApiReturnKind};
 
 pub(crate) fn collect_api_type_names(apis: &[ApiMetadata]) -> BTreeSet<String> {
     let mut names = BTreeSet::new();
     for api in apis {
         for parameter in api.parameters {
-            collect_type_names(parameter.type_name, &mut names);
+            collect_type_names(parameter.ts_type_name(), &mut names);
         }
-        if let ApiReturnType::Type(name) = api.return_type {
-            collect_type_names(name, &mut names);
+        if api.return_type.kind == ApiReturnKind::Type {
+            collect_type_names(
+                api.return_type.ts_type_name().unwrap_or("unknown"),
+                &mut names,
+            );
         }
     }
     names

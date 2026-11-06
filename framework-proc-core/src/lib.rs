@@ -1,4 +1,6 @@
 mod api_metadata;
+#[cfg(feature = "rust")]
+mod rust;
 mod type_metadata;
 #[cfg(feature = "ts")]
 mod typescript;
@@ -6,13 +8,21 @@ pub mod utils;
 
 #[cfg(feature = "collect")]
 pub use api_metadata::api_metadata_iter;
-pub use api_metadata::{ApiMetadata, ApiParameterKind, ApiParameterMetadata, ApiReturnType};
+pub use api_metadata::{
+    ApiMetadata, ApiParameterKind, ApiParameterMetadata, ApiReturnKind, ApiReturnType,
+    RustApiTypeMetadata, TsApiTypeMetadata,
+};
+#[cfg(feature = "rust")]
+pub use rust::*;
 pub use serde_json;
 #[cfg(feature = "collect")]
 pub use type_metadata::enum_metadata_iter;
 #[cfg(feature = "collect")]
 pub use type_metadata::type_metadata_iter;
-pub use type_metadata::{EnumMetadata, EnumValue, TypeKind, TypeMetadata, enum_field_value};
+pub use type_metadata::{
+    EnumMetadata, EnumValue, RustTypeMetadata, TsTypeMetadata, TypeKind, TypeMetadata,
+    enum_field_value,
+};
 #[cfg(feature = "ts")]
 pub use typescript::*;
 

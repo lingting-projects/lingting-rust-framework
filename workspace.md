@@ -100,6 +100,7 @@ flowchart LR
 |---------|-----------|------|
 | `collect` | `framework-proc-core`、`framework-proc-auto`、`framework-proc-web`、`framework-web`、`framework-web-axum`（默认开启） | 开启基于 `inventory` 的静态注册，需在最终二进制所在的 crate 上启用；`framework-web/collect` 同时开启 `framework-proc-core/collect` 并让 `web_api` 生成接口元数据注册代码 |
 | `ts` | `framework-proc-core`、`framework-web`、`framework-web-axum` | TypeScript 代码生成构建器（`framework-proc-core/ts`），默认关闭；`framework-web/ts` 会同时开启 `collect` |
+| `rust` | `framework-proc-core`、`framework-web`、`framework-web-axum` | Rust crate 生成构建器（`framework-proc-core/rust`），默认关闭；`framework-web/rust` 会同时开启 `collect` |
 | `generate` | `framework-timer` | 生成定时任务名称相关的 `syn` 支持，默认关闭 |
 | `ntp` / `tokio` | `framework-datetime` | NTP 校时及异步校时支持，默认关闭 |
 

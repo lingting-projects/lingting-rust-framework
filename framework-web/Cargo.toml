@@ -13,6 +13,7 @@ readme = "../doc/framework-web/README.md"
 default = []
 collect = ["dep:inventory", "framework-proc-web/collect", "framework-proc-core/collect"]
 ts = ["collect", "framework-proc-core/ts"]
+rust = ["collect", "framework-proc-core/rust"]
 
 [dependencies]
 framework-core = { workspace = true }

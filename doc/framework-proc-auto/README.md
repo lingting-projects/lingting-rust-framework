@@ -161,6 +161,36 @@ impl RCodeKind {
 开启 `collect` 后，导出的元数据包含枚举值列表（由 `strum::IntoEnumIterator` 遍历，值为 `to_string()` 结果）
 与字段名列表，供 `framework-proc-core` 的 `TypescriptEnumBuilder` 生成 TypeScript 运行时导出。
 
+## 元数据注册（`collect` 特性）
+
+开启 `collect` 后，`auto_type` 与 `auto_enum` 会为每个类型生成三个隐藏项：
+
+| 生成项 | 作用 |
+|--------|------|
+| `__proc_auto_type_name_<类型名>()` | 返回完整类型名 |
+| `__proc_auto_register_<类型名>(types)` | specta 注册函数，`specta = false` 时不生成 |
+| `__proc_auto_definition_<类型名>()` | 返回清洗后的定义快照文本 |
+
+注册代码只调用 `framework_proc_core` 的无条件构造器（`TypeMetadata::new(..).with_ts(..).with_rust(..)`），
+不依赖任何 `#[cfg]`，因此在 `ts` / `rust` / `collect` 的任意组合下都能通过编译。
+
+### 定义快照
+
+定义快照是**字段变换之后**的类型定义，由 `stringify!` 直接输出 token，不做格式化。清洗规则：
+
+| 内容 | 处理 |
+|------|------|
+| 可见性（`pub` / `pub(crate)` / 私有） | 条目与字段统一提升为 `pub` |
+| 泛型参数、`where` 子句 | 原样保留 |
+| `#[derive(...)]` | 只保留 `Clone`、`Copy`、`Debug`、`PartialEq`、`Eq`、`Default`、`Serialize`、`Deserialize`（按路径最后一段比较）；丢弃 `specta::Type`、`strum_macros::*` |
+| `#[serde(...)]`、`#[serde_as]`、`#[serde_as(as = ...)]`、`#[serde(with = ...)]` | 保留（wire 兼容需要；`serde_as` 会要求生成 crate 依赖 `serde_with`） |
+| `#[doc]` | 保留 |
+| 其余属性（`#[strum]`、`#[specta]` 等） | 丢弃，避免把使用方私有宏带进生成 crate |
+
+输出形如 `pub struct User { pub id : String , }`，间距由 token 流决定。
+快照供 [framework-proc-core](../framework-proc-core/README.md) 的 `RustTypeBuilder` 生成真实 Rust 类型定义，
+建议对生成目录执行 `rustfmt`。快照中引用的类型与第三方 crate 不在生成端校验，需使用者补充导入与依赖。
+
 ## 与其他 crate 的关系
 
 - 类型与枚举元数据的结构、注册表与 TypeScript 导出位于 [framework-proc-core](../framework-proc-core/README.md)。
