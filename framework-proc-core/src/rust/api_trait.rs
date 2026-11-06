@@ -66,13 +66,13 @@ fn method(api: &ApiMetadata) -> RustResult<String> {
         .map(|line| format!("            {line}\n"))
         .collect::<String>();
     let send = format!(
-        "self.send(&{constant}, {body}, {query})\n                .await\n                .map_err(ApiCallError::Transport)?"
+        "self.send(&{constant}, {body}, {query})\n                .await\n                .map_err(ApiCallError::Transport)"
     );
     let tail = match api.return_type.kind {
-        ApiReturnKind::Void => format!("            {send};\n            Ok(())"),
+        ApiReturnKind::Void => format!("            {send}?;\n            Ok(())"),
         ApiReturnKind::Blob => format!("            {send}"),
         ApiReturnKind::Type => format!(
-            "            let response = {send};\n            serde_json::from_slice(&response).map_err(ApiCallError::Format)"
+            "            let response = {send}?;\n            serde_json::from_slice(&response).map_err(ApiCallError::Format)"
         ),
     };
     Ok(format!(
