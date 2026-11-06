@@ -6,8 +6,10 @@ use std::sync::{Arc, Mutex};
 use chrono::{Local, NaiveDate};
 use tracing::Level;
 use tracing_appender::non_blocking::{NonBlocking, WorkerGuard};
+use tracing_subscriber::field::RecordFields;
 use tracing_subscriber::filter::{LevelFilter, filter_fn};
 use tracing_subscriber::fmt;
+use tracing_subscriber::fmt::format::{DefaultFields, FormatFields, Writer};
 use tracing_subscriber::layer::Layer;
 
 use super::archive;
@@ -72,12 +74,37 @@ fn layer(
         fmt::layer()
             .with_ansi(false)
             .with_target(true)
+            .map_fmt_fields(FileFields::from)
             .with_writer(writer)
             .with_filter(filter_fn(move |metadata| {
                 *metadata.level() == level && metadata.level() <= &max_level
             }))
             .with_filter(CombinedFilter::new(filters)),
     ))
+}
+
+/// 文件日志专用的字段格式化器。
+///
+/// `tracing-subscriber` 按格式化器类型缓存 span 字段的格式化结果：控制台层与文件层
+/// 共用默认格式化器时会复用控制台生成的 ANSI 转义文本，导致日志文件出现转义码。
+/// 改用独立类型后，文件层拥有自己的缓存槽，写出纯文本；两侧除颜色外文字保持一致。
+#[derive(Debug, Default)]
+pub(crate) struct FileFields(DefaultFields);
+
+impl From<DefaultFields> for FileFields {
+    fn from(fields: DefaultFields) -> Self {
+        Self(fields)
+    }
+}
+
+impl<'writer> FormatFields<'writer> for FileFields {
+    fn format_fields<R: RecordFields>(
+        &self,
+        writer: Writer<'writer>,
+        fields: R,
+    ) -> std::fmt::Result {
+        self.0.format_fields(writer, fields)
+    }
 }
 
 struct CurrentFileWriter {

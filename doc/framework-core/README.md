@@ -125,6 +125,7 @@ let guard = init(&config)?;
 `combined` 为 `true` 时额外写入 `combined.log`。日志按本地日期切分，旧文件压缩为
 `archive/YYYY-MM-DD-<name>.gz`；归档线程每小时清理一次超出 `retention_days` 的文件。
 空日志文件不生成归档。
+控制台层带 ANSI 颜色，文件层单独格式化 span 字段并写出纯文本，两侧除颜色外文字一致。
 
 日志层会过滤无意义的事件：`LoggingConfig::filters` 中的过滤器全部放行时才记录该事件，
 任一过滤器返回 `false` 即忽略。

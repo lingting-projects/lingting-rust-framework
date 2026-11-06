@@ -7,7 +7,7 @@ use tracing_subscriber::fmt;
 use tracing_subscriber::layer::Layer;
 
 use super::core::{BoxLayer, CombinedFilter, LoggingFilter};
-use super::file;
+use super::file::{self, FileFields};
 use super::flush::FileFlush;
 
 /// 聚合日志文件名。
@@ -26,6 +26,7 @@ pub(crate) fn layer(
         fmt::layer()
             .with_ansi(false)
             .with_target(true)
+            .map_fmt_fields(FileFields::from)
             .with_writer(writer)
             .with_filter(filter_fn(move |metadata| metadata.level() <= &max_level))
             .with_filter(CombinedFilter::new(filters)),
