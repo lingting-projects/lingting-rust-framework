@@ -23,6 +23,7 @@ server.run(None).await?;
 
 - `axum_builder(bind_address, bind_port)`：`bind_port` 小于等于 0 或超出 `u16` 范围时使用随机端口。
 - `AxumBuilder::with_cors(f)`：设置 CORS 解析函数，默认拒绝跨域。
+- `AxumBuilder::push_interceptor(interceptor)`：追加拦截器，可多次调用，执行顺序按 `order()` 升序。
 - `AxumBuilder::bind()`：绑定端口，返回 `AxumServer`；端口为 0 时由系统分配。
 - `AxumServer::context()`：返回 `AxumContext`，其中 `port` 是实际绑定端口。
 - `AxumServer::router()`：服务启动后可取到 `Arc<WebRouter>`，未启动时为 `None`。
@@ -30,8 +31,9 @@ server.run(None).await?;
 
 ## 路由
 
-`WebRouter::new(wrapper)` 在构造时通过 `framework_web::web_api_iter()` 收集所有已注册路由，
-按 `WebMethod` 与 `path` 建索引。查找时忽略请求路径两端的 `/`，匹配不到返回 404。
+`WebRouter::new(wrapper, interceptors)` 在构造时通过 `framework_web::web_api_iter()` 收集所有已注册路由，
+按 `WebMethod` 与 `path` 建索引，注入的拦截器交给 `WebInterceptors` 按 `order()` 升序稳定排序。查找时忽略路径两端的 `/`，
+未命中返回 `None`。
 
 `WebRouteWrapper` 用于在命中路由后包裹执行，可用于授权校验、上下文注入等：
 
@@ -47,7 +49,24 @@ let wrapper: WebRouteWrapper = Arc::new(|route| {
 未提供 wrapper 时使用默认实现，直接执行 `route.invoke()`。
 
 `WebRouter::invoke(web_context, axum_context)` 会依次注入 `AxumContext` 与 `WebContext`
-两层 task-local 作用域，再查找并执行路由。
+两层 task-local 作用域，再查找路由并执行拦截器与路由：
+
+1. 查找路由，结果为 `Option<Arc<WebRoute>>`。
+2. 把路由与上下文交给 `WebInterceptors::execute` 依次执行拦截器：`should_intercept` 返回 `false` 时跳过该拦截器；
+   `intercept` 返回 `Next` 时继续下一个拦截器，返回 `Respond` 时直接以该响应结束请求，
+   返回 `Redirect` 时用其路由替换当前路由，后续拦截器与路由都使用替换后的值。
+3. 执行结果中仍没有路由时返回 404，否则交由 `WebRouteWrapper` 执行。
+
+拦截器在两层 task-local 作用域内运行，可通过 `use_web()`、`use_axum()` 获取请求与服务信息。
+
+## 拦截器
+
+拦截器实现 `framework_web::WebInterceptor`，结果类型 `WebInterceptResult` 与语义见
+[framework-web](../framework-web/README.md#拦截器)。
+
+`AxumBuilder::push_interceptor(interceptor)` 逐个追加，`AxumServer::run` 启动时把这些拦截器交给
+`WebRouter`，由 `WebInterceptors` 按 `order()` 升序排序并统一执行。需要自行组装时使用
+`build_router(wrapper, interceptors)`，参数与 `WebRouter::new` 一致。
 
 ## 分发流程
 
@@ -100,5 +119,5 @@ let address = context.address();   // 形如 127.0.0.1:8080
 
 ## 组装
 
-`build_router(wrapper)` 创建 `WebRouter`；`build_router_with(router, context, cors)`
+`build_router(wrapper, interceptors)` 创建 `WebRouter`；`build_router_with(router, context, cors)`
 把路由组装为 axum `Router`，并挂载统一的 `fallback` 分发。

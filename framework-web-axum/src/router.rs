@@ -1,7 +1,8 @@
 use crate::AxumContext;
 use crate::context::scope_axum;
 use framework_web::{
-    WebContext, WebError, WebMethod, WebResponse, WebRoute, scope_web, use_web, web_api_iter,
+    WebContext, WebError, WebInterceptResult, WebInterceptor, WebInterceptors, WebMethod,
+    WebResponse, WebRoute, scope_web, use_web, web_api_iter,
 };
 use futures_util::future::BoxFuture;
 use std::collections::HashMap as Map;
@@ -23,10 +24,15 @@ fn default_wrapper() -> WebRouteWrapper {
 pub struct WebRouter {
     routes: Map<WebMethod, Map<String, Arc<WebRoute>>>,
     wrapper: WebRouteWrapper,
+    interceptors: WebInterceptors,
 }
 
 impl WebRouter {
-    pub fn new(wrapper: Option<WebRouteWrapper>) -> Self {
+    /// 创建路由实例，拦截器由 `WebInterceptors::new` 按 `order()` 升序排序。
+    pub fn new(
+        wrapper: Option<WebRouteWrapper>,
+        interceptors: Vec<Arc<dyn WebInterceptor>>,
+    ) -> Self {
         let mut routes: Map<WebMethod, Map<String, Arc<WebRoute>>> = Map::new();
         for route in web_api_iter() {
             let route = Arc::new(route);
@@ -42,10 +48,11 @@ impl WebRouter {
         Self {
             routes,
             wrapper: wrapper.unwrap_or_else(default_wrapper),
+            interceptors: WebInterceptors::new(interceptors),
         }
     }
 
-    /// 执行当前请求：注入上下文、查找路由、交由包装器运行。
+    /// 执行当前请求：注入上下文、查找路由、交由拦截器与包装器运行。
     pub async fn invoke(
         &self,
         web_context: WebContext,
@@ -53,25 +60,36 @@ impl WebRouter {
     ) -> anyhow::Result<WebResponse> {
         let web_context = Arc::new(web_context);
         let axum_context = Arc::new(axum_context);
+        let interceptor_context = Arc::clone(&web_context);
         scope_axum(
             axum_context,
-            scope_web(web_context, async {
-                let route = self.find().await?;
+            scope_web(web_context, async move {
+                let mut route = self.find().await;
+                let result = self
+                    .interceptors
+                    .execute(Arc::clone(&interceptor_context), route.clone())
+                    .await?;
+                match result {
+                    WebInterceptResult::Next => {}
+                    WebInterceptResult::Respond(response) => return Ok(response),
+                    WebInterceptResult::Redirect(next) => route = next,
+                }
+                let route = route
+                    .ok_or_else(|| anyhow::Error::from(WebError::not_found("请求接口不存在")))?;
                 (self.wrapper)(route).await
             }),
         )
         .await
     }
 
-    /// 按当前请求的方法与路径查找路由。
-    async fn find(&self) -> anyhow::Result<Arc<WebRoute>> {
-        let context = use_web()?;
+    /// 按当前请求的方法与路径查找路由，未命中返回 `None`。
+    async fn find(&self) -> Option<Arc<WebRoute>> {
+        let context = use_web().ok()?;
         let request = context.request();
         let path = request.path.trim_matches('/');
         self.routes
             .get(&request.method)
             .and_then(|routes| routes.get(path))
             .cloned()
-            .ok_or_else(|| WebError::not_found("请求接口不存在").into())
     }
 }

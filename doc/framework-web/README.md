@@ -150,3 +150,64 @@ JSON 响应会设置 `content-type: application/json; charset=utf-8` 与 `conten
 - `web_api_iter()` 返回所有已注册路由。
 
 `catch_panic` 把异步任务的 panic 转为 `WebError::Panic` 错误，宏生成的代码在调用函数体前会包裹它。
+
+## 拦截器
+
+`WebInterceptor` 是路由查找之后、路由执行之前的扩展点，由服务器适配层在调用路由前依次执行：
+
+| 方法 | 说明 |
+|------|------|
+| `order(&self) -> i32` | 排序值，无参数，按升序执行 |
+| `should_intercept(context, route) -> bool` | 是否对本次请求执行拦截，返回 `false` 时不调用 `intercept` |
+| `intercept(context, route)` | 异步方法，返回 `Result<WebInterceptResult>` |
+
+`should_intercept` 与 `intercept` 入参一致：`Arc<WebContext>` 与 `Option<Arc<WebRoute>>`，
+路由未命中时 `route` 为 `None`。
+
+`WebInterceptResult` 表达拦截器对本次请求的处理结论：
+
+| 结果 | 语义 |
+|------|------|
+| `Next` | 继续：不改变后续流程，交由下一个拦截器与路由继续处理 |
+| `Respond(WebResponse)` | 提前返回：直接以该响应结束请求，不再执行后续拦截器与路由 |
+| `Redirect(Option<Arc<WebRoute>>)` | 重定向：后续拦截器与路由改用该路由，`None` 表示清空当前路由 |
+
+`intercept` 返回 `Err` 时请求直接以错误响应结束。
+
+`WebInterceptors` 持有多个拦截器并提供统一执行逻辑，供服务器适配层复用，构造时按 `order()` 升序排序。
+`WebInterceptors::execute(context, route)` 依次执行拦截器：返回 `Next` 时继续下一个，返回 `Respond` 时立即
+以该响应结束，返回 `Redirect` 时把当前路由替换为返回值后继续；执行结束时若期间发生过重定向则返回
+`Redirect`（携带最后一个拦截器确定的路由），否则返回 `Next`。
+
+trait 使用 `async_trait` 定义，`async_trait` 属性宏已由本 crate 重导出：
+
+```rust
+use anyhow::Result;
+use framework_web::{
+    WebContext, WebInterceptResult, WebInterceptor, WebRoute, async_trait,
+};
+use std::sync::Arc;
+
+struct PassThrough;
+
+#[async_trait]
+impl WebInterceptor for PassThrough {
+    fn order(&self) -> i32 {
+        10
+    }
+
+    fn should_intercept(&self, _context: Arc<WebContext>, _route: Option<Arc<WebRoute>>) -> bool {
+        true
+    }
+
+    async fn intercept(
+        &self,
+        _context: Arc<WebContext>,
+        _route: Option<Arc<WebRoute>>,
+    ) -> Result<WebInterceptResult> {
+        Ok(WebInterceptResult::Next)
+    }
+}
+```
+
+执行时机由服务器适配层决定，见 `framework-web-axum` 的路由实例。

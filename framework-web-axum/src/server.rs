@@ -1,6 +1,6 @@
 use crate::{AxumContext, AxumCors, AxumCorsFn, WebRouteWrapper, WebRouter, build_router_with};
 use anyhow::{Context, Result, anyhow};
-use framework_web::WebContext;
+use framework_web::{WebContext, WebInterceptor};
 use std::net::SocketAddr;
 use std::sync::{Arc, Mutex, OnceLock};
 use tokio::net::TcpListener;
@@ -11,6 +11,7 @@ pub fn axum_builder(bind_address: impl Into<String>, bind_port: i32) -> AxumBuil
         bind_address: bind_address.into(),
         bind_port: u16::try_from(bind_port).unwrap_or_default(),
         cors: default_cors(),
+        interceptors: Vec::new(),
     }
 }
 
@@ -19,6 +20,7 @@ pub struct AxumBuilder {
     bind_address: String,
     bind_port: u16,
     cors: AxumCorsFn,
+    interceptors: Vec<Arc<dyn WebInterceptor>>,
 }
 
 impl AxumBuilder {
@@ -28,6 +30,12 @@ impl AxumBuilder {
         F: Fn(&WebContext) -> AxumCors + Send + Sync + 'static,
     {
         self.cors = Arc::new(cors);
+        self
+    }
+
+    /// 追加一个拦截器，执行顺序按拦截器 `order()` 升序决定。
+    pub fn push_interceptor(mut self, interceptor: Arc<dyn WebInterceptor>) -> Self {
+        self.interceptors.push(interceptor);
         self
     }
 
@@ -44,6 +52,7 @@ impl AxumBuilder {
             listener: Mutex::new(Some(listener)),
             context: AxumContext::new(self.bind_address, local.port()),
             cors: self.cors,
+            interceptors: self.interceptors,
             router: OnceLock::new(),
         })
     }
@@ -54,6 +63,7 @@ pub struct AxumServer {
     listener: Mutex<Option<TcpListener>>,
     context: AxumContext,
     cors: AxumCorsFn,
+    interceptors: Vec<Arc<dyn WebInterceptor>>,
     router: OnceLock<Arc<WebRouter>>,
 }
 
@@ -76,7 +86,7 @@ impl AxumServer {
             .map_err(|error| anyhow!("Axum 监听器锁定失败：{error}"))?
             .take()
             .ok_or_else(|| anyhow!("Axum 服务已启动"))?;
-        let router = Arc::new(WebRouter::new(wrapper));
+        let router = Arc::new(WebRouter::new(wrapper, self.interceptors.clone()));
         let app = build_router_with(
             Arc::clone(&router),
             self.context.clone(),

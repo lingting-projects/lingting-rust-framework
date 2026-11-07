@@ -12,15 +12,18 @@ pub use server::{AxumBuilder, AxumServer, axum_builder};
 use crate::dispatch::{AxumState, dispatch};
 use axum::Router;
 use axum::routing::any;
-use framework_web::WebContext;
+use framework_web::{WebContext, WebInterceptor};
 use std::sync::Arc;
 
 /// CORS 解析函数：按请求上下文返回本次响应的 CORS 配置。
 pub type AxumCorsFn = Arc<dyn Fn(&WebContext) -> AxumCors + Send + Sync>;
 
 /// 构建 WebRouter：内部创建 WebRouter，并挂载统一的 fallback 分发。
-pub fn build_router(wrapper: Option<WebRouteWrapper>) -> WebRouter {
-    WebRouter::new(wrapper)
+pub fn build_router(
+    wrapper: Option<WebRouteWrapper>,
+    interceptors: Vec<Arc<dyn WebInterceptor>>,
+) -> WebRouter {
+    WebRouter::new(wrapper, interceptors)
 }
 
 /// 使用已有 WebRouter 组装 axum Router。
