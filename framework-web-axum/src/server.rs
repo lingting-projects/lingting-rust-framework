@@ -1,6 +1,10 @@
-use crate::{AxumContext, AxumCors, AxumCorsFn, WebRouteWrapper, WebRouter, build_router_with};
+use crate::{
+    AxumContext, AxumCors, AxumCorsFn, AxumShared, AxumShutdown, AxumStatus, WebRouteWrapper,
+    WebRouter, build_router_with,
+};
 use anyhow::{Context, Result, anyhow};
 use framework_web::{WebContext, WebInterceptor};
+use log::info;
 use std::net::SocketAddr;
 use std::sync::{Arc, Mutex, OnceLock};
 use tokio::net::TcpListener;
@@ -50,7 +54,7 @@ impl AxumBuilder {
             .with_context(|| format!("读取监听地址 {address} 失败"))?;
         Ok(AxumServer {
             listener: Mutex::new(Some(listener)),
-            context: AxumContext::new(self.bind_address, local.port()),
+            context: AxumContext::with_shared(self.bind_address, local.port(), AxumShared::new()),
             cors: self.cors,
             interceptors: self.interceptors,
             router: OnceLock::new(),
@@ -78,7 +82,14 @@ impl AxumServer {
         self.router.get().cloned()
     }
 
-    /// 启动服务并持续运行。
+    /// 优雅关闭句柄，`run` 期间仍可取用。
+    pub fn shutdown(&self) -> AxumShutdown {
+        AxumShutdown::new(Arc::clone(self.context.shared()))
+    }
+
+    /// 启动服务并持续运行，收到优雅关闭请求后返回。
+    ///
+    /// 关闭请求早于启动时不会启动服务，直接返回 `Ok(())`；重复调用返回错误。
     pub async fn run(&self, wrapper: Option<WebRouteWrapper>) -> Result<()> {
         let listener = self
             .listener
@@ -86,6 +97,11 @@ impl AxumServer {
             .map_err(|error| anyhow!("Axum 监听器锁定失败：{error}"))?
             .take()
             .ok_or_else(|| anyhow!("Axum 服务已启动"))?;
+        if self.context.status().is_stopping() {
+            self.context.set_status(AxumStatus::Stopped);
+            return Ok(());
+        }
+        self.context.set_status(AxumStatus::Starting);
         let router = Arc::new(WebRouter::new(wrapper, self.interceptors.clone()));
         let app = build_router_with(
             Arc::clone(&router),
@@ -93,12 +109,19 @@ impl AxumServer {
             Arc::clone(&self.cors),
         );
         let _ = self.router.set(router);
-        axum::serve(
+        self.context.set_status(AxumStatus::Running);
+        let context = self.context.clone();
+        let result = axum::serve(
             listener,
             app.into_make_service_with_connect_info::<SocketAddr>(),
         )
-        .await
-        .context("Axum 服务运行失败")
+        .with_graceful_shutdown(async move {
+            context.subscribe_stopping().await;
+        })
+        .await;
+        self.context.set_status(AxumStatus::Stopped);
+        info!("Axum 服务已停止");
+        result.context("Axum 服务运行失败")
     }
 }
 

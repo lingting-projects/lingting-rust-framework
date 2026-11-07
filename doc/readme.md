@@ -13,7 +13,7 @@
 | [framework-startup](framework-startup/README.md) | 开机自启的注册、注销与启停，区分系统级与用户级 |
 | [framework-system](framework-system/README.md) | 提权判断 `is_elevated` 与 `std::process::Command` 扩展 `CommandExt` |
 | [framework-web](framework-web/README.md) | 请求/响应模型、请求上下文、错误分类与日志、参数提取、授权规则、路由模型 |
-| [framework-web-axum](framework-web-axum/README.md) | 基于 axum 的服务器适配：请求分发、路由收集、CORS 与服务启动 |
+| [framework-web-axum](framework-web-axum/README.md) | 基于 axum 的服务器适配：请求分发、路由收集、CORS、服务启动与优雅关闭 |
 | [framework-timer](framework-timer/README.md) | 基于 Tokio 的进程内定时任务运行时与全局注册表 |
 
 ## 宏与代码生成

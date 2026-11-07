@@ -1,6 +1,6 @@
 # framework-web-axum
 
-基于 axum 的 HTTP 服务器适配层：请求分发、路由收集、CORS 处理与服务启动。
+基于 axum 的 HTTP 服务器适配层：请求分发、路由收集、CORS 处理、服务启动与优雅关闭。
 请求/响应模型与错误处理由 [framework-web](../framework-web/README.md) 提供。
 
 ## feature
@@ -27,7 +27,70 @@ server.run(None).await?;
 - `AxumBuilder::bind()`：绑定端口，返回 `AxumServer`；端口为 0 时由系统分配。
 - `AxumServer::context()`：返回 `AxumContext`，其中 `port` 是实际绑定端口。
 - `AxumServer::router()`：服务启动后可取到 `Arc<WebRouter>`，未启动时为 `None`。
-- `AxumServer::run(wrapper)`：启动并持续运行；重复调用返回错误。
+- `AxumServer::run(wrapper)`：启动并持续运行，收到优雅关闭请求后返回 `Ok(())`；重复调用返回错误。
+- `AxumServer::shutdown()`：取优雅关闭句柄 `AxumShutdown`，`run` 期间也可取用。
+- `AxumContext::status()`：当前运行状态 `AxumStatus`。
+- `AxumContext::subscribe_stopping()`：等待服务进入停止流程，用于回收资源。
+
+## 运行状态
+
+`AxumStatus` 只能由服务内部推进，外部通过 `AxumContext::status()` 读取：
+
+| 状态 | 含义 |
+|------|------|
+| `Unstarted` | 未运行：已绑定端口，尚未启动 |
+| `Starting` | 启动中：正在组装路由、准备开始服务 |
+| `Running` | 运行中：正常接受请求 |
+| `Stopping` | 停止中：已触发优雅关闭，不再处理新请求，等待进行中的请求结束 |
+| `Stopped` | 已停止：服务已退出 |
+
+- `AxumStatus::is_running()` 仅在 `Running` 时为 `true`。
+- `AxumStatus::is_stopping()` 在 `Stopping` 与 `Stopped` 时为 `true`，即"停止流程"。
+- `bind()` 之后为 `Unstarted`；`run()` 依次推进 `Starting` → `Running`，收到关闭请求进入 `Stopping`，
+  `axum::serve` 返回后进入 `Stopped`。
+- 关闭请求早于 `run()` 时状态变为 `Stopping`，`run()` 不启动服务、置 `Stopped` 并直接返回 `Ok(())`。
+- 关闭句柄全部释放不会触发关闭；`AxumContext::new` 手工创建的上下文不与任何服务共享状态，恒为 `Unstarted`。
+
+## 优雅关闭
+
+`AxumShutdown` 是 `Clone` 的关闭句柄，可在任意任务、路由或定时器中触发：
+
+```rust
+use framework_web_axum::axum_builder;
+
+let server = axum_builder("127.0.0.1", 8080).bind().await?;
+let shutdown = server.shutdown();
+
+tokio::spawn({
+    let shutdown = shutdown.clone();
+    async move {
+        if tokio::signal::ctrl_c().await.is_ok() {
+            shutdown.shutdown();
+        }
+    }
+});
+
+// 关闭完成后返回 Ok(())
+server.run(None).await?;
+# Ok::<(), anyhow::Error>(())
+```
+
+- `AxumShutdown::shutdown()`：触发优雅关闭，幂等，已处于停止流程时不做任何事。
+- `AxumShutdown::is_shutdown()`：是否已进入停止流程。
+- 触发关闭后停止接受新连接，等待进行中的请求结束后 `run()` 返回 `Ok(())`；运行出错时先置 `Stopped` 再返回错误。
+- 停止流程中到达的新请求由分发层直接拒绝（见[分发流程](#分发流程)）。
+- 外部可在收到停止通知后回收资源：
+
+```rust
+let context = server.context().clone();
+tokio::spawn(async move {
+    context.subscribe_stopping().await;
+    // 回收连接池、定时器等资源
+});
+```
+
+- 长连接（SSE、WebSocket 等）会延长优雅关闭的等待时间。
+- 服务只启动一次；`run()` 结束后再次调用仍返回错误。
 
 ## 路由
 
@@ -71,6 +134,10 @@ let wrapper: WebRouteWrapper = Arc::new(|route| {
 ## 分发流程
 
 `dispatch` 作为 axum 的 fallback 处理所有请求：
+
+处于停止流程（`Stopping` / `Stopped`）的请求直接返回 503，响应体为
+`{"code":503,"message":"Service Unavailable"}`，并附加 `connection: close`；不读取请求体、不进入路由，
+但仍套用 CORS 与 `x-trace-id`。
 
 1. 读取 `x-trace-id` 请求头，为空时用 `next_id()` 生成雪花 ID。
 2. 收集请求头（键名转小写）与查询参数（保留原大小写），读取请求体，上限 16 MiB。

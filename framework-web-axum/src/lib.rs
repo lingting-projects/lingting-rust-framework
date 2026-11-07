@@ -3,11 +3,16 @@ mod cors;
 mod dispatch;
 mod router;
 mod server;
+mod shutdown;
+mod status;
 
 pub use context::{AxumContext, scope_axum, use_axum};
 pub use cors::AxumCors;
 pub use router::{WebRouteResultFuture, WebRouteWrapper, WebRouter};
 pub use server::{AxumBuilder, AxumServer, axum_builder};
+pub use shutdown::AxumShutdown;
+pub(crate) use status::AxumShared;
+pub use status::AxumStatus;
 
 use crate::dispatch::{AxumState, dispatch};
 use axum::Router;

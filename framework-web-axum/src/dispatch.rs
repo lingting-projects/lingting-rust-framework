@@ -1,6 +1,6 @@
 use crate::{AxumContext, AxumCorsFn, WebRouter};
 use anyhow::{Context, Result};
-use axum::body::{Body, to_bytes};
+use axum::body::{Body, Bytes, to_bytes};
 use axum::extract::{ConnectInfo, Request, State};
 use axum::http::{HeaderName, HeaderValue, StatusCode};
 use axum::response::Response;
@@ -41,6 +41,7 @@ pub(crate) async fn dispatch(
 }
 
 async fn dispatch_inner(state: AxumState, peer: SocketAddr, request: Request) -> Result<Response> {
+    let stopping = state.context.status().is_stopping();
     let receive_time = current_millis().unwrap_or_default();
     let trace_id = trace_id(&request);
     let method = request.method().to_string();
@@ -52,9 +53,14 @@ async fn dispatch_inner(state: AxumState, peer: SocketAddr, request: Request) ->
             .or_default()
             .push(value.to_str().unwrap_or_default().to_string());
     }
-    let body = to_bytes(request.into_body(), MAX_BODY_SIZE)
-        .await
-        .context("读取请求体失败")?;
+    let body = if stopping {
+        // 停止流程中不再读取请求体，直接拒绝请求
+        Bytes::new()
+    } else {
+        to_bytes(request.into_body(), MAX_BODY_SIZE)
+            .await
+            .context("读取请求体失败")?
+    };
     let mut query = HashMap::<String, Vec<String>>::new();
     for (name, value) in url::form_urlencoded::parse(uri.query().unwrap_or_default().as_bytes()) {
         query
@@ -85,7 +91,9 @@ async fn dispatch_inner(state: AxumState, peer: SocketAddr, request: Request) ->
     });
     let context = WebContext::new(Arc::clone(&web_request));
     let cors = (state.cors)(&context);
-    let mut response = if web_request.method == WebMethod::Options {
+    let mut response = if stopping {
+        unavailable()
+    } else if web_request.method == WebMethod::Options {
         WebResponse::empty()
     } else {
         let result = catch_panic(state.router.invoke(context, state.context.clone())).await;
@@ -130,4 +138,20 @@ fn to_axum_response(response: WebResponse) -> Result<Response> {
         WebBody::Stream(stream) => Body::from_stream(stream),
     };
     builder.body(body).map_err(Into::into)
+}
+
+/// 停止流程中拒绝新请求的响应体。
+const UNAVAILABLE_BODY: &[u8] = br#"{"code":503,"message":"Service Unavailable"}"#;
+
+/// 构造停止流程中拒绝新请求的响应：503，并让客户端不要复用连接。
+fn unavailable() -> WebResponse {
+    let mut headers = MultiStringValue::default();
+    headers.set_content_type("application/json; charset=utf-8");
+    headers.set_content_length(UNAVAILABLE_BODY.len());
+    headers.set("connection", "close");
+    WebResponse {
+        status: 503,
+        headers,
+        body: WebBody::from(UNAVAILABLE_BODY.to_vec()),
+    }
 }
