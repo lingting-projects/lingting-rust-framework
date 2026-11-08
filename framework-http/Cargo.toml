@@ -33,7 +33,7 @@ reqwest = { workspace = true, optional = true, features = [
     "deflate",
     "gzip",
     "http2",
-    "rustls-tls",
+    "rustls",
     "socks",
     "stream",
     "system-proxy",
