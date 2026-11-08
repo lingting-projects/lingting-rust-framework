@@ -32,3 +32,15 @@ pub(crate) fn response_headers(headers: &HeaderMap) -> MultiStringValue {
             .map(|(name, value)| (name.as_str(), String::from_utf8_lossy(value.as_bytes()))),
     )
 }
+
+/// 重定向次数转跟随上限：小于 0 不限制，等于 0 不跟随（返回 `None`）。
+pub(crate) fn redirect(limit: i64) -> Option<usize> {
+    if limit < 0 {
+        return Some(usize::MAX);
+    }
+    if limit == 0 {
+        return None;
+    }
+
+    Some(usize::try_from(limit).unwrap_or(usize::MAX))
+}

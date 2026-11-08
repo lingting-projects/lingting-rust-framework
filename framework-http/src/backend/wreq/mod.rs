@@ -7,11 +7,10 @@ use futures_util::{Stream, StreamExt as _};
 use wreq::redirect::Policy;
 use wreq_util::{Emulation, Platform, Profile};
 
-use crate::common::{REDIRECT_LIMIT, TIMEOUT};
 use crate::method::HttpMethod;
 use crate::request::HttpRequest;
 
-use super::api::Backend;
+use super::api::{Backend, ClientOptions};
 use super::utils;
 
 /// 模拟的浏览器版本。
@@ -28,7 +27,7 @@ impl Backend for Wreq {
     type Request = wreq::RequestBuilder;
     type Response = wreq::Response;
 
-    fn create(proxy: Option<&str>, system_proxy: bool) -> Result<Self::Client> {
+    fn create(options: &ClientOptions) -> Result<Self::Client> {
         let builder = Self::Client::builder()
             .emulation(
                 Emulation::builder()
@@ -36,16 +35,24 @@ impl Backend for Wreq {
                     .platform(PLATFORM)
                     .build(),
             )
-            .timeout(TIMEOUT)
-            .redirect(Policy::limited(REDIRECT_LIMIT))
             .gzip(true)
             .brotli(true)
             .zstd(true)
             .deflate(true);
 
-        let builder = match proxy {
+        let builder = match options.timeout {
+            Some(timeout) => builder.timeout(timeout),
+            None => builder,
+        };
+
+        let builder = match utils::redirect(options.redirect_limit) {
+            Some(limit) => builder.redirect(Policy::limited(limit)),
+            None => builder.redirect(Policy::none()),
+        };
+
+        let builder = match options.proxy.as_deref() {
             Some(proxy) => builder.proxy(wreq::Proxy::all(proxy)?),
-            None if system_proxy => builder,
+            None if options.system_proxy => builder,
             None => builder.no_proxy(),
         };
 

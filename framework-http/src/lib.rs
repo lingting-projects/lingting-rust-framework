@@ -18,12 +18,16 @@
 //! [`HttpClient::with_proxy`] 指定，需要跟随环境变量与系统代理设置时用
 //! [`HttpClient::with_system_proxy`]。
 //!
+//! 客户端默认超时 60 秒、最多跟随 10 次重定向；覆盖时用 [`HttpClient::builder`] 或
+//! [`HttpClient::with`]，超时为 `None` 表示不限，重定向次数小于 0 表示不限。
+//!
 //! 重试只包在单个请求外面，不会重放调用方发起的业务请求：下载与探测遇到限流
 //! （429）或瞬时故障（502、503、504）时自行退避重试，分块下载只补没写完的部分。
 #[cfg(not(any(feature = "reqwest", feature = "wreq")))]
 compile_error!("framework-http 需要启用后端 feature：`reqwest` 或 `wreq`");
 
 mod backend;
+mod builder;
 mod client;
 mod common;
 mod download;
@@ -34,7 +38,9 @@ mod retry;
 mod stream;
 mod utils;
 
+pub use builder::HttpClientBuilder;
 pub use client::HttpClient;
+pub use common::{DEFAULT_REDIRECT_LIMIT, DEFAULT_TIMEOUT};
 pub use download::{DEFAULT_THREADS, DownloadOutcome, RemoteProbe};
 pub use method::HttpMethod;
 pub use request::HttpRequest;

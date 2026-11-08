@@ -17,8 +17,6 @@ mod utils;
 #[cfg(feature = "wreq")]
 mod wreq;
 
-use std::sync::LazyLock;
-
 use anyhow::Result;
 
 use crate::method::HttpMethod;
@@ -26,7 +24,7 @@ use crate::request::HttpRequest;
 use crate::response::HttpResponse;
 use crate::stream::HttpStreamResponse;
 
-pub(crate) use api::Backend;
+pub(crate) use api::{Backend, ClientOptions};
 #[cfg(not(feature = "wreq"))]
 pub(crate) use reqwest::Reqwest as Current;
 #[cfg(feature = "wreq")]
@@ -35,20 +33,9 @@ pub(crate) use wreq::Wreq as Current;
 /// 当前后端使用的客户端。
 pub(crate) type Client = <Current as Backend>::Client;
 
-/// 默认客户端，不读取任何代理配置。
-static DEFAULT: LazyLock<Client> = LazyLock::new(create_default);
-
-/// 共享的默认客户端，复用同一份连接池。
-pub(crate) fn shared() -> Client {
-    DEFAULT.clone()
-}
-
-/// 构建客户端。
-///
-/// `proxy` 非空时所有请求都走该代理；为空时由 `system_proxy` 决定是否按环境变量与
-/// 系统代理设置选择，为假则完全忽略代理。
-pub(crate) fn create(proxy: Option<&str>, system_proxy: bool) -> Result<Client> {
-    Current::create(proxy, system_proxy)
+/// 按给定参数构建客户端。
+pub(crate) fn create(options: &ClientOptions) -> Result<Client> {
+    Current::create(options)
 }
 
 /// 发送一次请求，响应体整体读入内存。
@@ -67,9 +54,4 @@ pub(crate) async fn stream(
     request: HttpRequest,
 ) -> Result<HttpStreamResponse> {
     common::stream::<Current>(client, method, request).await
-}
-
-/// 构建默认客户端，失败只可能是环境异常，无需交给调用方处理。
-fn create_default() -> Client {
-    create(None, false).expect("初始化默认 HTTP 客户端失败")
 }

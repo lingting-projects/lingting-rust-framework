@@ -1,7 +1,10 @@
+use std::sync::LazyLock;
+
 use anyhow::Result;
 use bytes::Bytes;
 
 use crate::backend;
+use crate::builder::HttpClientBuilder;
 use crate::method::HttpMethod;
 use crate::request::HttpRequest;
 use crate::response::HttpResponse;
@@ -10,11 +13,18 @@ use crate::stream::HttpStreamResponse;
 /// HTTP 客户端。
 ///
 /// 客户端内部持有连接池，克隆时共享同一份连接：[`HttpClient::new`] 拿到的是进程级共享的
-/// 默认客户端，[`HttpClient::with_proxy`] 与 [`HttpClient::with_system_proxy`] 会各自新建。
+/// 默认客户端，其余构造方式都会新建客户端。
 #[derive(Clone)]
 pub struct HttpClient {
     client: backend::Client,
 }
+
+/// 默认客户端，由默认配置构建一次，多次 [`HttpClient::new`] 共享同一份连接池。
+static DEFAULT: LazyLock<HttpClient> = LazyLock::new(|| {
+    HttpClientBuilder::default()
+        .build()
+        .expect("初始化默认 HTTP 客户端失败")
+});
 
 impl Default for HttpClient {
     fn default() -> Self {
@@ -23,29 +33,35 @@ impl Default for HttpClient {
 }
 
 impl HttpClient {
-    /// 创建客户端，完全不使用代理：忽略环境变量与系统代理设置。
+    /// 创建客户端，使用默认配置且不使用任何代理：忽略环境变量与系统代理设置。
+    ///
+    /// 默认客户端在进程内只创建一次，多次调用共享同一份连接池。
     pub fn new() -> Self {
-        Self {
-            client: backend::shared(),
-        }
+        DEFAULT.clone()
     }
 
-    /// 创建客户端，所有请求都走 `proxy`。
+    /// 客户端构建器，用于自定义超时、重定向次数与代理。
+    pub fn builder() -> HttpClientBuilder {
+        HttpClientBuilder::default()
+    }
+
+    /// 在默认配置基础上用闭包自定义，内部走 [`HttpClient::builder`]。
+    pub fn with(configure: impl FnOnce(HttpClientBuilder) -> HttpClientBuilder) -> Result<Self> {
+        configure(Self::builder()).build()
+    }
+
+    /// 创建客户端，所有请求都走 `proxy`，其余使用默认配置。
     ///
     /// `proxy` 为代理地址，如 `http://127.0.0.1:7890`、`socks5://127.0.0.1:1080`；
     /// 地址非法时返回错误。
     pub fn with_proxy(proxy: impl AsRef<str>) -> Result<Self> {
-        Ok(Self {
-            client: backend::create(Some(proxy.as_ref()), false)?,
-        })
+        Self::with(|builder| builder.proxy(proxy.as_ref()))
     }
 
     /// 创建客户端，按环境变量（`HTTP_PROXY`、`HTTPS_PROXY`、`ALL_PROXY`、`NO_PROXY`）
-    /// 与操作系统代理设置选择代理，都没有时不走代理。
+    /// 与操作系统代理设置选择代理，都没有时不走代理，其余使用默认配置。
     pub fn with_system_proxy() -> Result<Self> {
-        Ok(Self {
-            client: backend::create(None, true)?,
-        })
+        Self::with(HttpClientBuilder::system_proxy)
     }
 
     /// 用指定方法发送请求，是本 crate 的原始入口。
@@ -126,5 +142,10 @@ impl HttpClient {
     /// 后端客户端，供本 crate 的下载实现复用同一份连接池。
     pub(crate) fn backend(&self) -> &backend::Client {
         &self.client
+    }
+
+    /// 用已构建好的后端客户端创建，供 [`HttpClientBuilder`] 使用。
+    pub(crate) fn with_backend(client: backend::Client) -> Self {
+        Self { client }
     }
 }

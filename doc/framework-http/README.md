@@ -21,15 +21,15 @@ framework-http = { workspace = true, features = ["wreq"] }
 
 后端 feature 默认全部关闭，两个都不启用时直接编译报错；两个都启用时使用 wreq 后端。
 
-两个后端对外行为一致，仅支持非 wasm 目标。客户端超时固定 60 秒，最多跟随 10 次重定向，
-并开启 gzip、brotli、zstd、deflate 解压。
+两个后端对外行为一致，仅支持非 wasm 目标。客户端默认超时 60 秒、最多跟随 10 次重定向
+（可用构建器覆盖），并开启 gzip、brotli、zstd、deflate 解压。
 
 ## 客户端
 
 ```rust
 use framework_http::HttpClient;
 
-// 完全不使用代理，忽略环境变量与系统代理设置
+// 默认配置且不使用代理：忽略环境变量与系统代理设置
 let client = HttpClient::new();
 
 // 所有请求都走指定代理，地址非法时报错
@@ -37,14 +37,34 @@ let proxied = HttpClient::with_proxy("socks5://127.0.0.1:1080")?;
 
 // 按环境变量与操作系统代理设置选择代理
 let system = HttpClient::with_system_proxy()?;
+
+// 闭包式覆盖：不走代理，超时 30 秒，不限重定向次数
+let custom = HttpClient::with(|builder| {
+    builder.timeout_secs(30).unlimited_redirect()
+})?;
+
+// 同一份配置也可以用构建器逐项设置
+let built = HttpClient::builder().no_timeout().redirect_limit(3).build()?;
 # Ok::<(), anyhow::Error>(())
 ```
 
-| 构造器 | 说明 |
-|--------|------|
+| 构造方式 | 说明 |
+|----------|------|
 | `HttpClient::new()` | 进程级共享的默认客户端，不使用任何代理 |
-| `HttpClient::with_proxy(proxy)` | 新建客户端，所有请求走 `proxy`，支持 `http://`、`https://`、`socks5://` |
-| `HttpClient::with_system_proxy()` | 新建客户端，读取 `HTTP_PROXY`、`HTTPS_PROXY`、`ALL_PROXY`、`NO_PROXY` 与系统代理设置 |
+| `HttpClient::builder()` | 客户端构建器，可设置超时、重定向次数与代理 |
+| `HttpClient::with(f)` | 在默认配置基础上用闭包 `f` 覆盖，内部走 `builder()` |
+| `HttpClient::with_proxy(proxy)` | 所有请求走 `proxy`，支持 `http://`、`https://`、`socks5://` |
+| `HttpClient::with_system_proxy()` | 读取 `HTTP_PROXY`、`HTTPS_PROXY`、`ALL_PROXY`、`NO_PROXY` 与系统代理设置 |
+
+### 超时与重定向
+
+默认超时为 `DEFAULT_TIMEOUT`（60 秒），默认最多跟随 `DEFAULT_REDIRECT_LIMIT`（10 次）重定向，
+都在构建器上覆盖，原始值与快捷方法一一对应：
+
+| 配置项 | 原始值覆盖 | 快捷方法 | 取值说明 |
+|--------|-----------|---------|---------|
+| 请求超时 | `timeout(Option<Duration>)` | `timeout_secs(secs)`、`no_timeout()` | `None` 表示不限超时 |
+| 重定向次数 | `redirect_limit(i64)` | `unlimited_redirect()`、`no_redirect()` | 小于 `0` 表示不限，`0` 表示不跟随、直接返回 3xx |
 
 `HttpClient` 可以克隆，克隆出的副本共用同一份连接池。
 

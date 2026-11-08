@@ -6,11 +6,10 @@ use framework_core::MultiStringValue;
 use futures_util::{Stream, StreamExt as _};
 use reqwest::redirect::Policy;
 
-use crate::common::{REDIRECT_LIMIT, TIMEOUT};
 use crate::method::HttpMethod;
 use crate::request::HttpRequest;
 
-use super::api::Backend;
+use super::api::{Backend, ClientOptions};
 use super::utils;
 
 /// reqwest 后端。
@@ -21,18 +20,26 @@ impl Backend for Reqwest {
     type Request = reqwest::RequestBuilder;
     type Response = reqwest::Response;
 
-    fn create(proxy: Option<&str>, system_proxy: bool) -> Result<Self::Client> {
+    fn create(options: &ClientOptions) -> Result<Self::Client> {
         let builder = Self::Client::builder()
-            .timeout(TIMEOUT)
-            .redirect(Policy::limited(REDIRECT_LIMIT))
             .gzip(true)
             .brotli(true)
             .zstd(true)
             .deflate(true);
 
-        let builder = match proxy {
+        let builder = match options.timeout {
+            Some(timeout) => builder.timeout(timeout),
+            None => builder,
+        };
+
+        let builder = match utils::redirect(options.redirect_limit) {
+            Some(limit) => builder.redirect(Policy::limited(limit)),
+            None => builder.redirect(Policy::none()),
+        };
+
+        let builder = match options.proxy.as_deref() {
             Some(proxy) => builder.proxy(reqwest::Proxy::all(proxy)?),
-            None if system_proxy => builder,
+            None if options.system_proxy => builder,
             None => builder.no_proxy(),
         };
 
