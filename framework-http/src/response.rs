@@ -1,6 +1,8 @@
 use bytes::Bytes;
 use framework_core::MultiStringValue;
 
+use crate::utils;
+
 /// 响应信息。
 #[derive(Debug, Clone, Default)]
 pub struct HttpResponse {
@@ -34,7 +36,7 @@ impl HttpResponse {
 
     /// 读取响应头，返回第一个值。
     pub fn header(&self, name: &str) -> Option<&String> {
-        self.headers.get_first(name)
+        utils::header(&self.headers, name)
     }
 
     /// `content-type` 响应头。
@@ -49,7 +51,7 @@ impl HttpResponse {
 
     /// `content-length` 响应头。
     pub fn content_length(&self) -> Option<u64> {
-        self.header("content-length")?.trim().parse().ok()
+        utils::content_length(&self.headers)
     }
 
     /// 响应体是否为空。

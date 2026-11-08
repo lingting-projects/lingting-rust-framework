@@ -25,13 +25,14 @@ compile_error!("framework-http 需要启用后端 feature：`reqwest` 或 `wreq`
 
 mod backend;
 mod client;
+mod common;
 mod download;
-mod header;
 mod method;
 mod request;
 mod response;
 mod retry;
 mod stream;
+mod utils;
 
 pub use client::HttpClient;
 pub use download::{DEFAULT_THREADS, DownloadOutcome, RemoteProbe};

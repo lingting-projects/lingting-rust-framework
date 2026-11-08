@@ -3,7 +3,10 @@ use std::pin::Pin;
 use anyhow::Result;
 use bytes::Bytes;
 use framework_core::MultiStringValue;
+
 use futures_util::{Stream, StreamExt as _};
+
+use crate::utils;
 
 /// 流式响应：状态码、响应头与逐块到达的响应体。
 ///
@@ -39,7 +42,7 @@ impl HttpStreamResponse {
 
     /// 读取响应头，返回第一个值。
     pub fn header(&self, name: &str) -> Option<&String> {
-        self.headers.get_first(name)
+        utils::header(&self.headers, name)
     }
 
     /// `content-type` 响应头。
@@ -54,7 +57,7 @@ impl HttpStreamResponse {
 
     /// `content-length` 响应头。
     pub fn content_length(&self) -> Option<u64> {
-        self.header("content-length")?.trim().parse().ok()
+        utils::content_length(&self.headers)
     }
 
     /// 读取下一块响应体，流结束或出错时返回 `None`。

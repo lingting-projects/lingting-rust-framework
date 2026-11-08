@@ -677,6 +677,7 @@ dependencies = [
  "bytes",
  "framework-core",
  "futures-util",
+ "http",
  "reqwest",
  "tokio",
  "tracing",
