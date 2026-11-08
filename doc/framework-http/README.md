@@ -91,16 +91,19 @@ let response = client
 ## 快捷方法
 
 只给地址（必要时给请求体）时用快捷方法：
+只给地址（必要时给请求体）时用快捷方法：
 
 ```rust
-let response = client.fetch("https://example.com/index.html").await?;
-let response = client.fetch_body("https://example.com/api", "raw body").await?;
+let response = client.fetch_get("https://example.com/index.html").await?;
+let response = client.fetch_post("https://example.com/api", "raw body").await?;
 ```
 
 | 方法 | 说明 |
 |------|------|
-| `fetch(url)` | GET |
-| `fetch_body(url, body)` | POST，`body` 为请求体 |
+| `fetch_get(url)` | GET，响应体整体读入内存 |
+| `fetch_post(url, body)` | POST，响应体整体读入内存 |
+| `stream_get(url)` | GET，返回流式响应 |
+| `stream_post(url, body)` | POST，返回流式响应 |
 
 ## 响应
 
@@ -113,6 +116,33 @@ let response = client.fetch_body("https://example.com/api", "raw body").await?;
 | `is_empty()` / `len()` | 响应体是否为空、字节数 |
 
 `status`、`body`、`headers` 为公开字段。
+
+## 流式响应
+
+响应体较大或需要边读边处理时用流式接口。`stream` 是原始入口，接收完整的 `HttpRequest` 并以 GET 发送；
+`stream_get` / `stream_post` 是只给地址的快捷方法，三者的返回值都是 `HttpStreamResponse`：
+
+```rust
+use framework_http::{HttpClient, HttpRequest};
+
+let client = HttpClient::new();
+let mut response = client
+    .stream(HttpRequest::new("https://example.com/big.bin"))
+    .await?;
+
+while let Some(chunk) = response.next().await {
+    println!("{} 字节", chunk?.len());
+}
+```
+
+| 成员 | 说明 |
+|------|------|
+| `status` / `headers` | 公开字段，状态码与响应头 |
+| `is_success()` | 状态码是否 2xx |
+| `header(name)` / `content_type()` / `mime_type()` / `content_length()` | 常用响应头 |
+| `next()` | 读取下一块响应体，流结束返回 `None` |
+
+状态码与响应头在拿到响应时即可读取；读流过程中出错会以 `Err` 从 `next()` 返回，不会中断已读到的内容。
 
 ## 下载
 

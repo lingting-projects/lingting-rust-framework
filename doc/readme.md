@@ -9,7 +9,7 @@
 | [framework-bus](framework-bus/README.md) | 与 UI 无关的进程内通知总线：纯通知、类型即事件、边沿触发与合并 |
 | [framework-core](framework-core/README.md) | 统一响应 `R`、分页类型、雪花 ID、精确金额、应用目录、日志初始化、多值映射 |
 | [framework-datetime](framework-datetime/README.md) | Unix 毫秒时间戳与可选 NTP 校时，区分原生与浏览器 wasm 平台 |
-| [framework-http](framework-http/README.md) | 统一 HTTP 客户端：代理、按方法请求与快捷调用、下载探测与分片、请求级重试 |
+| [framework-http](framework-http/README.md) | 统一 HTTP 客户端：代理、按方法请求与快捷调用、流式响应、下载探测与分片、请求级重试 |
 | [framework-region](framework-region/README.md) | 国家、地区、电话前缀与联合国 M49 区域静态数据 |
 | [framework-startup](framework-startup/README.md) | 开机自启的注册、注销与启停，区分系统级与用户级 |
 | [framework-system](framework-system/README.md) | 提权判断 `is_elevated` 与 `std::process::Command` 扩展 `CommandExt` |

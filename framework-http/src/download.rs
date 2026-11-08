@@ -14,10 +14,11 @@ use tokio::fs::{self, File, OpenOptions};
 use tokio::io::{AsyncSeekExt as _, AsyncWriteExt as _};
 use tokio::time::sleep;
 
-use crate::backend::{self, Client};
+use crate::backend::Client;
 use crate::client::HttpClient;
 use crate::request::HttpRequest;
 use crate::retry;
+use crate::stream::HttpStreamResponse;
 
 /// 分片下载的最小文件大小。
 ///
@@ -139,7 +140,7 @@ async fn download_single(
         .with_context(|| format!("创建文件失败: {}", path.display()))?;
     let mut stream = retry::stream(client, request).await?;
     if !stream.is_success() {
-        bail!("下载失败，状态码 {}", stream.status());
+        bail!("下载失败，状态码 {}", stream.status);
     }
 
     let written = write_stream(&mut file, &mut stream).await?;
@@ -257,7 +258,7 @@ async fn read_chunk(
     let request = request.clone().with("range", format!("bytes={from}-{end}"));
     let mut stream = retry::stream(client, request).await?;
     if !stream.is_success() {
-        bail!("分片下载失败，状态码 {}", stream.status());
+        bail!("分片下载失败，状态码 {}", stream.status);
     }
 
     let mut file = OpenOptions::new()
@@ -276,7 +277,7 @@ async fn read_chunk(
 }
 
 /// 把响应体逐块写入文件，返回写入的字节数。
-async fn write_stream(file: &mut File, stream: &mut backend::FetchStream) -> Result<u64> {
+async fn write_stream(file: &mut File, stream: &mut HttpStreamResponse) -> Result<u64> {
     let mut written = 0;
     while let Some(chunk) = stream.next().await {
         let chunk: Bytes = chunk.context("读取响应内容失败")?;

@@ -12,10 +12,11 @@ use std::time::Duration;
 use anyhow::Result;
 use tokio::time::sleep;
 
-use crate::backend::{self, Client, FetchStream};
+use crate::backend::{self, Client};
 use crate::method::HttpMethod;
 use crate::request::HttpRequest;
 use crate::response::HttpResponse;
+use crate::stream::HttpStreamResponse;
 
 /// 最多尝试的次数，含第一次。
 pub(crate) const MAX_ATTEMPTS: u32 = 4;
@@ -63,13 +64,13 @@ pub(crate) async fn head(client: &Client, request: HttpRequest) -> Result<HttpRe
 ///
 /// 只重试「请求失败」与「状态码可重试」两种情况。拿到响应之后由调用方读流，
 /// 读流中途断开不在这里处理：那种情况重试的是整个分块，由分块下载自己决定。
-pub(crate) async fn stream(client: &Client, request: HttpRequest) -> Result<FetchStream> {
+pub(crate) async fn stream(client: &Client, request: HttpRequest) -> Result<HttpStreamResponse> {
     let mut attempt = 0;
 
     loop {
         attempt += 1;
-        match backend::stream(client, request.clone()).await {
-            Ok(stream) if retryable_status(stream.status()) => {
+        match backend::stream(client, HttpMethod::Get, request.clone()).await {
+            Ok(stream) if retryable_status(stream.status) => {
                 if attempt >= MAX_ATTEMPTS {
                     return Ok(stream);
                 }
@@ -77,7 +78,7 @@ pub(crate) async fn stream(client: &Client, request: HttpRequest) -> Result<Fetc
                 tracing::warn!(
                     "{} 返回 {}，{} 毫秒后重试（第 {attempt} 次）",
                     request.url,
-                    stream.status(),
+                    stream.status,
                     delay.as_millis()
                 );
                 sleep(delay).await;

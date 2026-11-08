@@ -1,11 +1,12 @@
 //! 统一的 HTTP 请求、下载与重试。
 //!
-//! 对外提供三件事：
+//! 对外提供四件事：
 //!
 //! - [`HttpClient`]：可配置代理的客户端，既支持 [`HttpMethod`] 指定的原始请求，
 //!   也支持按方法固定、只给地址的快捷调用；
 //! - [`HttpRequest`] / [`HttpResponse`]：请求与响应模型，请求头与响应头统一使用
 //!   [`MultiStringValue`](framework_core::MultiStringValue)；
+//! - [`HttpStreamResponse`]：流式响应，响应体逐块到达，适合大文件或需要边读边处理的场景；
 //! - 下载：[`HttpClient::probe`] 探测远端文件大小与是否支持分段，[`HttpClient::download`]
 //!   据此决定分片并行还是单点顺序下载。
 //!
@@ -30,9 +31,11 @@ mod method;
 mod request;
 mod response;
 mod retry;
+mod stream;
 
 pub use client::HttpClient;
 pub use download::{DEFAULT_THREADS, DownloadOutcome, RemoteProbe};
 pub use method::HttpMethod;
 pub use request::HttpRequest;
 pub use response::HttpResponse;
+pub use stream::HttpStreamResponse;

@@ -5,6 +5,7 @@ use crate::backend;
 use crate::method::HttpMethod;
 use crate::request::HttpRequest;
 use crate::response::HttpResponse;
+use crate::stream::HttpStreamResponse;
 
 /// HTTP 客户端。
 ///
@@ -90,13 +91,36 @@ impl HttpClient {
     }
 
     /// 快捷方式：以 GET 请求获取远程内容。
-    pub async fn fetch(&self, url: &str) -> Result<HttpResponse> {
+    pub async fn fetch_get(&self, url: &str) -> Result<HttpResponse> {
         self.get(HttpRequest::new(url)).await
     }
 
     /// 快捷方式：以 `body` 为请求体发送 POST 请求。
-    pub async fn fetch_body(&self, url: &str, body: impl Into<Bytes>) -> Result<HttpResponse> {
+    pub async fn fetch_post(&self, url: &str, body: impl Into<Bytes>) -> Result<HttpResponse> {
         self.post(HttpRequest::new(url).with_body(body)).await
+    }
+
+    /// 原始流式入口：以 GET 请求取得流式响应，响应体逐块返回。
+    ///
+    /// 一次性的请求用 [`HttpClient::get`] 及其快捷方法，响应体整体读入内存；需要边读边处理
+    /// （大文件、事件流）时用本方法。
+    pub async fn stream(&self, request: HttpRequest) -> Result<HttpStreamResponse> {
+        backend::stream(&self.client, HttpMethod::Get, request).await
+    }
+
+    /// 快捷方式：以 GET 请求取得流式响应。
+    pub async fn stream_get(&self, url: &str) -> Result<HttpStreamResponse> {
+        self.stream(HttpRequest::new(url)).await
+    }
+
+    /// 快捷方式：以 `body` 为请求体发送 POST 请求并取得流式响应。
+    pub async fn stream_post(
+        &self,
+        url: &str,
+        body: impl Into<Bytes>,
+    ) -> Result<HttpStreamResponse> {
+        let request = HttpRequest::new(url).with_body(body);
+        backend::stream(&self.client, HttpMethod::Post, request).await
     }
 
     /// 后端客户端，供本 crate 的下载实现复用同一份连接池。
