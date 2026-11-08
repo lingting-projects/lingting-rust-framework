@@ -1,0 +1,51 @@
+[package]
+name = "framework-http"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "../doc/framework-http/README.md"
+
+[features]
+# 后端不设默认值，必须显式启用 `reqwest` 或 `wreq` 之一
+default = []
+# reqwest 后端：与 `wreq` 同时启用时不再编译
+reqwest = ["dep:reqwest"]
+# wreq 后端：模拟 Chrome 的 TLS 指纹；与 `reqwest` 同时启用时使用本后端
+wreq = ["dep:wreq", "dep:wreq-util"]
+
+[dependencies]
+framework-core.workspace = true
+
+anyhow.workspace = true
+bytes.workspace = true
+futures-util.workspace = true
+tokio = { workspace = true, features = ["fs", "io-util", "rt", "time"] }
+tracing.workspace = true
+
+reqwest = { workspace = true, optional = true, features = [
+    "brotli",
+    "charset",
+    "deflate",
+    "gzip",
+    "http2",
+    "rustls-tls",
+    "socks",
+    "stream",
+    "system-proxy",
+    "zstd",
+] }
+wreq = { workspace = true, optional = true, features = [
+    "brotli",
+    "charset",
+    "deflate",
+    "gzip",
+    "stream",
+    "system-proxy",
+    "zstd",
+] }
+wreq-util = { workspace = true, optional = true }
+

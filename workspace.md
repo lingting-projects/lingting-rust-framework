@@ -14,7 +14,7 @@ lingting-rust-framework/
 ├── scripts/
 │   ├── tag.sh              # 改版本号、同步 lock、commit、打 tag、推送
 │   └── publish.sh          # 校验版本一致性后发布到 crates.io
-├── framework-*/            # 13 个 workspace 成员 crate
+├── framework-*/            # 14 个 workspace 成员 crate
 ├── Cargo.toml              # workspace 定义与共享依赖
 ├── LICENSE
 ├── README.md               # 项目介绍与文档索引
@@ -34,7 +34,7 @@ lingting-rust-framework/
 |----|-------|------|
 | 基础 | `framework-bus`、`framework-datetime`、`framework-region`、`framework-system`、`framework-proc-core` | 不依赖其他内部 crate |
 | 宏 | `framework-proc-auto`、`framework-proc-timer`、`framework-proc-web` | 属性宏与代码生成，`framework-proc-web` 在 `collect` 特性下生成接口元数据注册代码 |
-| 运行时 | `framework-core`、`framework-web`、`framework-web-axum`、`framework-timer`、`framework-startup` | 依赖基础层与宏层，供业务直接使用 |
+| 运行时 | `framework-core`、`framework-web`、`framework-web-axum`、`framework-timer`、`framework-startup`、`framework-http` | 依赖基础层与宏层，供业务直接使用 |
 
 ## 依赖方向
 
@@ -62,6 +62,7 @@ flowchart LR
         webAxum["framework-web-axum"]
         timer["framework-timer"]
         startup["framework-startup"]
+        http["framework-http"]
     end
 
     procAuto --> procCore
@@ -80,6 +81,8 @@ flowchart LR
     timer --> core
     timer --> procTimer
 
+    http --> core
+
     startup --> system
 ```
 
@@ -92,6 +95,7 @@ flowchart LR
   供 `collect` 生成的路由与接口元数据注册代码引用，使用方无需自己声明该依赖。
 - `framework-startup` 依赖 `framework-system` 做提权判断与命令调用。
 - `framework-timer` 依赖 `framework-core`、`framework-proc-timer` 与 `inventory`（链接期任务注册）。
+- `framework-http` 依赖 `framework-core`，复用其 `MultiStringValue` 表达请求头与响应头。
 - `framework-bus` 与 `framework-region` 独立，无内部依赖。
 
 ## feature 传递
@@ -102,6 +106,8 @@ flowchart LR
 | `ts` | `framework-proc-core`、`framework-web`、`framework-web-axum` | TypeScript 代码生成构建器（`framework-proc-core/ts`），默认关闭；`framework-web/ts` 会同时开启 `collect` |
 | `rust` | `framework-proc-core`、`framework-web`、`framework-web-axum` | Rust crate 生成构建器（`framework-proc-core/rust`），默认关闭；`framework-web/rust` 会同时开启 `collect` |
 | `generate` | `framework-timer` | 生成定时任务名称相关的 `syn` 支持，默认关闭 |
+| `reqwest` | `framework-http` | reqwest 后端，默认关闭，未启用 `wreq` 时生效 |
+| `wreq` | `framework-http` | 改用 wreq 后端并模拟 Chrome 的 TLS 指纹，默认关闭；与 `reqwest` 同时启用时使用本后端 |
 | `ntp` / `tokio` | `framework-datetime` | NTP 校时及异步校时支持，默认关闭 |
 
 ## crate 文档索引
@@ -113,6 +119,7 @@ flowchart LR
 | framework-bus | [doc/framework-bus/README.md](doc/framework-bus/README.md) |
 | framework-core | [doc/framework-core/README.md](doc/framework-core/README.md) |
 | framework-datetime | [doc/framework-datetime/README.md](doc/framework-datetime/README.md) |
+| framework-http | [doc/framework-http/README.md](doc/framework-http/README.md) |
 | framework-region | [doc/framework-region/README.md](doc/framework-region/README.md) |
 | framework-startup | [doc/framework-startup/README.md](doc/framework-startup/README.md) |
 | framework-system | [doc/framework-system/README.md](doc/framework-system/README.md) |

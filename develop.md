@@ -16,11 +16,13 @@ Windows / Linux / macOS 均为支持目标；`framework-datetime` 额外支持�
 ## 常用命令
 
 ```bash
-cargo check --workspace
+cargo check --workspace --features framework-http/reqwest
 cargo fmt
 cargo clippy --fix --allow-dirty --allow-staged --all-features
 ```
 
+- `framework-http` 的后端 feature 默认全部关闭，workspace 整体检查必须显式启用一个后端；
+  只检查其他目标时也照此带上 `--features framework-http/reqwest`（或 `framework-http/wreq`）。
 - 只检查部分 crate 时用 `-p <crate>`，例如 `cargo check -p framework-web`。
 - 仓库内现有的测试代码位于 `framework-bus/tests/`，需要时用 `cargo test -p framework-bus` 运行。
 - `.cargo/config.toml` 只承载 `[env]` 与 `[build] rustflags`，当前 `rustflags` 为空。
@@ -36,6 +38,9 @@ framework-web-axum = { workspace = true }
 
 # 需要生成 TypeScript 类型与接口
 framework-web-axum = { workspace = true, features = ["ts"] }
+
+# 需要 HTTP 客户端，reqwest 后端（wreq 后端换成 features = ["wreq"]）
+framework-http = { workspace = true, features = ["reqwest"] }
 
 # 需要定时任务
 framework-timer = { workspace = true }
