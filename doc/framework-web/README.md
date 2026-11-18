@@ -95,23 +95,42 @@ JSON 响应会设置 `content-type: application/json; charset=utf-8` 与 `conten
 
 ## 错误
 
-`WebError` 按 `WebErrorKind` 分类，状态码复用 [framework-core](../framework-core/README.md) 的 `RCodeKind`：
+`WebError` 按 `WebErrorKind` 分类，错误响应的 HTTP 状态码与 R 标准结构状态码（响应体的 `code`）
+默认相同，分类状态码复用 [framework-core](../framework-core/README.md) 的 `RCodeKind`：
 
-| 类型 | 状态码 | 对外消息 |
-|------|--------|----------|
-| `Message` | 500 | 原消息 |
-| `Parameter` | 400 | 原消息 |
-| `Unauthorized` | 401 | 原消息 |
-| `Forbidden` | 403 | 原消息 |
-| `NotFound` | 404 | 原消息 |
-| `ReturnConversion` | 500 | `服务器内部错误` |
-| `Internal` | 500 | `服务器内部错误` |
-| `Panic` | 500 | `服务器内部错误` |
+| 类型 | HTTP 状态码 | R 状态码 | 对外消息 |
+|------|-------------|----------|----------|
+| `Message` | 500 | 500 | 原消息 |
+| `Parameter` | 400 | 400 | 原消息 |
+| `Unauthorized` | 401 | 401 | 原消息 |
+| `Forbidden` | 403 | 403 | 原消息 |
+| `NotFound` | 404 | 404 | 原消息 |
+| `ReturnConversion` | 500 | 500 | `服务器内部错误` |
+| `Internal` | 500 | 500 | `服务器内部错误` |
+| `Panic` | 500 | 500 | `服务器内部错误` |
+| `Status(u16)` | 自定义 | 与 HTTP 状态码相同 | 原消息 |
+| `Code(u32)` | 200 | 自定义 | 原消息 |
+| `StatusAndCode { status, code }` | 自定义 | 自定义 | 原消息 |
+
+自定义 HTTP 状态码只接受 `100..=599`，超出范围时回退为 500 并输出带调用点的 `warn` 日志，
+R 状态码不受影响。
 
 构造方法：`message`、`parameter`、`return_conversion`、`not_found`、`unauthorized`、`forbidden`、
-`internal`、`panic`、`with_source`。带 `source` 的构造方法在 debug 构建下会记录源码位置。
+`internal`、`panic`、`with_source`；自定义状态码的构造方法 `custom_status(status, message)`、
+`custom_code(code, message)`、`custom_status_code(status, code, message)`。
+带 `source` 的构造方法在 debug 构建下会记录源码位置。
 
-`log` / `log_request` 输出包含分类、状态码、`trace_id`、方法、路径、源码位置、
+`with_status(status)` 与 `with_code(code)` 可直接叠加在任意构造方法之后，只覆盖自己那一维：
+
+```rust
+WebError::not_found("用户不存在").with_status(418);        // HTTP 418 + R 404
+WebError::not_found("用户不存在").with_code(40401);         // HTTP 404 + R 40401
+WebError::internal("查询失败", source).with_status(503);    // HTTP 503 + R 500
+```
+
+`status()` 取 HTTP 状态码，`code()` 取 R 标准结构状态码。
+
+`log` / `log_request` 输出包含 HTTP 状态码、R 状态码、`trace_id`、方法、路径、源码位置、
 错误链与 backtrace 的 `error!` 日志。`source_backtrace` 取 `anyhow` 的 backtrace。
 
 `WebErrorExt` 为 `Result<T, E>` 提供快捷转换：`message()`、`parameter(msg)`、`internal(msg)`。

@@ -1,10 +1,15 @@
 use crate::WebRequest;
 use anyhow::Error;
 use framework_core::types::RCodeKind;
-use log::error;
+use log::{error, warn};
 use std::any::Any;
 use std::fmt::{Display, Formatter};
 use std::panic::Location;
+
+/// HTTP 状态码合法范围的最小值。
+const HTTP_STATUS_MIN: u16 = 100;
+/// HTTP 状态码合法范围的最大值。
+const HTTP_STATUS_MAX: u16 = 599;
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum WebErrorKind {
@@ -16,6 +21,32 @@ pub enum WebErrorKind {
     Forbidden,
     Internal,
     Panic,
+    /// 自定义 HTTP 状态码，R 标准结构状态码与 HTTP 状态码一致。
+    Status(u16),
+    /// 自定义 R 标准结构状态码，HTTP 状态码固定为 200。
+    Code(u32),
+    /// 同时自定义 HTTP 状态码与 R 标准结构状态码。
+    StatusAndCode {
+        /// HTTP 状态码。
+        status: u16,
+        /// R 标准结构状态码。
+        code: u32,
+    },
+}
+
+impl WebErrorKind {
+    /// 规范化自定义状态码：非法的 HTTP 状态码回退为 500，R 状态码保持不变。
+    #[track_caller]
+    fn normalize(self) -> Self {
+        match self {
+            Self::Status(status) => Self::Status(WebError::valid_http_status(status)),
+            Self::StatusAndCode { status, code } => Self::StatusAndCode {
+                status: WebError::valid_http_status(status),
+                code,
+            },
+            other => other,
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -76,6 +107,42 @@ impl WebError {
         Self::new(WebErrorKind::Panic, message)
     }
 
+    /// 自定义 HTTP 状态码，R 标准结构状态码与 HTTP 状态码一致。
+    #[track_caller]
+    pub fn custom_status(status: u16, message: impl Into<String>) -> Self {
+        Self::new(WebErrorKind::Status(status), message)
+    }
+
+    /// 自定义 R 标准结构状态码，HTTP 状态码固定为 200。
+    #[track_caller]
+    pub fn custom_code(code: u32, message: impl Into<String>) -> Self {
+        Self::new(WebErrorKind::Code(code), message)
+    }
+
+    /// 同时自定义 HTTP 状态码与 R 标准结构状态码。
+    #[track_caller]
+    pub fn custom_status_code(status: u16, code: u32, message: impl Into<String>) -> Self {
+        Self::new(WebErrorKind::StatusAndCode { status, code }, message)
+    }
+
+    /// 覆盖 HTTP 状态码，R 标准结构状态码保持不变；非法状态码回退为 500。
+    #[track_caller]
+    pub fn with_status(mut self, status: u16) -> Self {
+        let code = self.code();
+        self.kind = WebErrorKind::StatusAndCode {
+            status: Self::valid_http_status(status),
+            code,
+        };
+        self
+    }
+
+    /// 覆盖 R 标准结构状态码，HTTP 状态码保持不变。
+    pub fn with_code(mut self, code: u32) -> Self {
+        let status = self.status();
+        self.kind = WebErrorKind::StatusAndCode { status, code };
+        self
+    }
+
     pub fn kind(&self) -> &WebErrorKind {
         &self.kind
     }
@@ -90,6 +157,25 @@ impl WebError {
             WebErrorKind::ReturnConversion | WebErrorKind::Internal | WebErrorKind::Panic => {
                 RCodeKind::Internal.code() as u16
             }
+            WebErrorKind::Status(status) => status,
+            WebErrorKind::Code(_) => 200,
+            WebErrorKind::StatusAndCode { status, .. } => status,
+        }
+    }
+
+    pub fn code(&self) -> u32 {
+        match self.kind {
+            WebErrorKind::Message => RCodeKind::Internal.code(),
+            WebErrorKind::Parameter => RCodeKind::Parameter.code(),
+            WebErrorKind::Unauthorized => RCodeKind::Unauthorized.code(),
+            WebErrorKind::Forbidden => RCodeKind::Forbidden.code(),
+            WebErrorKind::NotFound => 404,
+            WebErrorKind::ReturnConversion | WebErrorKind::Internal | WebErrorKind::Panic => {
+                RCodeKind::Internal.code()
+            }
+            WebErrorKind::Status(status) => u32::from(status),
+            WebErrorKind::Code(code) => code,
+            WebErrorKind::StatusAndCode { code, .. } => code,
         }
     }
 
@@ -111,7 +197,7 @@ impl WebError {
 
     pub fn log_request(error: &Self, trace_id: &str, method: &str, path: &str) {
         let status = error.status();
-        let kind = error.label();
+        let code = error.code();
         let location = error.location.as_deref().unwrap_or("未知");
         let chain = std::iter::successors(Some(error as &dyn std::error::Error), |error| {
             error.source()
@@ -125,7 +211,7 @@ impl WebError {
             .unwrap_or_else(|| "未知".to_string());
 
         error!(
-            "Web 请求异常 category={kind} status={status} \
+            "Web 请求异常 status={status} code={code} \
             trace_id={trace_id} method={method} path={path} \
             source={location} error_chain={chain} backtrace={backtrace}"
         )
@@ -134,7 +220,7 @@ impl WebError {
     #[track_caller]
     fn new(kind: WebErrorKind, message: impl Into<String>) -> Self {
         Self {
-            kind,
+            kind: kind.normalize(),
             message: message.into(),
             source: None,
             location: Some(Self::location(Location::caller())),
@@ -162,7 +248,7 @@ impl WebError {
         let location = None;
 
         Self {
-            kind,
+            kind: kind.normalize(),
             message: message.into(),
             source: Some(source),
             location,
@@ -203,18 +289,18 @@ impl WebError {
             })
             .map(ToOwned::to_owned)
     }
-
-    fn label(&self) -> &'static str {
-        match self.kind {
-            WebErrorKind::Message => "消息错误",
-            WebErrorKind::Parameter => "参数转换",
-            WebErrorKind::ReturnConversion => "返回值转换",
-            WebErrorKind::NotFound => "路由不存在",
-            WebErrorKind::Unauthorized => "未授权",
-            WebErrorKind::Forbidden => "无权限",
-            WebErrorKind::Internal => "内部错误",
-            WebErrorKind::Panic => "程序崩溃",
+    /// 校验并规范化 HTTP 状态码，非法值回退为 500。
+    #[track_caller]
+    fn valid_http_status(status: u16) -> u16 {
+        if (HTTP_STATUS_MIN..=HTTP_STATUS_MAX).contains(&status) {
+            return status;
         }
+        warn!(
+            "非法 HTTP 状态码 {status}（合法范围 {HTTP_STATUS_MIN}..={HTTP_STATUS_MAX}），\
+            已回退为 500，来源 {}",
+            Location::caller()
+        );
+        500
     }
 }
 

@@ -141,8 +141,9 @@ impl WebResponse {
 
     fn error_body(error: &WebError) -> Self {
         let status = error.status();
+        let code = error.code();
         let message = error.public_message();
-        Self::json(status, &json!({ "code": status, "message": message }))
+        Self::json(status, &json!({ "code": code, "message": message }))
     }
 
     pub fn from_result(result: Result<Self>, request: Option<&WebRequest>) -> Self {
