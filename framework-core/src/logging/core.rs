@@ -20,8 +20,11 @@ use super::flush::FileFlush;
 /// 使用 `Arc` 包裹，便于在多个日志层之间复用同一实例。
 pub type LoggingFilter = Arc<dyn Filter<Registry> + Send + Sync + 'static>;
 
+/// 调用方可追加的自定义日志层（审计层等）：只加计数，不改变事件内容与去向。
+pub type LoggingLayer = Box<dyn Layer<Registry> + Send + Sync>;
+
 /// 日志层统一类型，供各日志文件实现复用。
-pub(crate) type BoxLayer = Box<dyn Layer<Registry> + Send + Sync>;
+pub(crate) type BoxLayer = LoggingLayer;
 
 /// 自动归档日志的配置。
 #[derive(Debug, Clone, Copy)]
@@ -30,7 +33,8 @@ pub struct LogArchiveConfig {
 }
 
 /// 日志初始化配置。
-#[derive(Clone)]
+///
+/// 自定义日志层是 `Box`（不可克隆），因此本结构不实现 `Clone`，并由 [`super::init`] 按值消费。
 pub struct LoggingConfig {
     pub level: LevelFilter,
     pub console: bool,
@@ -39,6 +43,8 @@ pub struct LoggingConfig {
     pub archive: Option<LogArchiveConfig>,
     /// 日志过滤器：任一过滤器返回 `false` 即忽略该事件。
     pub filters: Vec<LoggingFilter>,
+    /// 调用方追加的自定义日志层：与 console / file 层并列挂到 subscriber 上。
+    pub layers: Vec<LoggingLayer>,
 }
 
 impl LoggingConfig {
@@ -51,12 +57,18 @@ impl LoggingConfig {
             combined: false,
             archive: Some(LogArchiveConfig { retention_days: 7 }),
             filters: vec![Arc::new(DefaultSqlxFilter)],
+            layers: Vec::new(),
         }
     }
 
     /// 追加一个日志过滤器。
     pub fn push_filter(&mut self, filter: LoggingFilter) {
         self.filters.push(filter);
+    }
+
+    /// 追加一个自定义日志层：与 console / file 层并列，不参与级别与过滤器的判定。
+    pub fn push_layer(&mut self, layer: LoggingLayer) {
+        self.layers.push(layer);
     }
 }
 
@@ -76,6 +88,7 @@ impl std::fmt::Debug for LoggingConfig {
             .field("combined", &self.combined)
             .field("archive", &self.archive)
             .field("filters", &self.filters.len())
+            .field("layers", &self.layers.len())
             .finish()
     }
 }

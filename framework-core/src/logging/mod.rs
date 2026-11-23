@@ -18,13 +18,15 @@ use std::io;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 
-pub use core::{LogArchiveConfig, LoggingConfig, LoggingFilter, LoggingGuard};
+pub use core::{LogArchiveConfig, LoggingConfig, LoggingFilter, LoggingGuard, LoggingLayer};
 pub use filter_sqlx::DefaultSqlxFilter;
 
 /// 初始化 tracing 日志订阅器。
 ///
 /// 返回的 [`LoggingGuard`] 必须存活到进程退出，否则日志写入器与归档线程会被提前释放。
-pub fn init(config: &LoggingConfig) -> io::Result<LoggingGuard> {
+///
+/// 配置按值消费：自定义层是 `Box`，初始化后即转移给 subscriber。
+pub fn init(config: LoggingConfig) -> io::Result<LoggingGuard> {
     let mut layers = Vec::new();
 
     if config.console {
@@ -69,6 +71,8 @@ pub fn init(config: &LoggingConfig) -> io::Result<LoggingGuard> {
     #[cfg(target_arch = "wasm32")]
     let guard = LoggingGuard {};
 
+    // 调用方追加的自定义层（如审计层）与内置层并列；它们各自带过滤器，不影响内置层的级别判定。
+    layers.extend(config.layers);
     tracing_subscriber::registry()
         .with(layers)
         .try_init()
